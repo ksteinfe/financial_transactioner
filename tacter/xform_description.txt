@@ -1,0 +1,5 @@
+transfer to Sav 1816	>	transfer:1816_deep
+transfer to Sav 3570	>	transfer:3570_project
+FOREIGN TRANSACTION	>	financial:fees
+WIKITRIBUNE	>	gift:donation
+Property Management Systems	>	home:misc
