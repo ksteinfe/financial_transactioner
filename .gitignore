@@ -1,1 +1,5 @@
+data.hdf5
+data.json
+results/
+
 *.csv
