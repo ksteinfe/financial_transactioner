@@ -1,5 +1,67 @@
 transfer to Sav 1816	>	transfer:1816_deep
 transfer to Sav 3570	>	transfer:3570_project
+
+CAPITAL ONE AUTOPAY PYMT > transfer:credit_card_payment
+CAPITAL ONE DES:CRCARDPMT > transfer:credit_card_payment
+BANK OF AMERICA CREDIT CARD Bill Payment > transfer:credit_card_payment
+PAYMENT - THANK YOU > transfer:credit_card_payment
+
 FOREIGN TRANSACTION	>	financial:fees
+FEDLOANSERVICING > financial:student_loan_payment
+
 WIKITRIBUNE	>	gift:donation
+
 Property Management Systems	>	home:misc
+WASTE MANAGEMENT > home:utilities
+PGANDE > home:utilities
+ADTSECURITY > home:home_alarm
+COMCAST > home:internet
+
+IKEA > home:furnishings
+
+
+LEES DELI > food:sj_lunch
+77 CHINESE AND VIETNAM > food:sj_lunch
+STONE KOREAN KITCHEN > food:sj_lunch
+HAPPY DONUTS > food:sj_lunch
+SHSHI UMI > food:sj_lunch
+YIFANG TAIWAN > food:sj_lunch
+
+RICE & BONES > food:ks_lunch
+
+CAVIAR > food:restaurants
+KINJA SUSHI > food:restaurants
+DOSIRAK SHOP > food:restaurants
+CANCUN SABOR MEXICAN > food:restaurants
+CACTUS TAQUERIA > food:restaurants
+GRUBHUB > food:restaurants
+BEAUTY S BAGEL > food:restaurants
+
+GONG CHA > food:fast_food
+BEAUTY S BAGEL SHOP > food:fast_food
+STARBUCKS > food:fast_food
+CAFE STRADA > food:fast_food
+PHILZ COFFEE > food:fast_food
+
+BAY GRAPE > food:alcohol
+
+UC Regents Bill Payment > childcare:uc_daycare
+
+
+BIRD APP > transportation:rideshare
+LYFT > transportation:rideshare
+
+
+KAISER > health:doctor
+CVS/PHARMACY > health:pharmacy
+
+
+LASTPASS > professional:business_services
+Amazon web services > professional:business_services
+GOOGLE*GOOGLE STORAGE > professional:business_services
+
+
+ITUNES.COM > shopping:electronics_and_software
+
+PERKINS CLEANERS > personal_care:laundry
+ALLURE SALON > personal_care:hair

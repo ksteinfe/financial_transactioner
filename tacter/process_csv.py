@@ -39,9 +39,8 @@ def do_process_directory(pth_src, pth_inf_mdl=False):
     tacts_bad = []
     for tact in tacts:
         tact['catg'] = False
-        if '_catg' in tact:
-            tact['catg'] = categorize_explicitly(tact,cat_alw,xfs_cat,xfs_dsc) # categorize by category or description
-            #print(tact['catg'])
+        tact['catg'] = categorize_explicitly(tact,cat_alw,xfs_cat,xfs_dsc) # categorize by category or description
+        #print(tact['catg'])
 
         if not tact['catg']:
             g = False
@@ -71,6 +70,7 @@ def do_process_directory(pth_src, pth_inf_mdl=False):
     with open('out.csv', 'w', newline='') as f:
         keys = ["date", "amnt", "acnt", "catg", "_catg", "pred", "prob", "desc"]
         tacts_write = [{key: value for key, value in tact.items() if key in keys} for tact in tacts]
+        tacts_write = sorted(tacts_write, key = lambda i: i['date'])
         for tact in tacts_write:
             tact['date'] = "{:%m/%d/%Y}".format(tact['date'])
             tact['acnt'] = tact['acnt'].value
@@ -86,6 +86,7 @@ def csv_to_tacts(strs, cat, name):
         amnt = d
         if amnt: amnt = float(amnt) * -1
         else: amnt = float(c)
+        return amnt
 
     def amnt_from_type(a,t):
         amnt = float(a)
@@ -157,6 +158,18 @@ def csv_to_tacts(strs, cat, name):
                 "_catg": row['Category']
             }
             #print(tact)
+
+        if cat is Account.BOA_VISA:
+            #print("'{}'\t'{}''".format(row['Debit'],row['Credit']))
+            amnt = float(row['Amount'])
+            date = datetime.strptime(row['Posted Date'], "%m/%d/%Y")
+            tact = {
+                "date": date,
+                "amnt": amnt,
+                "desc": row['Payee']
+            }
+            #print(tact)
+
         if not tact:
             print("!!! could not parse transaction.")
             continue
@@ -173,11 +186,12 @@ def determine_csv_category(pth_csv):
         if line.lower().startswith("transaction date,posted date"): return Account.CAP_ONE
         if line.lower().startswith("transaction date,post date"): return Account.CHASE
         if line.lower().startswith('"date","description"'): return Account.MINT_HISTORICAL
+        if line.lower().startswith('posted date,reference number'): return Account.BOA_VISA # what about alaska card??
         if line.lower().startswith("description,,summary"):
             if "2955" in os.path.basename(pth_csv): return Account.BOA_CHECK
             if "2232" in os.path.basename(pth_csv): return Account.BOA_BILLS
             raise ValueError("This looks like a BoA CSV file, but I didn't find any of the account numbers I expected.\nDidn't find 2955 or 2232.")
-        raise ValueError("I couldn't deterimine the category of this CSV file")
+        raise ValueError("I couldn't deterimine the category of this CSV file\n{}".format(line))
 
 def get_csv_files(pth_src):
     return [ os.path.join(root, file)
