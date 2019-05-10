@@ -3,8 +3,12 @@ import os
 
 
 def categorize_explicitly(tact, allowed, xfs_cat, xfs_dsc):
-    if tact['_catg'] in allowed: return tact['_catg']
-    if tact['_catg'] in xfs_cat: return xfs_cat[tact['_catg']]
+    # by category
+    if '_catg' in tact:
+        if tact['_catg'] in allowed: return tact['_catg']
+        if tact['_catg'] in xfs_cat: return xfs_cat[tact['_catg']]
+
+    # by description
     for key, val in xfs_dsc.items():
         if key in tact['desc'].lower(): return val
     #print("could not resolve given category:\t{}".format(given))
