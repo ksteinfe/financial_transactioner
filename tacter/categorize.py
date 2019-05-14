@@ -4,7 +4,7 @@ import os
 
 def categorize_explicitly(tact, allowed, xfs_cat, xfs_dsc):
     # by category
-    if '_catg' in tact:
+    if '_catg' in tact and '_trust_catg' in tact and tact['_trust_catg']:
         if tact['_catg'] in allowed: return tact['_catg']
         if tact['_catg'] in xfs_cat: return xfs_cat[tact['_catg']]
 

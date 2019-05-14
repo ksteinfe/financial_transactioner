@@ -1,21 +1,31 @@
-transfer to Sav 1816	>	transfer:1816_deep
+transfer to Sav 1816	>	savings:deep_savings
 transfer to Sav 3570	>	transfer:3570_project
 
+Interest Earned > income:misc
+UC BERKELEY DES > income:berkeley
+UNIVERSITY OF CA DES > income:berkeley
+
 CAPITAL ONE AUTOPAY PYMT > transfer:credit_card_payment
-CAPITAL ONE DES:CRCARDPMT > transfer:credit_card_payment
+CAPITAL ONE DES > transfer:credit_card_payment
+CHASE CREDIT CRD DES > transfer:credit_card_payment
 BANK OF AMERICA CREDIT CARD Bill Payment > transfer:credit_card_payment
 PAYMENT - THANK YOU > transfer:credit_card_payment
+AUTOMATIC PAYMENT - THANK > transfer:credit_card_payment
 
 FOREIGN TRANSACTION	>	financial:fees
 FEDLOANSERVICING > financial:student_loan_payment
+
+2920 A AGE 0-4 DES:INVESTMENT > savings:college_savings
 
 WIKITRIBUNE	>	gift:donation
 
 Property Management Systems	>	home:misc
 WASTE MANAGEMENT > home:utilities
+EAST BAY MUD > home:utilities
 PGANDE > home:utilities
 ADTSECURITY > home:home_alarm
 COMCAST > home:internet
+NETFLIX.COM > entertainment:misc
 
 IKEA > home:furnishings
 
@@ -26,8 +36,23 @@ STONE KOREAN KITCHEN > food:sj_lunch
 HAPPY DONUTS > food:sj_lunch
 SHSHI UMI > food:sj_lunch
 YIFANG TAIWAN > food:sj_lunch
+SUSHIRRITO > food:sj_lunch
+SUSHI UMI > food:sj_lunch
+I - TEA KEARNY > food:sj_lunch
+SUBWAY > food:sj_lunch
+TENDER GREENS > food:sj_lunch
+CHONG QING XIAO MIAN > food:sj_lunch
+SNOWFLAKE TREATS > food:sj_lunch
+RAMEN > food:sj_lunch
+SF WRAPS > food:sj_lunch
+COCO FRESH TEA & JUICE > food:sj_lunch
 
 RICE & BONES > food:ks_lunch
+RICE &amp; BONES > food:ks_lunch
+SAUL S RESTAURANT > food:ks_lunch
+THE FACULTY CLUB > food:ks_lunch
+CAFE ZEB > food:ks_lunch
+LABURRITA > food:ks_lunch
 
 CAVIAR > food:restaurants
 KINJA SUSHI > food:restaurants
@@ -36,12 +61,36 @@ CANCUN SABOR MEXICAN > food:restaurants
 CACTUS TAQUERIA > food:restaurants
 GRUBHUB > food:restaurants
 BEAUTY S BAGEL > food:restaurants
+UMAMI BURGER > food:restaurants
+SUPER DUPER BURGER > food:restaurants
+ARIZMENDI > food:restaurants
+THE GREAT CHINA > food:restaurants
+FARM HOUSE OAKLAND > food:restaurants
+TACUBAYA > food:restaurants
+FUNKY ELEPHANT > food:restaurants
+BRAZIL CAFE BERKELEY > food:restaurants
+Beer Baron > food:restaurants
+The Star > food:restaurants
+BERKELEY BURGE > food:restaurants
 
 GONG CHA > food:fast_food
 BEAUTY S BAGEL SHOP > food:fast_food
 STARBUCKS > food:fast_food
 CAFE STRADA > food:fast_food
 PHILZ COFFEE > food:fast_food
+PEET'S > food:fast_food
+PARIS BAGUETTE > food:fast_food
+CHICK FIL A > food:fast_food
+ICEY CREAM > food:fast_food
+
+KOREANA PLAZA > food:groceries
+VER BRUGGE FOODS > food:groceries
+LA FARINE > food:groceries
+SAFEWAY > food:groceries
+WHOLEFDS > food:groceries
+BERKELEY BOWL > food:groceries
+PrimeNowMktp > food:groceries
+PrimeNowTips > food:groceries
 
 BAY GRAPE > food:alcohol
 
@@ -49,19 +98,32 @@ UC Regents Bill Payment > childcare:uc_daycare
 
 
 BIRD APP > transportation:rideshare
+LIM > transportation:rideshare
 LYFT > transportation:rideshare
-
+CITY OF BERKELEY- IPS > transportation:parking
+UCB PARKING AND TRANS > transportation:parking
+OAKLAND PARK METER > transportation:parking
+CHEVRON > transportation:gas
+SHELL OIL > transportation:gas
 
 KAISER > health:doctor
 CVS/PHARMACY > health:pharmacy
+WALGREENS > health:pharmacy
 
 
 LASTPASS > professional:business_services
 Amazon web services > professional:business_services
-GOOGLE*GOOGLE STORAGE > professional:business_services
+GOOGLE STORAGE > professional:business_services
+Evernote Corp > professional:business_services
 
 
 ITUNES.COM > shopping:electronics_and_software
+Amazon.com > shopping:amazon
+AMZN Mktp US > shopping:amazon
+WALMART > shopping:amazon
+TARGET > shopping:amazon
+GAP ONLINE > shopping:clothing
+REI > shopping:clothing
 
 PERKINS CLEANERS > personal_care:laundry
 ALLURE SALON > personal_care:hair

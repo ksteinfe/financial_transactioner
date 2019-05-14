@@ -22,6 +22,10 @@ def do_process_directory(pth_src, pth_inf_mdl=False):
             inf_csv.append((strs_csv,cat,os.path.basename(pth_csv)))
         except Exception as e:
             print("!!! {}\n{}\nSkipping.".format(os.path.basename(pth_csv),e))
+            print("continue? yes/no?")
+            choice = input().lower()
+            if choice in {'yes','y', 'ye'}: continue
+            exit()
 
     # parse CSV files to transactions
     tacts = []
@@ -120,6 +124,7 @@ def csv_to_tacts(strs, cat, name):
                 "acnt": acnt,
                 "desc": row['Original Description'],
                 "_catg": row['Category'],
+                "_trust_catg": True,
                 "_desc": row['Description'],
                 "_labl": row['Labels'],
                 "_note": row['Notes']
@@ -144,7 +149,8 @@ def csv_to_tacts(strs, cat, name):
                 "date": date,
                 "amnt": amnt,
                 "desc": row['Description'],
-                "_catg": row['Category']
+                "_catg": row['Category'],
+                "_trust_catg": False
             }
             #print(tact)
         if cat is Account.CAP_ONE:
@@ -155,11 +161,12 @@ def csv_to_tacts(strs, cat, name):
                 "date": date,
                 "amnt": amnt,
                 "desc": row['Description'],
-                "_catg": row['Category']
+                "_catg": row['Category'],
+                "_trust_catg": False
             }
             #print(tact)
 
-        if cat is Account.BOA_VISA:
+        if cat is Account.BOA_VISA or cat is Account.BOA_ALSK:
             #print("'{}'\t'{}''".format(row['Debit'],row['Credit']))
             amnt = float(row['Amount'])
             date = datetime.strptime(row['Posted Date'], "%m/%d/%Y")
@@ -186,7 +193,11 @@ def determine_csv_category(pth_csv):
         if line.lower().startswith("transaction date,posted date"): return Account.CAP_ONE
         if line.lower().startswith("transaction date,post date"): return Account.CHASE
         if line.lower().startswith('"date","description"'): return Account.MINT_HISTORICAL
-        if line.lower().startswith('posted date,reference number'): return Account.BOA_VISA # what about alaska card??
+        if line.lower().startswith('posted date,reference number'):
+            if "visa" in os.path.basename(pth_csv): return Account.BOA_VISA
+            if "alsk" in os.path.basename(pth_csv): return Account.BOA_ALSK
+            if "alaska" in os.path.basename(pth_csv): return Account.BOA_ALSK
+            raise ValueError("This looks like a BoA Credit Card CSV file, but I couldn't tell which type from the name of the file.\nDidn't find 'visa' or 'alsk' or 'alaska'.")
         if line.lower().startswith("description,,summary"):
             if "2955" in os.path.basename(pth_csv): return Account.BOA_CHECK
             if "2232" in os.path.basename(pth_csv): return Account.BOA_BILLS
