@@ -71,7 +71,7 @@ def do_process_directory(pth_src, pth_inf_mdl=False):
         print("removing temp npy file: {}".format(f))
         os.remove(f)
 
-    with open('out.csv', 'w', newline='') as f:
+    with open(os.path.join(pth_src,'out.csv'), 'w', newline='') as f:
         keys = ["date", "amnt", "acnt", "catg", "_catg", "pred", "prob", "desc"]
         tacts_write = [{key: value for key, value in tact.items() if key in keys} for tact in tacts]
         tacts_write = sorted(tacts_write, key = lambda i: i['date'])
