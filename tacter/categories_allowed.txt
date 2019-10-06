@@ -7,6 +7,7 @@ education:supplies
 education:tuition
 
 entertainment:misc
+entertainment:camping_and_supplies
 
 financial:fees
 financial:student_loan_payment
