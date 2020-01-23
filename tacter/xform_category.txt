@@ -1,5 +1,5 @@
 529 College Savings	>	savings:college_savings
-Air Travel	>	vacation:air_travel
+Air Travel	>	project:vacation_air_travel
 Alcohol & Bars	>	food:alcohol
 Amazon	>	shopping:amazon
 Amusement	>	entertainment:misc
@@ -46,7 +46,7 @@ Home Improvement	>	home:home_improvement
 Home Insurance	>	home:home_insurance
 Home Services	>	home:home_serivces
 Home Supplies	>	home:home_improvement
-Hotel	>	vacation:hotel
+Hotel	>	project:vacation_hotel
 Income	>	income:misc
 Interest Income	>	income:misc
 Internet	>	home:internet
@@ -71,7 +71,7 @@ Printing	>	professional:misc
 Property Tax	>	tax:property_tax
 Public Transportation	>	transportation:mass_transit
 Reimbursement	>	income:reimbursment
-Rental Car & Taxi	>	vacation:car_rental
+Rental Car & Taxi	>	project:vacation_car_rental
 Restaurants	>	food:restaurants
 Service & Parts	>	transportation:auto_parts_and_repair
 Shipping	>	professional:shipping
@@ -87,11 +87,11 @@ Transfer	>	unknown:unaccounted_transfer
 Transfer Bills 2232	>	transfer:2232_bills
 Transfer Deep 1816	>	transfer:1816_deep
 Transfer Proj 3570	>	transfer:3570_project
-Travel	>	vacation:misc
+Travel	>	project:vacation_misc
 Tuition	>	education:tuition
 Unaccounted Cash	>	unknown:unaccounted_cash
 Unaccounted Transfer	>	unknown:unaccounted_transfer
 Uncategorized	>	unknown:undefined
 Utilities	>	home:utilities
-Vacation	>	vacation:misc
+Vacation	>	project:vacation_misc
 Zipcar	>	transportation:rideshare
