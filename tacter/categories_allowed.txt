@@ -51,6 +51,7 @@ project:vacation_air_travel
 project:vaction_car_rental
 project:vacation_hotel
 project:vacation_misc
+project:big_medical
 rare:parking_ticket
 reimbursment:berkeley
 reimbursment:som
