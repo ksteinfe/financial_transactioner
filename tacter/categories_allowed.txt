@@ -32,6 +32,9 @@ home:misc
 home:mobile_phone
 home:mortgage
 home:utilities
+home:utilities_pge
+home:utilities_wm
+home:utilities_mud
 income:berkeley
 income:bonus
 income:misc
