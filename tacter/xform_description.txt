@@ -21,9 +21,9 @@ CA DIR ACH DES:CONTRIB > savings:college_savings
 WIKITRIBUNE	>	gift:donation
 
 Property Management Systems	>	home:misc
-WASTE MANAGEMENT > home:utilities
-EAST BAY MUD > home:utilities
-PGANDE > home:utilities
+WASTE MANAGEMENT > home:utilities_wm
+EAST BAY MUD > home:utilities_mud
+PGANDE > home:utilities_pge
 ADTSECURITY > home:home_alarm
 COMCAST > home:internet
 NETFLIX.COM > entertainment:misc
@@ -73,6 +73,7 @@ BRAZIL CAFE BERKELEY > food:restaurants
 Beer Baron > food:restaurants
 The Star > food:restaurants
 BERKELEY BURGE > food:restaurants
+DOORDASH > food:restaurants
 
 GONG CHA > food:fast_food
 BEAUTY S BAGEL SHOP > food:fast_food
@@ -92,6 +93,8 @@ WHOLEFDS > food:groceries
 BERKELEY BOWL > food:groceries
 PrimeNowMktp > food:groceries
 PrimeNowTips > food:groceries
+COSTCO > food:groceries
+seaforager.com > food:groceries
 
 BAY GRAPE > food:alcohol
 
