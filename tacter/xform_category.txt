@@ -34,6 +34,8 @@ Food & Dining	>	food:misc
 Food Services	>	food:food_services
 Furnishings	>	home:furnishings
 Gas & Fuel	>	transportation:gas
+Gas >	transportation:gas
+Gas/Automotive >	transportation:gas
 Gift	>	gift:misc
 Gifts & Donations	>	gift:misc
 Groceries	>	food:groceries
@@ -44,7 +46,6 @@ Home	>	home:misc
 Home Alarm System	>	home:home_alarm
 Home Improvement	>	home:home_improvement
 Home Insurance	>	home:home_insurance
-Home Services	>	home:home_serivces
 Home Supplies	>	home:home_improvement
 Hotel	>	project:vacation_hotel
 Income	>	income:misc
@@ -70,10 +71,7 @@ Pharmacy	>	health:pharmacy
 Printing	>	professional:misc
 Property Tax	>	tax:property_tax
 Public Transportation	>	transportation:mass_transit
-Reimbursement	>	income:reimbursment
-Rental Car & Taxi	>	project:vacation_car_rental
 Restaurants	>	food:restaurants
-Service & Parts	>	transportation:auto_parts_and_repair
 Shipping	>	professional:shipping
 Shopping	>	shopping:misc
 SJ Luncheon	>	food:sj_lunch

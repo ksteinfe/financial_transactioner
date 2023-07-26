@@ -49,7 +49,7 @@ def do_process_directory(pth_src, pth_inf_mdl=False):
         if not tact['catg']:
             g = False
             if '_catg' in tact and tact['_catg']: g = tact['_catg']
-            print("could not deterimine category\t{:%d/%m/%y}\t{}\t{}\t{}\t{}".format(tact['date'],tact['amnt'],tact['acnt'],g,tact['desc']))
+            #print("could not deterimine category\t{:%d/%m/%y}\t{}\t{}\t{}\t{}".format(tact['date'],tact['amnt'],tact['acnt'],g,tact['desc']))
             if g: cats_bad.add(g)
             tacts_bad.append(tact)
             continue
@@ -134,7 +134,8 @@ def csv_to_tacts(strs, cat, name):
             if n==0 and row['Description'].startswith('Beginning balance'):
                 print("skipping beginning balance transaction.")
                 continue
-            amnt = float(row['Amount'])
+            
+            amnt = float(row['Amount'].replace(',',''))
             date = datetime.strptime(row['Date'], "%m/%d/%Y")
             tact = {
                 "date": date,
