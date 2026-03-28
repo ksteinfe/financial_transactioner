@@ -1,0 +1,36 @@
+{
+  "source": "Legacy tacter/account.py enum values",
+  "accounts": [
+    {
+      "id": "BOA_CHECK",
+      "value": "primary_checking",
+      "legacy_note": "Comment in legacy code references account number suffix 2955."
+    },
+    {
+      "id": "BOA_BILLS",
+      "value": "bills_checking",
+      "legacy_note": "Comment in legacy code references account number suffix 2232."
+    },
+    {
+      "id": "BOA_VISA",
+      "value": "boa_visa"
+    },
+    {
+      "id": "BOA_ALSK",
+      "value": "boa_alsk",
+      "legacy_note": "Likely Alaska card variant inferred from naming."
+    },
+    {
+      "id": "CHASE",
+      "value": "chase"
+    },
+    {
+      "id": "CAP_ONE",
+      "value": "capital_one"
+    },
+    {
+      "id": "MINT_HISTORICAL",
+      "value": "mint"
+    }
+  ]
+}
