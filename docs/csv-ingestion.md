@@ -21,6 +21,8 @@ Normative terms:
 - Input files are downloaded `.csv` files from supported institutions.
 - CSV formats are not uniform across institutions.
 - Ingestion MUST treat format detection and parsing as bank-specific.
+- Bank-provided category columns (for example `Category`) are **non-authoritative**
+  and MUST NOT be written directly to corpus `category`.
 
 Supported source identifiers (from filename):
 
@@ -113,7 +115,8 @@ Parsing:
   - negative = debit
   - positive = credit
 - Description: trim surrounding whitespace.
-- Source category candidate: `Category`.
+- Source category candidate: `Category` (non-authoritative; store as
+  `source_category` signal only).
 - Account normalization: derive canonical account id from `Account Name` and/or
   filename metadata.
 
@@ -141,7 +144,8 @@ Parsing:
   - else if `Credit` has value -> `amount = +abs(Credit)`
   - else -> fail row validation
 - Description: trim surrounding whitespace.
-- Source category candidate: `Category`.
+- Source category candidate: `Category` (non-authoritative; store as
+  `source_category` signal only).
 
 Legacy mismatch (explicit uncertainty):
 
@@ -190,6 +194,9 @@ Each parsed CSV row MUST be normalized into this intermediate object:
 }
 ```
 
+`source_category` is an optional raw hint only. It MUST NOT be treated as the
+final canonical category.
+
 Then map normalized object to corpus transaction fields:
 
 - `date` -> `date`
@@ -202,14 +209,26 @@ Then map normalized object to corpus transaction fields:
 
 ## 7) Category resolution and validation
 
-Category resolution MUST align with preserved legacy mappings:
+Category resolution MUST use an internal categorization process/tool owned by
+this project; bank-provided categories are not trusted.
 
-1. If source category is present and trusted/mappable:
-   - map through `reference/legacy-domain/category_mapping_legacy_to_canonical.tsv`
-2. Then apply description substring rules (case-insensitive):
-   - `reference/legacy-domain/description_mapping_legacy_to_canonical.tsv`
-3. Validate final category is in:
+Required behavior:
+
+1. Run internal categorization tool on normalized transaction data (at minimum:
+   `description`, `amount`, `account`, `date`; optional `source_category` as a
+   weak feature only).
+2. Tool output MUST be a canonical `major:minor` category.
+3. Validate tool output is in:
    - `reference/allowed-categories.json`
+
+Legacy alignment (secondary support, non-authoritative):
+
+- `reference/legacy-domain/category_mapping_legacy_to_canonical.tsv`
+- `reference/legacy-domain/description_mapping_legacy_to_canonical.tsv`
+
+These legacy mappings MAY be used for feature engineering, warm-start defaults,
+or fallback suggestions, but MUST NOT override the internal categorization tool
+without explicit policy.
 
 Validation requirements:
 
@@ -217,7 +236,8 @@ Validation requirements:
 - category MUST be `major:minor`
 - category MUST be in allowed list
 
-If unresolved, ingestion SHOULD assign `unknown:undefined` and emit a warning.
+If category remains unresolved after categorization + policy fallback, ingestion
+MUST assign `unknown:undefined` and emit a warning.
 
 ## 8) Ingestion pipeline (required sequence)
 
@@ -226,11 +246,12 @@ Ingestion MUST execute in this order:
 1. Identify source type from filename (`boa`, `capone`, `chase`).
 2. Parse CSV rows with bank-specific parser.
 3. Normalize fields into common shape.
-4. Determine insert vs update candidate for each normalized row.
-5. Deduplicate using deterministic identity.
-6. Validate/resolve category against allowed list and mappings.
-7. Write to yearly JSON file (`YYYY.json`) in corpus.
-8. Update `metadata` (`last_sync_date`, `sources`, `last_push_date` policy).
+4. Deduplicate and locate existing candidate via deterministic identity.
+5. Run internal categorization tool to produce canonical category.
+6. Validate category against allowed list and apply unresolved policy.
+7. Determine **insert** vs **update** decision.
+8. Write to yearly JSON file (`YYYY.json`) in corpus.
+9. Update `metadata` (`last_sync_date`, `sources`, `last_push_date` policy).
 
 ## 9) Insert vs update and deduplication contract
 
@@ -257,7 +278,9 @@ Where `normalized_description` is:
 - One match, no field changes -> no-op
 - Multiple matches -> fail with conflict error (manual intervention required)
 
-This ensures idempotent re-ingestion of identical files.
+This ensures idempotent re-ingestion of identical files while allowing category
+improvements from the internal categorization process to flow through as
+deterministic updates.
 
 ## 10) Source tracking (`.csv` -> `metadata.sources`)
 

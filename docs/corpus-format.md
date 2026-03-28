@@ -189,7 +189,11 @@ Legacy mapping sources (for CSV ingestion):
 - `reference/legacy-domain/category_mapping_legacy_to_canonical.tsv`
 - `reference/legacy-domain/description_mapping_legacy_to_canonical.tsv`
 
-If a category cannot be resolved from known mappings/rules, writers SHOULD use
+Bank-provided CSV category labels are non-authoritative input hints only; corpus
+writers MUST set `category` using the project categorization process/toolchain,
+then validate membership in the allowed list.
+
+If a category cannot be resolved by that process, writers SHOULD use
 `unknown:undefined` and emit a warning for follow-up cleanup.
 
 ## 8) Behavioral rules: idempotency, dedupe, insert vs update
