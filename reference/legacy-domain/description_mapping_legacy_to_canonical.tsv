@@ -1,0 +1,111 @@
+legacy_description_substring	canonical_category	note
+transfer to Sav 1816	savings:deep_savings	case-insensitive substring match in legacy code
+transfer to Sav 3570	transfer:3570_project	case-insensitive substring match in legacy code
+Interest Earned	income:misc	case-insensitive substring match in legacy code
+UC BERKELEY DES	income:berkeley	case-insensitive substring match in legacy code
+UNIVERSITY OF CA DES	income:berkeley	case-insensitive substring match in legacy code
+CAPITAL ONE AUTOPAY PYMT	transfer:credit_card_payment	case-insensitive substring match in legacy code
+CAPITAL ONE DES	transfer:credit_card_payment	case-insensitive substring match in legacy code
+CHASE CREDIT CRD DES	transfer:credit_card_payment	case-insensitive substring match in legacy code
+BANK OF AMERICA CREDIT CARD Bill Payment	transfer:credit_card_payment	case-insensitive substring match in legacy code
+PAYMENT - THANK YOU	transfer:credit_card_payment	case-insensitive substring match in legacy code
+AUTOMATIC PAYMENT - THANK	transfer:credit_card_payment	case-insensitive substring match in legacy code
+FOREIGN TRANSACTION	financial:fees	case-insensitive substring match in legacy code
+FEDLOANSERVICING	financial:student_loan_payment	case-insensitive substring match in legacy code
+2920 A AGE 0-4 DES:INVESTMENT	savings:college_savings	case-insensitive substring match in legacy code
+CA DIR ACH DES:CONTRIB	savings:college_savings	case-insensitive substring match in legacy code
+WIKITRIBUNE	gift:donation	case-insensitive substring match in legacy code
+Property Management Systems	home:misc	case-insensitive substring match in legacy code
+WASTE MANAGEMENT	home:utilities_wm	case-insensitive substring match in legacy code
+EAST BAY MUD	home:utilities_mud	case-insensitive substring match in legacy code
+PGANDE	home:utilities_pge	case-insensitive substring match in legacy code
+ADTSECURITY	home:home_alarm	case-insensitive substring match in legacy code
+COMCAST	home:internet	case-insensitive substring match in legacy code
+NETFLIX.COM	entertainment:misc	case-insensitive substring match in legacy code
+IKEA	home:furnishings	case-insensitive substring match in legacy code
+LEES DELI	food:sj_lunch	case-insensitive substring match in legacy code
+77 CHINESE AND VIETNAM	food:sj_lunch	case-insensitive substring match in legacy code
+STONE KOREAN KITCHEN	food:sj_lunch	case-insensitive substring match in legacy code
+HAPPY DONUTS	food:sj_lunch	case-insensitive substring match in legacy code
+SHSHI UMI	food:sj_lunch	case-insensitive substring match in legacy code; likely typo in source
+YIFANG TAIWAN	food:sj_lunch	case-insensitive substring match in legacy code
+SUSHIRRITO	food:sj_lunch	case-insensitive substring match in legacy code
+SUSHI UMI	food:sj_lunch	case-insensitive substring match in legacy code
+I - TEA KEARNY	food:sj_lunch	case-insensitive substring match in legacy code
+SUBWAY	food:sj_lunch	case-insensitive substring match in legacy code
+TENDER GREENS	food:sj_lunch	case-insensitive substring match in legacy code
+CHONG QING XIAO MIAN	food:sj_lunch	case-insensitive substring match in legacy code
+SNOWFLAKE TREATS	food:sj_lunch	case-insensitive substring match in legacy code
+RAMEN	food:sj_lunch	case-insensitive substring match in legacy code
+SF WRAPS	food:sj_lunch	case-insensitive substring match in legacy code
+COCO FRESH TEA & JUICE	food:sj_lunch	case-insensitive substring match in legacy code
+RICE & BONES	food:ks_lunch	case-insensitive substring match in legacy code
+RICE &amp; BONES	food:ks_lunch	case-insensitive substring match in legacy code; HTML-escaped variant in source
+SAUL S RESTAURANT	food:ks_lunch	case-insensitive substring match in legacy code
+THE FACULTY CLUB	food:ks_lunch	case-insensitive substring match in legacy code
+CAFE ZEB	food:ks_lunch	case-insensitive substring match in legacy code
+LABURRITA	food:ks_lunch	case-insensitive substring match in legacy code
+CAVIAR	food:restaurants	case-insensitive substring match in legacy code
+KINJA SUSHI	food:restaurants	case-insensitive substring match in legacy code
+DOSIRAK SHOP	food:restaurants	case-insensitive substring match in legacy code
+CANCUN SABOR MEXICAN	food:restaurants	case-insensitive substring match in legacy code
+CACTUS TAQUERIA	food:restaurants	case-insensitive substring match in legacy code
+GRUBHUB	food:restaurants	case-insensitive substring match in legacy code
+BEAUTY S BAGEL	food:restaurants	case-insensitive substring match in legacy code
+UMAMI BURGER	food:restaurants	case-insensitive substring match in legacy code
+SUPER DUPER BURGER	food:restaurants	case-insensitive substring match in legacy code
+ARIZMENDI	food:restaurants	case-insensitive substring match in legacy code
+THE GREAT CHINA	food:restaurants	case-insensitive substring match in legacy code
+FARM HOUSE OAKLAND	food:restaurants	case-insensitive substring match in legacy code
+TACUBAYA	food:restaurants	case-insensitive substring match in legacy code
+FUNKY ELEPHANT	food:restaurants	case-insensitive substring match in legacy code
+BRAZIL CAFE BERKELEY	food:restaurants	case-insensitive substring match in legacy code
+Beer Baron	food:restaurants	case-insensitive substring match in legacy code
+The Star	food:restaurants	case-insensitive substring match in legacy code
+BERKELEY BURGE	food:restaurants	case-insensitive substring match in legacy code; truncated token in source
+DOORDASH	food:restaurants	case-insensitive substring match in legacy code
+GONG CHA	food:fast_food	case-insensitive substring match in legacy code
+BEAUTY S BAGEL SHOP	food:fast_food	case-insensitive substring match in legacy code
+STARBUCKS	food:fast_food	case-insensitive substring match in legacy code
+CAFE STRADA	food:fast_food	case-insensitive substring match in legacy code
+PHILZ COFFEE	food:fast_food	case-insensitive substring match in legacy code
+PEET'S	food:fast_food	case-insensitive substring match in legacy code
+PARIS BAGUETTE	food:fast_food	case-insensitive substring match in legacy code
+CHICK FIL A	food:fast_food	case-insensitive substring match in legacy code
+ICEY CREAM	food:fast_food	case-insensitive substring match in legacy code
+KOREANA PLAZA	food:groceries	case-insensitive substring match in legacy code
+VER BRUGGE FOODS	food:groceries	case-insensitive substring match in legacy code
+LA FARINE	food:groceries	case-insensitive substring match in legacy code
+SAFEWAY	food:groceries	case-insensitive substring match in legacy code
+WHOLEFDS	food:groceries	case-insensitive substring match in legacy code
+BERKELEY BOWL	food:groceries	case-insensitive substring match in legacy code
+PrimeNowMktp	food:groceries	case-insensitive substring match in legacy code
+PrimeNowTips	food:groceries	case-insensitive substring match in legacy code
+COSTCO	food:groceries	case-insensitive substring match in legacy code
+seaforager.com	food:groceries	case-insensitive substring match in legacy code
+BAY GRAPE	food:alcohol	case-insensitive substring match in legacy code
+UC Regents Bill Payment	childcare:uc_daycare	case-insensitive substring match in legacy code
+BIRD APP	transportation:rideshare	case-insensitive substring match in legacy code
+LIM	transportation:rideshare	case-insensitive substring match in legacy code; ambiguous short token
+LYFT	transportation:rideshare	case-insensitive substring match in legacy code
+CITY OF BERKELEY- IPS	transportation:parking	case-insensitive substring match in legacy code
+UCB PARKING AND TRANS	transportation:parking	case-insensitive substring match in legacy code
+OAKLAND PARK METER	transportation:parking	case-insensitive substring match in legacy code
+CHEVRON	transportation:gas	case-insensitive substring match in legacy code
+SHELL OIL	transportation:gas	case-insensitive substring match in legacy code
+KAISER	health:doctor	case-insensitive substring match in legacy code
+CVS/PHARMACY	health:pharmacy	case-insensitive substring match in legacy code
+WALGREENS	health:pharmacy	case-insensitive substring match in legacy code
+LASTPASS	professional:business_services	case-insensitive substring match in legacy code
+Amazon web services	professional:business_services	case-insensitive substring match in legacy code
+GOOGLE STORAGE	professional:business_services	case-insensitive substring match in legacy code
+Evernote Corp	professional:business_services	case-insensitive substring match in legacy code
+ITUNES.COM	shopping:electronics_and_software	case-insensitive substring match in legacy code
+Amazon.com	shopping:amazon	case-insensitive substring match in legacy code
+AMZN Mktp US	shopping:amazon	case-insensitive substring match in legacy code
+WALMART	shopping:amazon	case-insensitive substring match in legacy code; likely intentional consolidation
+TARGET	shopping:amazon	case-insensitive substring match in legacy code; likely intentional consolidation
+GAP ONLINE	shopping:clothing	case-insensitive substring match in legacy code
+REI	shopping:clothing	case-insensitive substring match in legacy code
+PERKINS CLEANERS	personal_care:laundry	case-insensitive substring match in legacy code
+ALLURE SALON	personal_care:hair	case-insensitive substring match in legacy code

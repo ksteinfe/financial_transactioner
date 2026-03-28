@@ -1,0 +1,96 @@
+legacy_label	canonical_category	note
+529 College Savings	savings:college_savings	from xform_category.txt
+Air Travel	project:vacation_air_travel	from xform_category.txt
+Alcohol & Bars	food:alcohol	from xform_category.txt
+Amazon	shopping:amazon	from xform_category.txt
+Amusement	entertainment:misc	from xform_category.txt
+ATM Fee	financial:fees	from xform_category.txt
+Auto & Transport	transportation:misc	from xform_category.txt
+Auto Insurance	transportation:auto_insurance	from xform_category.txt
+Auto Payment	transportation:auto_payment	from xform_category.txt
+Baby Supplies	shopping:baby	from xform_category.txt
+Babysitter & Daycare	childcare:nanny_and_babysitter	from xform_category.txt
+Bank Fee	financial:fees	from xform_category.txt
+BART	transportation:mass_transit	from xform_category.txt
+Bonus	income:bonus	from xform_category.txt
+Books	professional:books	from xform_category.txt
+Business Services	professional:business_services	from xform_category.txt
+Cash & ATM	unknown:unaccounted_cash	from xform_category.txt
+Check	unknown:undefined	from xform_category.txt
+Closing Costs	home:misc	from xform_category.txt
+Clothing	shopping:clothing	from xform_category.txt
+Coffee Shops	food:fast_food	from xform_category.txt
+Credit Card Payment	transfer:credit_card_payment	from xform_category.txt
+Dentist	health:dentist	from xform_category.txt
+Doctor	health:doctor	from xform_category.txt
+Electronics & Software	shopping:electronics_and_software	from xform_category.txt
+Entertainment	entertainment:misc	from xform_category.txt
+Eyecare	health:vision	from xform_category.txt
+Fast Food	food:fast_food	from xform_category.txt
+Federal Tax	tax:federal_tax	from xform_category.txt
+Fees & Charges	financial:fees	from xform_category.txt
+Finance Charge	financial:fees	from xform_category.txt
+Financial	financial:fees	from xform_category.txt
+Food & Dining	food:misc	from xform_category.txt
+Food Services	food:food_services	from xform_category.txt
+Furnishings	home:furnishings	from xform_category.txt
+Gas & Fuel	transportation:gas	from xform_category.txt
+Gas	transportation:gas	from xform_category.txt (spacing inconsistent in source)
+Gas/Automotive	transportation:gas	from xform_category.txt (spacing inconsistent in source)
+Gift	gift:misc	from xform_category.txt
+Gifts & Donations	gift:misc	from xform_category.txt
+Groceries	food:groceries	from xform_category.txt
+Gym	health:gym	from xform_category.txt
+Hair	personal_care:hair	from xform_category.txt
+Health & Fitness	health:misc	from xform_category.txt
+Home	home:misc	from xform_category.txt
+Home Alarm System	home:home_alarm	from xform_category.txt
+Home Improvement	home:home_improvement	from xform_category.txt
+Home Insurance	home:home_insurance	from xform_category.txt
+Home Supplies	home:home_improvement	from xform_category.txt
+Hotel	project:vacation_hotel	from xform_category.txt
+Income	income:misc	from xform_category.txt
+Interest Income	income:misc	from xform_category.txt
+Internet	home:internet	from xform_category.txt
+Kids	kids:misc	from xform_category.txt
+Kids Activities	kids:activities	from xform_category.txt
+KS Luncheon	food:ks_lunch	from xform_category.txt
+Laundry	personal_care:laundry	from xform_category.txt
+Lawn & Garden	home:home_improvement	from xform_category.txt
+Local Tax	tax:local_tax	from xform_category.txt
+Mobile Phone	home:mobile_phone	from xform_category.txt
+Movies & DVDs	entertainment:misc	from xform_category.txt
+Music	entertainment:misc	from xform_category.txt
+Nanny	childcare:nanny_and_babysitter	from xform_category.txt
+Office Supplies	professional:misc	from xform_category.txt
+Parking	transportation:parking	from xform_category.txt
+Parking Ticket	rare:parking_ticket	from xform_category.txt
+Paycheck - Berkeley	income:berkeley	from xform_category.txt
+Paycheck - SOM	income:som	from xform_category.txt
+Personal Care	personal_care:misc	from xform_category.txt
+Pharmacy	health:pharmacy	from xform_category.txt
+Printing	professional:misc	from xform_category.txt
+Property Tax	tax:property_tax	from xform_category.txt
+Public Transportation	transportation:mass_transit	from xform_category.txt
+Restaurants	food:restaurants	from xform_category.txt
+Shipping	professional:shipping	from xform_category.txt
+Shopping	shopping:misc	from xform_category.txt
+SJ Luncheon	food:sj_lunch	from xform_category.txt
+Spa & Massage	health:misc	from xform_category.txt
+Sporting Goods	shopping:misc	from xform_category.txt
+State Tax	tax:state_tax	from xform_category.txt
+Student Loan	financial:student_loan_payment	from xform_category.txt
+Tolls	transportation:misc	from xform_category.txt
+Toys	shopping:misc	from xform_category.txt
+Transfer	unknown:unaccounted_transfer	from xform_category.txt
+Transfer Bills 2232	transfer:2232_bills	from xform_category.txt
+Transfer Deep 1816	transfer:1816_deep	from xform_category.txt
+Transfer Proj 3570	transfer:3570_project	from xform_category.txt
+Travel	project:vacation_misc	from xform_category.txt
+Tuition	education:tuition	from xform_category.txt
+Unaccounted Cash	unknown:unaccounted_cash	from xform_category.txt
+Unaccounted Transfer	unknown:unaccounted_transfer	from xform_category.txt
+Uncategorized	unknown:undefined	from xform_category.txt
+Utilities	home:utilities	from xform_category.txt
+Vacation	project:vacation_misc	from xform_category.txt
+Zipcar	transportation:rideshare	from xform_category.txt
