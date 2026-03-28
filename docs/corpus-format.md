@@ -213,11 +213,14 @@ Required behavior:
 6. If multiple matches are found, tooling MUST fail the write and surface a
    conflict for manual resolution.
 
-## 9) Corpus and git constraints
+## 9) Corpus boundary constraints
 
 - Corpus data is local runtime data, not repository source code.
 - Corpus files MUST remain outside the repository working tree.
-- `.gitignore` MUST protect against accidental local corpus commits.
+- Tool/app interaction with corpus data MUST occur via external paths configured
+  in environment (`TRANSACTION_CORPUS_DIR` and related download directories).
+- Repository source control MUST NOT be used to track corpus snapshots, diffs,
+  caches, or any other corpus interaction artifacts.
 
 ## 10) Legacy alignment and known differences
 
