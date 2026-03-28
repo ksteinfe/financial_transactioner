@@ -51,6 +51,18 @@ without retaining obsolete code.
 ## New active repository purpose
 
 1. Build ingestion/normalization tooling for downloaded bank transactions.
-2. Integrate results into a local JSON corpus **excluded from git**.
+2. Integrate results into a local JSON corpus configured by shared environment
+   variables.
 3. Build applications (likely JavaScript/Electron) for corpus visualization and
    maintenance.
+
+## Shared environment contract
+
+This umbrella repo now uses a root `.env` contract shared by tools and apps.
+A sample file is provided at `.env.example`.
+
+Expected variables:
+
+- `TRANSACTION_CORPUS_DIR`: local JSON corpus directory
+- `TRANSACTION_DOWNLOADS_UNPROCESSED_DIR`: directory for unprocessed downloaded transaction CSV files
+- `TRANSACTION_DOWNLOADS_PROCESSED_DIR`: directory for CSV files after they are processed
