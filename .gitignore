@@ -4,3 +4,12 @@ results/
 *.pyc
 *.csv
 .env
+
+# Local corpus/runtime data must never be committed.
+# The preferred setup is external directories via .env, but these patterns
+# guard common in-repo local folder names.
+transaction-corpus/
+corpus/
+local-corpus/
+transactions/unprocessed/
+transactions/processed/
