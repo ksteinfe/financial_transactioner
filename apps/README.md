@@ -3,6 +3,9 @@
 This directory is reserved for end-user applications over the local transaction
 corpus.
 
+Configuration for all apps is centralized in repository-root `.env` (copy from
+`.env.example`).
+
 Expected near-term focus:
 
 - JavaScript/Electron applications for:

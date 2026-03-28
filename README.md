@@ -42,3 +42,16 @@ See `docs/repository-transition.md` for details.
 - Read `docs/repository-transition.md` for context.
 - Review `reference/legacy-domain/` for extracted legacy vocabulary.
 - Start new implementation work in `tools/` and `apps/`.
+
+## Shared environment configuration
+
+All tools and apps should read data-directory locations from the root `.env`.
+
+1. Copy `.env.example` to `.env`.
+2. Set absolute paths for your local machine:
+   - `TRANSACTION_CORPUS_DIR`
+   - `TRANSACTION_DOWNLOADS_UNPROCESSED_DIR`
+   - `TRANSACTION_DOWNLOADS_PROCESSED_DIR`
+
+This provides a single, stable configuration contract across `tools/` and
+`apps/`.

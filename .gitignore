@@ -3,11 +3,4 @@ data.json
 results/
 *.pyc
 *.csv
-
-# Local transaction corpus (must remain out of git)
-corpus/
-local-corpus/
-data/corpus/
-data/local-corpus/
-*.corpus.json
-*.transactions.json
+.env
