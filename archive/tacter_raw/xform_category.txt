@@ -1,0 +1,95 @@
+529 College Savings	>	savings:college_savings
+Air Travel	>	project:vacation_air_travel
+Alcohol & Bars	>	food:alcohol
+Amazon	>	shopping:amazon
+Amusement	>	entertainment:misc
+ATM Fee	>	financial:fees
+Auto & Transport	>	transportation:misc
+Auto Insurance	>	transportation:auto_insurance
+Auto Payment	>	transportation:auto_payment
+Baby Supplies	>	shopping:baby
+Babysitter & Daycare	>	childcare:nanny_and_babysitter
+Bank Fee	>	financial:fees
+BART	>	transportation:mass_transit
+Bonus	>	income:bonus
+Books	>	professional:books
+Business Services	>	professional:business_services
+Cash & ATM	>	unknown:unaccounted_cash
+Check	>	unknown:undefined
+Closing Costs	>	home:misc
+Clothing	>	shopping:clothing
+Coffee Shops	>	food:fast_food
+Credit Card Payment	>	transfer:credit_card_payment
+Dentist	>	health:dentist
+Doctor	>	health:doctor
+Electronics & Software	>	shopping:electronics_and_software
+Entertainment	>	entertainment:misc
+Eyecare	>	health:vision
+Fast Food	>	food:fast_food
+Federal Tax	>	tax:federal_tax
+Fees & Charges	>	financial:fees
+Finance Charge	>	financial:fees
+Financial	>	financial:fees
+Food & Dining	>	food:misc
+Food Services	>	food:food_services
+Furnishings	>	home:furnishings
+Gas & Fuel	>	transportation:gas
+Gas >	transportation:gas
+Gas/Automotive >	transportation:gas
+Gift	>	gift:misc
+Gifts & Donations	>	gift:misc
+Groceries	>	food:groceries
+Gym	>	health:gym
+Hair	>	personal_care:hair
+Health & Fitness	>	health:misc
+Home	>	home:misc
+Home Alarm System	>	home:home_alarm
+Home Improvement	>	home:home_improvement
+Home Insurance	>	home:home_insurance
+Home Supplies	>	home:home_improvement
+Hotel	>	project:vacation_hotel
+Income	>	income:misc
+Interest Income	>	income:misc
+Internet	>	home:internet
+Kids	>	kids:misc
+Kids Activities	>	kids:activities
+KS Luncheon	>	food:ks_lunch
+Laundry	>	personal_care:laundry
+Lawn & Garden	>	home:home_improvement
+Local Tax	>	tax:local_tax
+Mobile Phone	>	home:mobile_phone
+Movies & DVDs	>	entertainment:misc
+Music	>	entertainment:misc
+Nanny	>	childcare:nanny_and_babysitter
+Office Supplies	>	professional:misc
+Parking	>	transportation:parking
+Parking Ticket	>	rare:parking_ticket
+Paycheck - Berkeley	>	income:berkeley
+Paycheck - SOM	>	income:som
+Personal Care	>	personal_care:misc
+Pharmacy	>	health:pharmacy
+Printing	>	professional:misc
+Property Tax	>	tax:property_tax
+Public Transportation	>	transportation:mass_transit
+Restaurants	>	food:restaurants
+Shipping	>	professional:shipping
+Shopping	>	shopping:misc
+SJ Luncheon	>	food:sj_lunch
+Spa & Massage	>	health:misc
+Sporting Goods	>	shopping:misc
+State Tax	>	tax:state_tax
+Student Loan	>	financial:student_loan_payment
+Tolls	>	transportation:misc
+Toys	>	shopping:misc
+Transfer	>	unknown:unaccounted_transfer
+Transfer Bills 2232	>	transfer:2232_bills
+Transfer Deep 1816	>	transfer:1816_deep
+Transfer Proj 3570	>	transfer:3570_project
+Travel	>	project:vacation_misc
+Tuition	>	education:tuition
+Unaccounted Cash	>	unknown:unaccounted_cash
+Unaccounted Transfer	>	unknown:unaccounted_transfer
+Uncategorized	>	unknown:undefined
+Utilities	>	home:utilities
+Vacation	>	project:vacation_misc
+Zipcar	>	transportation:rideshare
