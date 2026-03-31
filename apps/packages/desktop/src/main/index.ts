@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, nativeImage } from 'electron'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { scanCorpusDirectory } from '@txn/corpus-core'
 // electron-updater is CJS; named ESM imports fail at runtime in the bundled main bundle.
@@ -62,11 +63,34 @@ function attachAutoUpdaterListeners(win: BrowserWindow): void {
   })
 }
 
+/** Taskbar / title bar icon. Packaged Windows builds use `app.ico` next to `app.asar`; dev uses `build/hello.png`. */
+function resolveWindowIcon(): Electron.NativeImage | undefined {
+  if (app.isPackaged) {
+    if (process.platform === 'win32') {
+      for (const name of ['app.ico', 'icon.ico'] as const) {
+        const p = join(process.resourcesPath, name)
+        if (existsSync(p)) {
+          return nativeImage.createFromPath(p)
+        }
+      }
+    } else if (process.platform === 'darwin') {
+      const icns = join(process.resourcesPath, 'icon.icns')
+      if (existsSync(icns)) {
+        return nativeImage.createFromPath(icns)
+      }
+    }
+    return undefined
+  }
+  const png = join(__dirname, '../../build/hello.png')
+  return existsSync(png) ? nativeImage.createFromPath(png) : undefined
+}
+
 function createWindow(): BrowserWindow {
   const win = new BrowserWindow({
     width: 960,
     height: 720,
     show: false,
+    icon: resolveWindowIcon(),
     webPreferences: {
       preload: join(__dirname, '../preload/index.cjs'),
       contextIsolation: true,
