@@ -3,8 +3,14 @@
 ## TL;DR
 
 1. Bump **`version`** in the app’s `package.json` (see table below) and **commit** on `main`.
-2. Create a tag: **`<tag-prefix><version>`** — the part after the prefix must **exactly match** `version` (e.g. `0.2.0`).
-3. **`git push origin <tag>`** → CI builds and publishes that app to **GitHub Releases**.
+2. Create and push a tag whose suffix **exactly matches** `version` (replace `X.X.X` with that semver, e.g. `0.2.0`):
+
+   ```bash
+   git tag steinfeld-finance-hello-vX.X.X
+   git push origin steinfeld-finance-hello-vX.X.X
+   ```
+
+3. CI builds and publishes that app to **GitHub Releases**.
 
 **Fresh repo:** If you cleared old tags and releases, you’re starting clean. From now on only use the **new** tag prefixes (not `moneylooksee-hello-*`). Old tags like `moneylooksee-hello-v0.1.0` were retired in favor of app-specific slugs such as **`steinfeld-finance-hello-v*`** for **Steinfeld Finance - Hello**.
 
