@@ -21,6 +21,8 @@
 
 Each app gets its **own tag namespace** so installers and `latest.yml` never collide.
 
+A running narrative of packaging, updater, and history work is in [CHANGELOG.md](CHANGELOG.md).
+
 ---
 
 ## Prerequisites

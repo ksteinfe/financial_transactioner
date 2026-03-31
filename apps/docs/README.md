@@ -7,3 +7,4 @@
 | [updates.md](updates.md) | Auto-update in the main process, release hosting, environment variables |
 | [releases.md](releases.md) | Tag-only GitHub Releases workflow (Steinfeld Finance - Hello) |
 | [development.md](development.md) | Node/pnpm, install, dev, build, package, app icons (Material Symbols), troubleshooting |
+| [CHANGELOG.md](CHANGELOG.md) | Desktop platform, releases, updater, and repo maintenance log |

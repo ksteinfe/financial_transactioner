@@ -10,6 +10,7 @@ This directory is the **Electron desktop platform** workspace: a shared shell th
 - [docs/updates.md](docs/updates.md) — auto-update behavior and environment variables
 - [docs/releases.md](docs/releases.md) — tag-only GitHub Releases (CI) for Steinfeld Finance - Hello
 - [docs/development.md](docs/development.md) — prerequisites, install, run, build
+- [docs/CHANGELOG.md](docs/CHANGELOG.md) — desktop platform and repo maintenance log
 
 ## Quick start
 

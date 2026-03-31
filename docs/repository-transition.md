@@ -11,9 +11,8 @@ tag.
 
 ## Legacy preservation model
 
-- Final legacy tag (intact pre-transition tree):
+- Optional git tag (may still exist on the remote):
   - `legacy-final-pre-umbrella-2026-03-28`
-- Full legacy source/model history remains available in git commit history.
 - The only legacy files kept directly in the active tree are raw TXT artifacts
   from `tacter/`, now stored under `archive/tacter_raw/`.
 
@@ -24,7 +23,16 @@ Removed as obsolete active code/data:
 - Legacy application code (`munge.py`, `tacter/*.py`)
 - Legacy ML training/inference assets (`ludwig_training/`, `inference_models/`)
 
-These remain available by checking out history or the tag above.
+## History maintenance (2026)
+
+The **`inference_models/`** tree (training metadata and model binaries that
+should not be published) was **stripped from all git history** using
+`git filter-repo` and a force-pushed rewrite. It is **no longer** present in any
+reachable commit in this repository. Recovery of those blobs, if needed, is
+only from **out-of-band backups**, not from GitHub.
+
+Older documentation may still refer to “checking out the legacy tag” for the
+full pre-umbrella tree; that no longer includes `inference_models/`.
 
 ## What was preserved directly
 

@@ -5,7 +5,7 @@ into the shared yearly JSON corpus (see `docs/corpus-format.md`).
 
 It is grounded in extracted legacy behavior from:
 
-- `tacter/process_csv.py` (via tag `legacy-final-pre-umbrella-2026-03-28`)
+- Historical `tacter/process_csv.py` behavior (legacy app; not in active tree; see `docs/repository-transition.md`)
 - `reference/legacy-domain/category_mapping_legacy_to_canonical.tsv`
 - `reference/legacy-domain/description_mapping_legacy_to_canonical.tsv`
 - `reference/legacy-domain/accounts.json`

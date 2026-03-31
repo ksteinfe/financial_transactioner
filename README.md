@@ -30,10 +30,13 @@ The active project direction is:
 
 ## Legacy preservation
 
-The complete pre-transition codebase is preserved by git history and a final
-tag:
+Raw `tacter` TXT artifacts live under `archive/tacter_raw/`. Structured legacy
+vocabulary is under `reference/legacy-domain/`.
 
-- `legacy-final-pre-umbrella-2026-03-28`
+A **legacy umbrella tag** (`legacy-final-pre-umbrella-2026-03-28`) may still
+exist as a git pointer; **legacy ML / inference assets** (`inference_models/`)
+were **removed from git history** in a 2026 maintenance pass and are **not**
+recoverable from this repository (keep a separate backup if needed).
 
 See `docs/repository-transition.md` for details.
 
@@ -43,6 +46,7 @@ See `docs/repository-transition.md` for details.
 - Review `reference/legacy-domain/` for extracted legacy vocabulary.
 - Start new implementation work in `tools/` and `apps/`.
 - **Desktop app releases (tag-only, GitHub Actions):** see [apps/docs/releases.md](apps/docs/releases.md).
+- **What changed recently (desktop + repo hygiene):** [apps/docs/CHANGELOG.md](apps/docs/CHANGELOG.md).
 
 ## Shared environment configuration
 

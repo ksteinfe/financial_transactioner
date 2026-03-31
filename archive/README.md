@@ -10,5 +10,7 @@ For the legacy personal-finance application, only raw TXT artifacts from
 - `archive/tacter_raw/xform_description.txt`
 
 The full legacy codebase and model files are **not** retained in the active
-tree and remain available through git history and the final legacy tag:
-`legacy-final-pre-umbrella-2026-03-28`.
+tree. Historical Python sources and **`inference_models/`** are no longer
+present in this repo’s git history (2026 scrub); use local backups if you still
+need them. An optional legacy tag (`legacy-final-pre-umbrella-2026-03-28`) may
+still exist as a pointer without those assets.
