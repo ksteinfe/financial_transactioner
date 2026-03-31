@@ -1,6 +1,6 @@
 {
   "name": "@txn/desktop",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "author": "Steinfeld Finance",
   "description": "Steinfeld Finance - Hello (Electron shell)",
@@ -51,9 +51,7 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "build/hello.png",
-      "uninstallerIcon": "build/hello.png"
+      "allowToChangeInstallationDirectory": true
     },
     "win": {
       "executableName": "steinfeld-finance-hello",

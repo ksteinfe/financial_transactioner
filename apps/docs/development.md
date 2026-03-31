@@ -60,6 +60,7 @@ Each packaged Electron app should ship an icon that **matches the app’s name o
 - **Size:** **512px** when exporting or downloading the PNG.
 - **Color:** **`#808080`** (hex) for the symbol/fill so icons align across apps.
 - **Repo layout:** store the PNG under the app package’s `build/` folder with a **short name tied to that app** (e.g. `hello.png` for Steinfeld Finance - Hello). Point `package.json` `build.icon` at that path so `electron-builder` can produce Windows `.ico` and other targets.
+- **NSIS (Windows installer):** do **not** set `nsis.installerIcon` / `nsis.uninstallerIcon` to a **PNG** path — NSIS’s `makensis` only accepts **`.ico`** for those fields. Omit them and let `electron-builder` derive installer artwork from `build.icon`, or supply a real multi-size `.ico` if you customize those options.
 
 ### Windows: packaging and symbolic links
 
