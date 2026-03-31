@@ -26,8 +26,8 @@ export type CheckForUpdatesResult =
   | { status: 'error'; message: string }
 
 const manifest: AppManifest = {
-  id: 'moneylooksee-hello',
-  name: 'moneylooksee - hello',
+  id: 'steinfeld-finance-hello',
+  name: 'Steinfeld Finance - Hello',
   version: pkg.version,
   capabilities: readerCapabilities
 }

@@ -38,7 +38,7 @@ Development / unpackaged builds (`electron-vite dev`) **do not** check for updat
 See [releases.md](releases.md) for the **tag-only** GitHub Actions flow. Summary:
 
 1. Bump `version` in `packages/desktop/package.json`.
-2. Push tag `moneylooksee-hello-vX.Y.Z` matching that version.
+2. Push tag `steinfeld-finance-hello-vX.Y.Z` matching that version.
 3. CI publishes installers and update metadata to GitHub Releases.
 
 ## Corpus safety

@@ -82,7 +82,7 @@ export function App(): ReactElement {
   return (
     <main className="shell">
       <header className="header">
-        <h1>moneylooksee - hello</h1>
+        <h1>Steinfeld Finance - Hello</h1>
         <p className="badge" data-mode={modeLabel}>
           Mode: {modeLabel}
         </p>

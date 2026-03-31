@@ -2,7 +2,7 @@ import { app } from 'electron'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SETTINGS_FILE = 'moneylooksee-settings.json'
+const SETTINGS_FILE = 'steinfeld-finance-hello-settings.json'
 
 export function getSettingsPath(): string {
   return join(app.getPath('userData'), SETTINGS_FILE)

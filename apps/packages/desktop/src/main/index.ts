@@ -74,8 +74,6 @@ function createWindow(): BrowserWindow {
     }
   })
 
-  mainWindow = win
-
   win.on('ready-to-show', () => {
     win.show()
   })
