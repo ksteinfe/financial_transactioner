@@ -1,0 +1,59 @@
+{
+  "name": "@txn/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "author": "moneylooksee",
+  "description": "moneylooksee - hello (Electron shell)",
+  "main": "./out/main/index.js",
+  "type": "module",
+  "scripts": {
+    "build:deps": "pnpm --filter @txn/types build && pnpm --filter @txn/app-contracts build && pnpm --filter @txn/corpus-core build",
+    "dev": "pnpm run build:deps && electron-vite dev",
+    "build": "pnpm run build:deps && electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "pnpm run build && electron-builder --publish never",
+    "release": "pnpm run build && electron-builder --publish always"
+  },
+  "dependencies": {
+    "@txn/app-contracts": "workspace:*",
+    "@txn/corpus-core": "workspace:*",
+    "@txn/types": "workspace:*",
+    "electron-updater": "^6.3.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  },
+  "build": {
+    "appId": "com.moneylooksee.hello",
+    "productName": "moneylooksee - hello",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "ksteinfe",
+      "repo": "financial_transactioner",
+      "releaseType": "release"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "win": {
+      "sign": null,
+      "verifyUpdateCodeSignature": false
+    }
+  }
+}

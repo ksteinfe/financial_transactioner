@@ -1,0 +1,51 @@
+# Pattern 1: tag-only releases for @txn/desktop (moneylooksee - hello).
+# Push tag: moneylooksee-hello-vX.Y.Z (must match apps/packages/desktop package.json version).
+
+name: Release moneylooksee hello
+
+on:
+  push:
+    tags:
+      - 'moneylooksee-hello-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag matches package.json version
+        shell: bash
+        working-directory: apps
+        run: |
+          TAG_VER="${GITHUB_REF_NAME#moneylooksee-hello-v}"
+          PKG_VER=$(node -p "require('./packages/desktop/package.json').version")
+          echo "Tag version: $TAG_VER"
+          echo "package.json:  $PKG_VER"
+          if [ "$TAG_VER" != "$PKG_VER" ]; then
+            echo "::error::Tag suffix must match apps/packages/desktop package.json version"
+            exit 1
+          fi
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: apps/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: apps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and publish to GitHub Releases
+        working-directory: apps
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm --filter @txn/desktop run release
