@@ -8,7 +8,7 @@ This directory is the **Electron desktop platform** workspace: a shared shell th
 - [docs/architecture.md](docs/architecture.md) — layers, reader vs editor apps, corpus boundary
 - [docs/capability-model.md](docs/capability-model.md) — app manifests and capabilities
 - [docs/updates.md](docs/updates.md) — auto-update behavior and environment variables
-- [docs/releases.md](docs/releases.md) — tag-only GitHub Releases (CI) for moneylooksee - hello
+- [docs/releases.md](docs/releases.md) — tag-only GitHub Releases (CI) for Steinfeld Finance - Hello
 - [docs/development.md](docs/development.md) — prerequisites, install, run, build
 
 ## Quick start

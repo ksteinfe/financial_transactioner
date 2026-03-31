@@ -53,6 +53,14 @@ pnpm --filter @txn/desktop package
 
 Uses `electron-builder` from the desktop package. See [updates.md](updates.md) for update metadata and environment variables.
 
+### App icons (Material Symbols)
+
+Each packaged Electron app should ship an icon that **matches the app’s name or theme**. Source artwork from **[Google Fonts — Material Symbols & Icons](https://fonts.google.com/icons)**: pick a symbol that fits the product (for example, a greeting-style icon for “Hello” apps).
+
+- **Size:** **512px** when exporting or downloading the PNG.
+- **Color:** **`#808080`** (hex) for the symbol/fill so icons align across apps.
+- **Repo layout:** store the PNG under the app package’s `build/` folder with a **short name tied to that app** (e.g. `hello.png` for Steinfeld Finance - Hello). Point `package.json` `build.icon` at that path so `electron-builder` can produce Windows `.ico` and other targets.
+
 ### Windows: packaging and symbolic links
 
 `electron-builder` downloads helper archives (for example `winCodeSign`) that extract with **symbolic links**. On some Windows setups, extraction fails with “A required privilege is not held by the client” unless symlinks are allowed. Mitigations:

@@ -1,12 +1,12 @@
-# Pattern 1: tag-only releases for @txn/desktop (moneylooksee - hello).
-# Push tag: moneylooksee-hello-vX.Y.Z (must match apps/packages/desktop package.json version).
+# Pattern 1: tag-only releases for @txn/desktop (Steinfeld Finance - Hello).
+# Push tag: steinfeld-finance-hello-vX.Y.Z (must match apps/packages/desktop package.json version).
 
-name: Release moneylooksee hello
+name: Release Steinfeld Finance Hello
 
 on:
   push:
     tags:
-      - 'moneylooksee-hello-v*'
+      - 'steinfeld-finance-hello-v*'
 
 permissions:
   contents: write
@@ -21,7 +21,7 @@ jobs:
         shell: bash
         working-directory: apps
         run: |
-          TAG_VER="${GITHUB_REF_NAME#moneylooksee-hello-v}"
+          TAG_VER="${GITHUB_REF_NAME#steinfeld-finance-hello-v}"
           PKG_VER=$(node -p "require('./packages/desktop/package.json').version")
           echo "Tag version: $TAG_VER"
           echo "package.json:  $PKG_VER"
