@@ -1,0 +1,78 @@
+# Development
+
+## Prerequisites
+
+- **Node.js** 20 LTS or newer (18+ may work; 20+ recommended).
+- **pnpm** 9.x (see root `packageManager` in [package.json](../package.json)). If `pnpm` is not on your `PATH`, use `npx pnpm@9.15.0` in front of the commands below (or enable it via [Corepack](https://nodejs.org/api/corepack.html) if your environment allows it).
+
+## Install
+
+From the `apps/` directory:
+
+```bash
+pnpm install
+```
+
+## Run (development)
+
+```bash
+pnpm dev
+```
+
+Equivalent:
+
+```bash
+pnpm --filter @txn/desktop dev
+```
+
+This starts the Electron app with Vite HMR for the renderer.
+
+## Build
+
+Compile main, preload, and renderer:
+
+```bash
+pnpm build
+```
+
+or:
+
+```bash
+pnpm --filter @txn/desktop build
+```
+
+Output is under `packages/desktop/out/` (electron-vite default).
+
+## Package (installer / distributable)
+
+Requires build artifacts first:
+
+```bash
+pnpm --filter @txn/desktop package
+```
+
+Uses `electron-builder` from the desktop package. See [updates.md](updates.md) for update metadata and environment variables.
+
+### Windows: packaging and symbolic links
+
+`electron-builder` downloads helper archives (for example `winCodeSign`) that extract with **symbolic links**. On some Windows setups, extraction fails with “A required privilege is not held by the client” unless symlinks are allowed. Mitigations:
+
+- Enable **Developer Mode** (Settings → Privacy & security → For developers → Developer Mode), or
+- Run the terminal **as Administrator** for the packaging command, or
+- Build on CI or another machine where extraction succeeds.
+
+`pnpm build` does not require this; only full `package` / installer flows hit the cached tooling extraction.
+
+## Workspace packages
+
+| Package | Role |
+|---------|------|
+| `@txn/desktop` | Electron shell |
+| `@txn/types` | Shared types |
+| `@txn/app-contracts` | Manifests and capabilities |
+
+## Troubleshooting
+
+- **Port in use**: Vite may default to 5173; change in `electron.vite.config` if needed.
+- **Windows path length**: keep repo paths reasonably short if packaging fails.
+- **Updates in dev**: expected to no-op; see [updates.md](updates.md).

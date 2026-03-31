@@ -42,6 +42,7 @@ See `docs/repository-transition.md` for details.
 - Read `docs/repository-transition.md` for context.
 - Review `reference/legacy-domain/` for extracted legacy vocabulary.
 - Start new implementation work in `tools/` and `apps/`.
+- **Desktop app releases (tag-only, GitHub Actions):** see [apps/docs/releases.md](apps/docs/releases.md).
 
 ## Shared environment configuration
 
