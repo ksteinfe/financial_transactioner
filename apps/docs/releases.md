@@ -1,6 +1,6 @@
 # Tag-only GitHub Releases
 
-## TL;DR
+## TL;DR 
 
 1. Bump **`version`** in the app’s `package.json` (see table below) and **commit** on `main`.
 2. Create and push a tag whose suffix **exactly matches** `version` (replace `X.X.X` with that semver, e.g. `0.2.0`):
