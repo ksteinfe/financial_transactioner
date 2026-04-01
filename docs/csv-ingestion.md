@@ -206,6 +206,9 @@ Then map normalized object to corpus transaction fields:
 - resolved canonical category -> `category`
 - insert/update lifecycle fields (`key`, `date_created`, `date_updated`) per
   `docs/corpus-format.md`
+- optional `notes` only when the user or pipeline supplies one; otherwise omit
+- after successful ingest writes, rebuild `corpus-summary.json` per
+  `docs/corpus-format.md` section 9
 
 ## 7) Category resolution and validation
 

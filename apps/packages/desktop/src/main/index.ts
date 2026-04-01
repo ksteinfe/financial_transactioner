@@ -1,7 +1,13 @@
 import { app, BrowserWindow, ipcMain, dialog, nativeImage } from 'electron'
 import { existsSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { scanCorpusDirectory } from '@txn/corpus-core'
+import {
+  CORPUS_SUMMARY_FILENAME,
+  rebuildCorpusSummaryFile,
+  scanCorpusDirectory
+} from '@txn/corpus-core'
+import type { CorpusSummaryDocument } from '@txn/types'
 // electron-updater is CJS; named ESM imports fail at runtime in the bundled main bundle.
 import electronUpdater from 'electron-updater'
 import { readStoredCorpusFolder, writeStoredCorpusFolder } from './settings'
@@ -9,6 +15,20 @@ import { readStoredCorpusFolder, writeStoredCorpusFolder } from './settings'
 const { autoUpdater } = electronUpdater
 
 let autoUpdaterListenersAttached = false
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isCorpusSummaryShape(value: unknown): value is CorpusSummaryDocument {
+  if (!isRecord(value)) return false
+  const meta = value.metadata
+  const years = value.years
+  if (!isRecord(meta)) return false
+  if (typeof meta.last_updated !== 'string' || typeof meta.version !== 'string') return false
+  if (!isRecord(years)) return false
+  return true
+}
 
 /** Packaged builds check GitHub Releases by default; set TXN_AUTO_UPDATE=0 to disable. */
 function isUpdateEnabled(): boolean {
@@ -180,6 +200,45 @@ app.whenReady().then(() => {
     }
     const summary = await scanCorpusDirectory(rootPath)
     return { status: 'ok' as const, summary }
+  })
+
+  ipcMain.handle('platform:rebuildCorpusSummary', async () => {
+    const rootPath = readStoredCorpusFolder()
+    if (rootPath === null || rootPath.length === 0) {
+      return { status: 'no_folder' as const }
+    }
+    try {
+      const path = await rebuildCorpusSummaryFile(rootPath)
+      return { status: 'ok' as const, path }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      return { status: 'error' as const, message }
+    }
+  })
+
+  ipcMain.handle('platform:getCorpusSummary', async () => {
+    const rootPath = readStoredCorpusFolder()
+    if (rootPath === null || rootPath.length === 0) {
+      return { status: 'no_folder' as const }
+    }
+    const filePath = join(rootPath, CORPUS_SUMMARY_FILENAME)
+    if (!existsSync(filePath)) {
+      return { status: 'missing' as const }
+    }
+    try {
+      const raw = await readFile(filePath, 'utf8')
+      const parsed = JSON.parse(raw) as unknown
+      if (!isCorpusSummaryShape(parsed)) {
+        return {
+          status: 'error' as const,
+          message: 'corpus-summary.json is missing required fields (metadata, years)'
+        }
+      }
+      return { status: 'ok' as const, summary: parsed }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      return { status: 'error' as const, message }
+    }
   })
 
   const win = createWindow()

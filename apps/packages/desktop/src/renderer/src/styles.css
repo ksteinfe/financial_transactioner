@@ -11,7 +11,7 @@ body {
 }
 
 .shell {
-  max-width: 40rem;
+  max-width: 52rem;
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
@@ -218,4 +218,59 @@ h1 {
   font-family: ui-monospace, monospace;
   font-size: 0.8em;
   color: #9aa3b2;
+}
+
+.summary-panel {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #2a3140;
+}
+
+.summary-header {
+  margin-bottom: 0.5rem;
+}
+
+.summary-title {
+  margin-bottom: 0.35rem;
+}
+
+.summary-sub {
+  margin: 0 0 0.75rem;
+  max-width: 42rem;
+}
+
+.summary-actions {
+  margin-bottom: 0.5rem;
+}
+
+.summary-status {
+  margin-top: 0.5rem;
+}
+
+.summary-missing {
+  margin-top: 0.5rem;
+}
+
+.summary-meta {
+  margin: 0.75rem 0 1rem;
+}
+
+.summary-err {
+  margin-top: 0.75rem;
+}
+
+.year-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.summary-total td {
+  background: rgba(255, 255, 255, 0.04);
+  border-top: 1px solid #3d4a63;
+}
+
+.summary-total strong {
+  font-weight: 600;
+  color: #e8e6e3;
 }

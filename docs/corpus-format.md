@@ -17,6 +17,8 @@ Normative terms use RFC-style language:
   committed.
 - Corpus files are partitioned by year:
   - `YYYY.json` (example: `2024.json`)
+- Optional derived index at the corpus root:
+  - `corpus-summary.json` (section 11)
 - Each yearly file MUST contain:
   - `metadata` object
   - `transactions` array
@@ -40,6 +42,7 @@ Each `YYYY.json` file MUST follow this shape:
       "account": "account_id",
       "description": "string",
       "category": "major:minor",
+      "notes": "optional free-text note",
       "date_created": "ISO-8601 timestamp",
       "date_updated": "ISO-8601 timestamp"
     }
@@ -63,7 +66,7 @@ All metadata timestamps MUST be UTC ISO 8601, e.g. `2026-01-15T18:25:02Z`.
 
 ### 2.2 `transactions[]` fields
 
-All fields are required for each transaction.
+Required fields for each transaction:
 
 - `key` (string): stable unique identifier (UUID format recommended).
 - `date` (string): transaction date in `YYYY-MM-DD`.
@@ -73,6 +76,12 @@ All fields are required for each transaction.
 - `category` (string): canonical category in `major:minor` format (section 5).
 - `date_created` (string): UTC ISO 8601 creation time.
 - `date_updated` (string): UTC ISO 8601 last update time.
+
+Optional fields:
+
+- `notes` (string): user- or tool-supplied context (e.g. trip label, reimbursement
+  explanation). Writers MAY omit the key when there is no note. Empty strings
+  SHOULD be treated as “no note” and omitted on save.
 
 ## 3) Required full sample JSON (fake values)
 
@@ -104,6 +113,7 @@ All fields are required for each transaction.
       "account": "chase_checking_9876",
       "description": "Payroll Deposit",
       "category": "income:misc",
+      "notes": "Q4 bonus",
       "date_created": "2026-01-15T18:22:11Z",
       "date_updated": "2026-01-15T18:23:10Z"
     }
@@ -116,12 +126,18 @@ All fields are required for each transaction.
 Multiple tools/apps MAY read/write the same corpus. Therefore all writers MUST:
 
 1. Follow this schema exactly.
-2. MUST NOT introduce ad-hoc transaction fields.
+2. MUST NOT introduce ad-hoc transaction fields beyond the optional `notes` field
+   documented in section 2.2.
 3. Preserve existing `key` values.
 4. Preserve existing `date_created` on updates.
 5. Update `date_updated` on every material transaction update.
 6. Update `metadata.last_sync_date` on each successful ingest write.
 7. Append/update `metadata.sources` entries for CSVs processed.
+8. After any successful write that inserts, updates, or deletes transactions in
+   yearly files, either rebuild `corpus-summary.json` (section 11) in the same
+   operation or schedule an immediate rebuild so the summary does not stay stale.
+   Read-only tools MAY expose an explicit “refresh summary” action that performs
+   the same rebuild without changing yearly data.
 
 ### 4.1 Atomic write requirement
 
@@ -213,7 +229,112 @@ Required behavior:
 6. If multiple matches are found, tooling MUST fail the write and surface a
    conflict for manual resolution.
 
-## 9) Corpus boundary constraints
+## 9) Corpus summary index (`corpus-summary.json`)
+
+The corpus root MAY contain a single derived JSON file:
+
+- **File name**: `corpus-summary.json` (constant `CORPUS_SUMMARY_FILENAME` in
+  `@txn/corpus-core`).
+
+Purpose:
+
+- Fast dashboards and reporting without scanning every `YYYY.json`.
+- Stable rollups by calendar year, month (`YYYY-MM`), and category (major, and
+  for year-level totals also minor).
+
+Nature:
+
+- **Derived only**: fully recomputed from `YYYY.json` files. Safe to delete; it
+  will be recreated on the next rebuild.
+- **Do not edit manually** — the `_note` field in the file states this for humans
+  and diff tools.
+
+When to rebuild:
+
+- After every write that changes transaction data (insert/update/delete in any
+  year file), OR
+- On demand (user gesture, CLI, or IPC such as `platform:rebuildCorpusSummary`
+  in the desktop shell).
+
+How to rebuild:
+
+- Implementation reference: `computeCorpusSummary` and `rebuildCorpusSummaryFile`
+  in `@txn/corpus-core`, which read all `YYYY.json` files, aggregate amounts, and
+  write through a temporary file plus atomic rename.
+
+Aggregation rules (normative):
+
+- **Inflow**: sum of positive `amount` values in the bucket.
+- **Outflow**: sum of the absolute values of negative `amount` values (reported
+  as a non-negative number).
+- **Net**: sum of signed `amount` values (equals inflow − outflow for that bucket).
+- **transaction_count**: number of transactions in the bucket.
+- **Major / minor**: split `category` on the first `:`. If the value does not
+  contain `:`, bucket under major `unknown`, minor `undefined`.
+- **Month buckets**: keyed by `YYYY-MM` from each transaction’s `date`.
+- **Month `major_categories`**: rollups per major; implementations SHOULD include
+  every major category key from `reference/allowed-categories.json` (first segment
+  before `:`) plus any major seen in data but not in that list, so months show a
+  consistent grid (zeros where there was no activity).
+- **Year `major_categories`**: per-major totals with nested `minor_categories`
+  only for minor keys that appear in that year (empty object when none).
+
+Top-level shape (illustrative; numeric values are examples):
+
+```json
+{
+  "_note": "This file is automatically maintained by the system. Do not edit manually.",
+  "metadata": {
+    "last_updated": "2025-12-01T20:01:19.648Z",
+    "version": "1.0"
+  },
+  "years": {
+    "2018": {
+      "inflow": 223809.51,
+      "outflow": 223527.41,
+      "net": 282.1,
+      "transaction_count": 2300,
+      "months": {
+        "2018-03": {
+          "inflow": 23121.06,
+          "outflow": 19203.99,
+          "net": 3917.07,
+          "transaction_count": 173,
+          "major_categories": {
+            "food": {
+              "inflow": 10.38,
+              "outflow": 2616.32,
+              "net": -2605.94,
+              "transaction_count": 105
+            }
+          }
+        }
+      },
+      "major_categories": {
+        "food": {
+          "inflow": 117.25,
+          "outflow": 32255.66,
+          "net": -32138.41,
+          "transaction_count": 1238,
+          "minor_categories": {
+            "groceries": {
+              "inflow": 26.35,
+              "outflow": 9321.21,
+              "net": -9294.86,
+              "transaction_count": 190
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+`metadata.version` is the summary schema version (currently `1.0`); bump it when
+the JSON shape changes incompatibly.
+
+## 10) Corpus boundary constraints
 
 - Corpus data is local runtime data, not repository source code.
 - Corpus files MUST remain outside the repository working tree.
@@ -222,7 +343,7 @@ Required behavior:
 - Repository source control MUST NOT be used to track corpus snapshots, diffs,
   caches, or any other corpus interaction artifacts.
 
-## 10) Legacy alignment and known differences
+## 11) Legacy alignment and known differences
 
 Extracted legacy model (`tacter`) used short field names (`amnt`, `acnt`,
 `desc`, `catg`) and parser-specific helper fields (`_catg`, `_trust_catg`,

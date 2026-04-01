@@ -60,3 +60,13 @@ All tools and apps should read data-directory locations from the root `.env`.
 
 This provides a single, stable configuration contract across `tools/` and
 `apps/`.
+
+## Corpus data loading (apps)
+
+Yearly transaction files live as `YYYY.json` under the corpus directory. The
+derived index **`corpus-summary.json`** (see [`docs/corpus-format.md`](docs/corpus-format.md))
+holds pre-aggregated rollups by year, month, and category. **Apps and tools
+should read `corpus-summary.json` when possible** (dashboards, charts, high-level
+totals) and fall back to scanning `YYYY.json` only when row-level detail is
+required. The summary is rebuilt after writes or on demand (`@txn/corpus-core`,
+desktop **Rebuild summary**).

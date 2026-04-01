@@ -1,7 +1,12 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { AppManifest } from '@txn/app-contracts'
 import { readerCapabilities } from '@txn/app-contracts'
-import type { CorpusRescanResult, CorpusScanSummary } from '@txn/types'
+import type {
+  CorpusRescanResult,
+  CorpusScanSummary,
+  CorpusSummaryLoadResult,
+  CorpusSummaryRebuildResult
+} from '@txn/types'
 import pkg from '../../package.json'
 
 /**
@@ -17,6 +22,10 @@ export interface PlatformReaderApi {
   scanCorpus: (rootPath: string) => Promise<CorpusScanSummary>
   /** Re-scan the persisted corpus folder; use after external file changes or on load. */
   rescanCorpus: () => Promise<CorpusRescanResult>
+  /** Recompute and overwrite `corpus-summary.json` under the stored corpus folder. */
+  rebuildCorpusSummary: () => Promise<CorpusSummaryRebuildResult>
+  /** Read parsed `corpus-summary.json` from the stored corpus folder, if present. */
+  getCorpusSummary: () => Promise<CorpusSummaryLoadResult>
   getManifest: () => AppManifest
 }
 
@@ -40,6 +49,8 @@ const platform: PlatformReaderApi = {
   setStoredCorpusFolder: (folder) => ipcRenderer.invoke('platform:setStoredCorpusFolder', folder),
   scanCorpus: (rootPath) => ipcRenderer.invoke('platform:scanCorpus', rootPath),
   rescanCorpus: () => ipcRenderer.invoke('platform:rescanCorpus'),
+  rebuildCorpusSummary: () => ipcRenderer.invoke('platform:rebuildCorpusSummary'),
+  getCorpusSummary: () => ipcRenderer.invoke('platform:getCorpusSummary'),
   getManifest: () => manifest
 }
 
