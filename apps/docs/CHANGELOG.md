@@ -9,6 +9,14 @@ This log records **maintainer-facing** changes to the **`apps/`** Electron stack
 - **Version:** see `package.json` `version` (e.g. **0.1.4** at last documentation pass).
 - **Upcoming:** repository may be switched **public** for anonymous GitHub Releases / auto-updates (private repos require `GH_TOKEN` for the updater feed).
 
+### Corpus summary & hello app (2026-04)
+
+- **Contract:** [`docs/corpus-format.md`](../../docs/corpus-format.md) documents optional transaction `notes` and the derived **`corpus-summary.json`** (year / month / category rollups, rebuild protocol).
+- **`@txn/corpus-core`:** `computeCorpusSummary`, `rebuildCorpusSummaryFile`, constants for filename and schema version; aggregates from all `YYYY.json` files.
+- **`@txn/types`:** `CorpusTransaction`, `CorpusSummaryDocument`, load/rebuild result types for IPC.
+- **Steinfeld Finance - Hello:** reads `corpus-summary.json` via **`platform:getCorpusSummary`**; shows per-year inflow/outflow/net, last rebuild time, schema version, and **Rebuild summary** (**`platform:rebuildCorpusSummary`**). Year scan table unchanged.
+- **Guidance:** new and future apps should **use `corpus-summary.json` when possible** for dashboards and rollups; load `YYYY.json` only when row-level data is required.
+
 ---
 
 ## 2026-03-31 — Steinfeld Finance - Hello hardening & release pipeline

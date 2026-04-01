@@ -2,4 +2,4 @@
 
 Shared **canonical types** for corpus data, queries, and aggregates — pure TypeScript, no Electron.
 
-Future exports will align with repository `docs/corpus-format.md` (e.g. `CorpusYearFile`, `CorpusTransaction`, `QuerySpec`).
+Aligned with repository **`docs/corpus-format.md`**, including **`CorpusTransaction`** (optional `notes`), **`CorpusYearFile`**, **`CorpusSummaryDocument`** and related rollup types, plus scan/summary IPC result types (`CorpusSummaryLoadResult`, `CorpusSummaryRebuildResult`, etc.).

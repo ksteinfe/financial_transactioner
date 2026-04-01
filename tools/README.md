@@ -9,6 +9,7 @@ Planned scope:
 - deterministic rule-based enrichment and reconciliation
 - write/update operations against a local JSON corpus
 - validation and consistency tooling
+- after writes that change transactions, rebuild **`corpus-summary.json`** (see repo `docs/corpus-format.md`) so apps can keep using the summary for fast loads
 
 Initial expectation:
 
