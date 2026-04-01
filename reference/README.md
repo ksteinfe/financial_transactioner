@@ -11,3 +11,5 @@ It is intended for:
   implementation code.
 
 See `legacy-domain/` for the extracted artifacts.
+
+**Machine-readable category list:** `allowed-categories.json` is the canonical set of `major:minor` paths for corpus validation and for **`@txn/category-colors`** (see [`apps/docs/category-colors.md`](../apps/docs/category-colors.md)).

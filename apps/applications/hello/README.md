@@ -1,6 +1,6 @@
-# `@txn/desktop`
+# `@txn/hello`
 
-Electron + Vite + React shell for **Steinfeld Finance - Hello** (the shared desktop platform scaffold).
+Electron + Vite + React shell for **Steinfeld Finance - Hello** (the primary desktop app in this workspace).
 
 - **Security**: `contextIsolation`, sandboxed renderer, narrow `contextBridge` API (`window.platform`).
 - **Mode**: Reader-only manifest (`readerCapabilities` from `@txn/app-contracts`); no corpus mutation IPC in preload (summary rebuild is a derived-file refresh, not editing transactions).
@@ -15,6 +15,10 @@ The renderer loads corpus metadata through **`window.platform`** (see `src/prelo
 - **`rebuildCorpusSummary`** — recompute and overwrite `corpus-summary.json` after external edits or before relying on rollups.
 
 The hello UI shows summary rollups, last rebuild timestamp, and a rebuild button. **Prefer the summary file for aggregate views**; rescan yearly files when you need raw row counts or to validate file presence.
+
+## Category colors
+
+The **Category colors** panel lists canonical majors/minors with swatches from **`@txn/category-colors`**. Behavior and theme format: [category-colors.md](../../docs/category-colors.md).
 
 ## App icon (Windows / packaging)
 

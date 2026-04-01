@@ -1,2 +1,5 @@
+# Workspace layout — see [README.md](README.md) and [applications/README.md](applications/README.md)
 packages:
+  - "applications/*"
+  - "libraries/*"
   - "packages/*"

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type ReactElement } from 'react'
 import type { AppManifest } from '@txn/app-contracts'
+import { CategoryColorsPanel } from './CategoryColorsPanel'
 import type {
   CorpusRescanResult,
   CorpusScanSummary,
@@ -186,6 +187,8 @@ export function App(): ReactElement {
           </dt>
           <dd>{manifest?.id ?? '—'}</dd>
         </dl>
+
+        <CategoryColorsPanel />
 
         <div className="corpus-actions">
           <button type="button" className="btn" onClick={() => void pickFolder()}>

@@ -22,7 +22,7 @@ pnpm dev
 Equivalent:
 
 ```bash
-pnpm --filter @txn/desktop dev
+pnpm --filter @txn/hello dev
 ```
 
 This starts the Electron app with Vite HMR for the renderer.
@@ -38,20 +38,20 @@ pnpm build
 or:
 
 ```bash
-pnpm --filter @txn/desktop build
+pnpm --filter @txn/hello build
 ```
 
-Output is under `packages/desktop/out/` (electron-vite default).
+Output is under `applications/hello/out/` (electron-vite default).
 
 ## Package (installer / distributable)
 
 Requires build artifacts first:
 
 ```bash
-pnpm --filter @txn/desktop package
+pnpm --filter @txn/hello package
 ```
 
-Uses `electron-builder` from the desktop package. See [updates.md](updates.md) for update metadata and environment variables.
+Uses `electron-builder` from the hello app package. See [updates.md](updates.md) for update metadata and environment variables.
 
 ### App icons (Material Symbols)
 
@@ -76,9 +76,11 @@ Each packaged Electron app should ship an icon that **matches the app’s name o
 
 | Package | Role |
 |---------|------|
-| `@txn/desktop` | Electron shell |
+| `@txn/hello` | Electron shell (Steinfeld Finance - Hello) |
 | `@txn/types` | Shared types |
 | `@txn/app-contracts` | Manifests and capabilities |
+| `@txn/corpus-core` | Corpus scan, summary index, validation |
+| `@txn/category-colors` | Display colors for canonical categories ([category-colors.md](category-colors.md)) |
 
 ## Troubleshooting
 

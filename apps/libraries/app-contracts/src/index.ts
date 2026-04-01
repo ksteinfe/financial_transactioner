@@ -1,5 +1,5 @@
 /**
- * App manifests and capability profiles — consumed by desktop shell, preload, and tests.
+ * App manifests and capability profiles — consumed by app shells, preload, and tests.
  */
 
 export interface AppCapabilityProfile {

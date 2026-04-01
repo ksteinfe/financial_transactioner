@@ -8,36 +8,20 @@ importers:
 
   .: {}
 
-  packages/app-contracts:
-    devDependencies:
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-
-  packages/corpus-core:
-    dependencies:
-      '@txn/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      '@types/node':
-        specifier: ^22.10.2
-        version: 22.19.15
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-
-  packages/desktop:
+  applications/hello:
     dependencies:
       '@txn/app-contracts':
         specifier: workspace:*
-        version: link:../app-contracts
+        version: link:../../libraries/app-contracts
+      '@txn/category-colors':
+        specifier: workspace:*
+        version: link:../../packages/category-colors
       '@txn/corpus-core':
         specifier: workspace:*
-        version: link:../corpus-core
+        version: link:../../packages/corpus-core
       '@txn/types':
         specifier: workspace:*
-        version: link:../types
+        version: link:../../libraries/types
       electron-updater:
         specifier: ^6.3.9
         version: 6.8.3
@@ -73,8 +57,36 @@ importers:
         specifier: ^5.4.11
         version: 5.4.21(@types/node@25.5.0)
 
-  packages/types:
+  libraries/app-contracts:
     devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  libraries/types:
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/category-colors:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.19.15
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/corpus-core:
+    dependencies:
+      '@txn/types':
+        specifier: workspace:*
+        version: link:../../libraries/types
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.19.15
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
@@ -1363,6 +1375,7 @@ packages:
 
   lodash@4.18.0:
     resolution: {integrity: sha512-l1mfj2atMqndAHI3ls7XqPxEjV2J9ZkcNyHpoZA3r2T1LLwDB69jgkMWh71YKwhBbK0G2f4WSn05ahmQXVxupA==}
+    deprecated: Bad release. Please use lodash@4.17.21 instead.
 
   log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}

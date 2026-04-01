@@ -1,13 +1,19 @@
-# Changelog — desktop platform & related repo work
+# Changelog — apps workspace & related repo work
 
-This log records **maintainer-facing** changes to the **`apps/`** Electron stack, release automation, and umbrella-repo hygiene. **Released app versions** are defined in [`packages/desktop/package.json`](../packages/desktop/package.json) and published via tags `steinfeld-finance-hello-v*`.
+This log records **maintainer-facing** changes to the **`apps/`** workspace (Electron apps, shared libraries and packages), release automation, and umbrella-repo hygiene. **Released app versions** for Steinfeld Finance - Hello are defined in [`applications/hello/package.json`](../applications/hello/package.json) and published via tags `steinfeld-finance-hello-v*`.
 
 ---
 
 ## Unreleased / current tree
 
-- **Version:** see `package.json` `version` (e.g. **0.1.4** at last documentation pass).
+- **Version:** see `applications/hello/package.json` `version` (e.g. **0.1.4** at last documentation pass).
 - **Upcoming:** repository may be switched **public** for anonymous GitHub Releases / auto-updates (private repos require `GH_TOKEN` for the updater feed).
+
+### Documentation & workspace layout (2026-04)
+
+- **Structure:** Documented the split between **`applications/`** (runnable products such as `@txn/hello`), **`libraries/`** (`@txn/types`, `@txn/app-contracts`), and **`packages/`** (domain modules). Root [docs/repository-transition.md](../../docs/repository-transition.md) and [apps/README.md](../README.md) are the primary references; [applications/README.md](../applications/README.md) describes adding future apps.
+- **Category colors:** New [category-colors.md](category-colors.md) describes **`@txn/category-colors`**: theme JSON (`majors`, `labBounds`, `explicit` with **major-only** and full-path keys), resolution order, and the hello app Category colors panel. Cross-links from [architecture.md](architecture.md), [corpus-format.md](../../docs/corpus-format.md), [`@txn/corpus-core` README](../packages/corpus-core/README.md), and [hello README](../applications/hello/README.md).
+- **`@txn/category-colors` behavior:** If **`explicit["major"]`** is set, all minors under that major inherit that hex unless **`explicit["major:minor"]`** overrides a row; default theme consolidates **`unknown`** minors via a single major-level explicit entry.
 
 ### Corpus summary & hello app (2026-04)
 

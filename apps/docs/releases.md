@@ -16,7 +16,7 @@
 
 | App (product) | Package / workflow | Tag prefix (examples) |
 |---------------|--------------------|------------------------|
-| **Steinfeld Finance - Hello** | [`apps/packages/desktop/package.json`](../packages/desktop/package.json) · [`.github/workflows/release-steinfeld-finance-hello.yml`](../../.github/workflows/release-steinfeld-finance-hello.yml) | `steinfeld-finance-hello-v` + version → e.g. `steinfeld-finance-hello-v0.1.0`, `steinfeld-finance-hello-v1.0.0` |
+| **Steinfeld Finance - Hello** | [`apps/applications/hello/package.json`](../applications/hello/package.json) · [`.github/workflows/release-steinfeld-finance-hello.yml`](../../.github/workflows/release-steinfeld-finance-hello.yml) | `steinfeld-finance-hello-v` + version → e.g. `steinfeld-finance-hello-v0.1.0`, `steinfeld-finance-hello-v1.0.0` |
 | *(future Electron app)* | Add another workflow + bump that app’s `package.json` | e.g. `my-other-app-v` + version → `my-other-app-v0.1.0` |
 
 Each app gets its **own tag namespace** so installers and `latest.yml` never collide.
@@ -27,12 +27,12 @@ A running narrative of packaging, updater, and history work is in [CHANGELOG.md]
 
 ## Prerequisites
 
-- [`build.publish`](../packages/desktop/package.json) in the desktop `package.json` uses `provider: "github"` with `owner` / `repo` for this repository.
+- [`build.publish`](../applications/hello/package.json) in the hello app `package.json` uses `provider: "github"` with `owner` / `repo` for this repository.
 - You can push to the repo and create tags (Actions will run on tag push).
 
 ## Release steps (Steinfeld Finance - Hello)
 
-1. **Version** — Edit [`apps/packages/desktop/package.json`](../packages/desktop/package.json) and set `"version"` to the new semver (e.g. `"0.2.0"`). Commit and push to `main` (or merge via PR).
+1. **Version** — Edit [`apps/applications/hello/package.json`](../applications/hello/package.json) and set `"version"` to the new semver (e.g. `"0.2.0"`). Commit and push to `main` (or merge via PR).
 
 2. **Tag** — Prefix is **`steinfeld-finance-hello-v`** (no extra `v` inside the semver). The full tag must be `steinfeld-finance-hello-v` + **exactly** the same string as `version`.
 
@@ -42,7 +42,7 @@ A running narrative of packaging, updater, and history work is in [CHANGELOG.md]
    git push origin steinfeld-finance-hello-v0.2.0
    ```
 
-3. **CI** — [`.github/workflows/release-steinfeld-finance-hello.yml`](../../.github/workflows/release-steinfeld-finance-hello.yml) runs on `steinfeld-finance-hello-v*`. It compares the tag to `package.json` and **fails** if they don’t match. On success it builds on Windows and runs `pnpm --filter @txn/desktop run release`, uploading the installer and update metadata to the **Release** for that tag (`GITHUB_TOKEN`).
+3. **CI** — [`.github/workflows/release-steinfeld-finance-hello.yml`](../../.github/workflows/release-steinfeld-finance-hello.yml) runs on `steinfeld-finance-hello-v*`. It compares the tag to `package.json` and **fails** if they don’t match. On success it builds on Windows and runs `pnpm --filter @txn/hello run release`, uploading the installer and update metadata to the **Release** for that tag (`GITHUB_TOKEN`).
 
 4. **Optional** — Add release notes on the GitHub Release page.
 
@@ -56,12 +56,13 @@ Packaged apps check for updates on launch ([updates.md](updates.md)). A newer Re
 
 ## Verify before you rely on CI
 
-1. **Local build, no upload:** from `apps/`, run `pnpm --filter @txn/desktop package` — artifacts land under `packages/desktop/release/`.
+1. **Local build, no upload:** from `apps/`, run `pnpm --filter @txn/hello package` — artifacts land under `applications/hello/release/`.
 2. **First real release:** after pushing a new tag, open the workflow run and the GitHub Release; confirm assets (installer, `latest.yml`, etc.) attached.
 3. **Updater:** install an older build, publish a higher version via a new tag, launch the old app — confirm it offers an update.
 
 ## Adding another Electron app later
 
-1. New workflow file listening on a **new** tag pattern, e.g. `other-product-v*`.
-2. That app’s own `package.json` `version` and `build.publish` (or scoped publish config).
-3. Document the new row in the **TL;DR** table and keep tag prefixes unique per app.
+1. Add the app under **`applications/<slug>/`** (for example `applications/sankey/` or `applications/second/`) with its own `package.json` (`@txn/<slug>`).
+2. New workflow file listening on a **new** tag pattern, e.g. `steinfeld-finance-sankey-v*` — **must not** reuse another app’s prefix.
+3. That app’s own `package.json` `version` and `build.publish` (or scoped publish config).
+4. Document the new row in the **TL;DR** table and keep tag prefixes unique per app.

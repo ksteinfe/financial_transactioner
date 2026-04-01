@@ -27,7 +27,9 @@ Apps should refresh views when yearly JSON files change on disk. The preload API
 
 Pure TypeScript where possible, testable outside Electron. Responsibilities include canonical corpus types, runtime validation, scanning/loading, query and aggregation, mutation rules, and diagnostics.
 
-Packages under `apps/packages/` (e.g. `types`, `corpus-core`, `app-contracts`) implement or stub these boundaries.
+`libraries/` (`types`, `app-contracts`) and `packages/` (`corpus-core`, `category-colors`, …) implement or stub these boundaries; see [apps/README.md](../README.md).
+
+**Category display colors** are not corpus data; **`@txn/category-colors`** maps canonical `major:minor` strings to hex using a bundled theme and `reference/allowed-categories.json`. See [category-colors.md](category-colors.md).
 
 ## App shell (layer 4)
 

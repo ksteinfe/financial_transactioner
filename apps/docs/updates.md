@@ -9,7 +9,7 @@ Updates apply to **application binaries and resources**, not the user’s corpus
 
 ## GitHub Releases (configured build)
 
-[`apps/packages/desktop/package.json`](../packages/desktop/package.json) `build.publish` uses **`provider: "github"`** with `owner` / `repo` pointing at this repository. `electron-builder` embeds feed metadata in packaged apps; `electron-updater` reads GitHub Releases for newer versions.
+[`apps/applications/hello/package.json`](../applications/hello/package.json) `build.publish` uses **`provider: "github"`** with `owner` / `repo` pointing at this repository. `electron-builder` embeds feed metadata in packaged apps; `electron-updater` reads GitHub Releases for newer versions.
 
 **Tag-only releases** and CI are documented in [releases.md](releases.md).
 
@@ -37,7 +37,7 @@ Development / unpackaged builds (`electron-vite dev`) **do not** check for updat
 
 See [releases.md](releases.md) for the **tag-only** GitHub Actions flow. Summary:
 
-1. Bump `version` in `packages/desktop/package.json`.
+1. Bump `version` in `applications/hello/package.json`.
 2. Push tag `steinfeld-finance-hello-vX.Y.Z` matching that version.
 3. CI publishes installers and update metadata to GitHub Releases.
 

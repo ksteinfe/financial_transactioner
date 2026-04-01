@@ -1,5 +1,5 @@
 {
-  "name": "@txn/desktop",
+  "name": "@txn/hello",
   "version": "0.1.4",
   "private": true,
   "author": "Steinfeld Finance",
@@ -7,7 +7,7 @@
   "main": "./out/main/index.js",
   "type": "module",
   "scripts": {
-    "build:deps": "pnpm --filter @txn/types build && pnpm --filter @txn/app-contracts build && pnpm --filter @txn/corpus-core build",
+    "build:deps": "pnpm --filter @txn/types build && pnpm --filter @txn/app-contracts build && pnpm --filter @txn/corpus-core build && pnpm --filter @txn/category-colors build",
     "dev": "pnpm run build:deps && electron-vite dev",
     "build": "pnpm run build:deps && electron-vite build",
     "preview": "electron-vite preview",
@@ -17,6 +17,7 @@
   "dependencies": {
     "@txn/app-contracts": "workspace:*",
     "@txn/corpus-core": "workspace:*",
+    "@txn/category-colors": "workspace:*",
     "@txn/types": "workspace:*",
     "electron-updater": "^6.3.9",
     "react": "^19.0.0",

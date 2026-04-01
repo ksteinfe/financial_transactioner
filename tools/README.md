@@ -1,6 +1,6 @@
 # tools/
 
-Workspace for transaction ingestion and transformation tooling.
+Workspace for transaction ingestion and transformation tooling. **Apps** (Electron and shared TypeScript packages) live under **`../apps/`** — see [apps/README.md](../apps/README.md).
 
 Planned scope:
 

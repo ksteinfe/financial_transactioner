@@ -3,8 +3,8 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "pnpm --filter @txn/desktop dev",
-    "build": "pnpm --filter @txn/desktop build",
-    "package": "pnpm --filter @txn/desktop package"
+    "dev": "pnpm --filter @txn/hello dev",
+    "build": "pnpm --filter @txn/hello build",
+    "package": "pnpm --filter @txn/hello package"
   }
 }

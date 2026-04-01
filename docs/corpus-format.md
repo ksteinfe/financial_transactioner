@@ -200,6 +200,8 @@ Authoritative allowed list source:
 - `reference/legacy-domain/category_taxonomy.txt`
 - machine-readable companion: `reference/allowed-categories.json`
 
+**Display (non-normative):** chart and list UIs may map canonical paths to colors using the shared **`@txn/category-colors`** package ([`apps/docs/category-colors.md`](../apps/docs/category-colors.md)). That mapping does not affect corpus validity or ingestion.
+
 Legacy mapping sources (for CSV ingestion):
 
 - `reference/legacy-domain/category_mapping_legacy_to_canonical.tsv`
@@ -254,7 +256,7 @@ When to rebuild:
 - After every write that changes transaction data (insert/update/delete in any
   year file), OR
 - On demand (user gesture, CLI, or IPC such as `platform:rebuildCorpusSummary`
-  in the desktop shell).
+  in the Steinfeld Finance - Hello app).
 
 How to rebuild:
 

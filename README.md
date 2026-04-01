@@ -24,7 +24,7 @@ The active project direction is:
 - `tools/`
   - Transaction ingestion/transformation tooling (new work area).
 - `apps/`
-  - UI applications for visualization and maintenance (new work area).
+  - TypeScript workspace: **`applications/`** (runnable apps), **`libraries/`** (shared types/contracts), **`packages/`** (shared domain modules). See [apps/README.md](apps/README.md).
 - `docs/`
   - Transition docs, repository charter, and architecture notes.
 
@@ -45,8 +45,9 @@ See `docs/repository-transition.md` for details.
 - Read `docs/repository-transition.md` for context.
 - Review `reference/legacy-domain/` for extracted legacy vocabulary.
 - Start new implementation work in `tools/` and `apps/`.
+- **Apps workspace layout** (`applications/` · `libraries/` · `packages/`): [apps/README.md](apps/README.md).
 - **Desktop app releases (tag-only, GitHub Actions):** see [apps/docs/releases.md](apps/docs/releases.md).
-- **What changed recently (desktop + repo hygiene):** [apps/docs/CHANGELOG.md](apps/docs/CHANGELOG.md).
+- **What changed recently (apps + repo hygiene):** [apps/docs/CHANGELOG.md](apps/docs/CHANGELOG.md).
 
 ## Shared environment configuration
 
@@ -69,4 +70,4 @@ holds pre-aggregated rollups by year, month, and category. **Apps and tools
 should read `corpus-summary.json` when possible** (dashboards, charts, high-level
 totals) and fall back to scanning `YYYY.json` only when row-level detail is
 required. The summary is rebuilt after writes or on demand (`@txn/corpus-core`,
-desktop **Rebuild summary**).
+Steinfeld Finance - Hello **Rebuild summary**).

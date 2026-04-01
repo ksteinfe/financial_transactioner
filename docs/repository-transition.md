@@ -64,6 +64,16 @@ without retaining obsolete code.
 3. Build applications (likely JavaScript/Electron) for corpus visualization and
    maintenance.
 
+## Apps workspace layout (`apps/`)
+
+The **`apps/`** directory is a **pnpm workspace** of Node packages:
+
+- **`applications/`** — one folder per runnable product (for example **`applications/hello/`** is **`@txn/hello`**, Steinfeld Finance - Hello). Future apps get their own subdirectory and package name **`@txn/<slug>`**.
+- **`libraries/`** — shared **types** and **app-contracts** consumed by multiple apps (`@txn/types`, `@txn/app-contracts`).
+- **`packages/`** — reusable **domain modules** not tied to a single UI (`@txn/corpus-core`, `@txn/category-colors`, …).
+
+Authoritative overview: [apps/README.md](../apps/README.md) and [apps/applications/README.md](../apps/applications/README.md). Platform docs (architecture, releases, category colors) live under **`apps/docs/`**.
+
 ## Shared environment contract
 
 This umbrella repo now uses a root `.env` contract shared by tools and apps.

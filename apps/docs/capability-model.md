@@ -23,4 +23,4 @@ Each runnable surface (eventually each “app”) declares what it is allowed to
 
 ## Implementation
 
-Type definitions live in `packages/app-contracts`. The `packages/desktop` shell imports a manifest for the current build (hello world: **reader-only**).
+Type definitions live in `libraries/app-contracts`. The `applications/hello` shell imports a manifest for the current build (hello world: **reader-only**).

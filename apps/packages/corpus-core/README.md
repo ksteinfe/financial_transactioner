@@ -4,7 +4,7 @@
 
 Depends on `@txn/types`. Uses Node `fs`; safe to unit-test with temp directories. No Electron imports.
 
-**Consumption guidance:** UIs and tools that only need **totals and category rollups** should load **`corpus-summary.json`** (via `computeCorpusSummary` / a file read) instead of parsing every `YYYY.json`. Reserve full year-file reads for transaction lists, edits, and ingestion. See repo root **`docs/corpus-format.md`** (corpus summary section).
+**Consumption guidance:** UIs and tools that only need **totals and category rollups** should load **`corpus-summary.json`** (via `computeCorpusSummary` / a file read) instead of parsing every `YYYY.json`. Reserve full year-file reads for transaction lists, edits, and ingestion. See repo root **`docs/corpus-format.md`** (corpus summary section). **Per-category display colors** are provided by sibling package **`@txn/category-colors`**; see **`apps/docs/category-colors.md`**.
 
 Exports:
 

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "_notes": {
+    "labBounds": "CIELAB (D65) axis-aligned box. Every resolved color is converted to L*a*b*, then each of L*, a*, b* is clamped to these ranges before converting to sRGB hex. L* is lightness (0 ≈ black, 100 ≈ white). a* runs green (−) to red (+). b* runs blue (−) to yellow (+). Real displayable colors usually sit well inside ±100 on a*/b*; this file uses a mid L* band (35–88) so swatches stay off pure black/white.",
+    "majors": "Each key is a major category id. Value is an sRGB hex string (e.g. \"#d1767f\"). For major-only lookups (`getColorForMajor(\"food\")` or `getColorForCategory(\"food\")` with no colon), that hex is converted to LAB, clipped by labBounds, then back to hex. For full paths, the resolver builds a region around that seed (half-extents ∩ labBounds) and places non-explicit minors on an L* sweep plus a*/b* grid.",
+    "explicit": "Keys may be a full path \"major:minor\" or a major-only id \"major\". Per-path overrides win; if only \"major\" is set, every minor under that major uses that color (no per-minor LAB grid). Values: hex string or { \"hex\" } / { \"lab\" }. Hex is normalized #rrggbb; lab-only entries skip labBounds on encode. Generated minors (when no major-level explicit) use LAB internally and are clipped by labBounds."
+  },
+  "labBounds": {
+    "LMin": 10,
+    "LMax": 90,
+    "aMin": -80,
+    "aMax": 80,
+    "bMin": -80,
+    "bMax": 80
+  },
+  "majors": {
+    "childcare": "#ce7692",
+    "education": "#d1767f",
+    "entertainment": "#ce7a6d",
+    "financial": "#c67f5d",
+    "food": "#ba8653",
+    "gift": "#aa8d4d",
+    "health": "#98934e",
+    "home": "#839955",
+    "income": "#6d9d62",
+    "kids": "#54a072",
+    "personal_care": "#34a286",
+    "professional": "#00a299",
+    "project": "#00a2ad",
+    "reimbursment": "#009dca",
+    "savings": "#3d98d1",
+    "shopping": "#6592d3",
+    "tax": "#858ccf",
+    "transfer": "#a084c5",
+    "transportation": "#b67db7",
+    "unknown": "#c578a5"
+  },
+  "explicit": {
+    "unknown": "#ff00ff",
+    "rare": "#ff00ff"
+  }
+}

@@ -1,5 +1,5 @@
-# Pattern 1: tag-only releases for @txn/desktop (Steinfeld Finance - Hello).
-# Push tag: steinfeld-finance-hello-vX.Y.Z (must match apps/packages/desktop package.json version).
+# Tag-only releases for @txn/hello (Steinfeld Finance - Hello).
+# Push tag: steinfeld-finance-hello-vX.Y.Z (must match apps/applications/hello package.json version).
 
 name: Release Steinfeld Finance Hello
 
@@ -22,11 +22,11 @@ jobs:
         working-directory: apps
         run: |
           TAG_VER="${GITHUB_REF_NAME#steinfeld-finance-hello-v}"
-          PKG_VER=$(node -p "require('./packages/desktop/package.json').version")
+          PKG_VER=$(node -p "require('./applications/hello/package.json').version")
           echo "Tag version: $TAG_VER"
           echo "package.json:  $PKG_VER"
           if [ "$TAG_VER" != "$PKG_VER" ]; then
-            echo "::error::Tag suffix must match apps/packages/desktop package.json version"
+            echo "::error::Tag suffix must match apps/applications/hello package.json version"
             exit 1
           fi
 
@@ -48,4 +48,4 @@ jobs:
         working-directory: apps
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm --filter @txn/desktop run release
+        run: pnpm --filter @txn/hello run release
