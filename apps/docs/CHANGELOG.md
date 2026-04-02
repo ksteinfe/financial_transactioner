@@ -6,8 +6,22 @@ This log records **maintainer-facing** changes to the **`apps/`** workspace (Ele
 
 ## Unreleased / current tree
 
-- **Version:** see `applications/hello/package.json` `version` (e.g. **0.1.4** at last documentation pass).
+- **Version:** see `applications/hello/package.json` `version` (e.g. **0.1.4** at last documentation pass). **Sankey:** `applications/sankey/package.json` (**@txn/sankey**), releases via tags `steinfeld-finance-sankey-v*`.
 - **Upcoming:** repository may be switched **public** for anonymous GitHub Releases / auto-updates (private repos require `GH_TOKEN` for the updater feed).
+
+### Steinfeld Finance - Sankey (2026-04)
+
+- **New app:** `applications/sankey` — **`@txn/sankey`**, Electron + D3 Sankey (main / reimbursement / transfer sections), corpus via **`platform:loadCorpusYearFile`**, **`@txn/ui-core`** canvas + month range, **`@txn/category-colors`** for category nodes, tests (`pnpm --filter @txn/sankey test`).
+- **`@txn/corpus-core/pure`:** browser-safe subpath (no `fs`) for renderer imports; full package unchanged for main process.
+- **CI:** [`.github/workflows/release-steinfeld-finance-sankey.yml`](../../.github/workflows/release-steinfeld-finance-sankey.yml).
+
+#### Sankey UI iteration (same release line; **known issues**)
+
+- **Model / layout:** Transfer section **omits major-category nodes**; flow is inflow minors → total inflow → total outflow → outflow minors. Middle nodes ordered with **total inflow before deficit** and **total outflow before surplus**; **`adjustStackedBalances`** places deficit under total inflow and surplus under total outflow.
+- **Theme:** Light app chrome and **very light grey** canvas background (`--txn-canvas-bg` / sankey styles).
+- **`@txn/ui-core` `AppCanvas`:** Optional **`toolbarExtra`** (e.g. **Reset node positions** next to Fit / Reset view); transparent **pan hit rect** with explicit bounds; **`touch-action: none`** on zoom SVG; zoom filter tweaks for wheel vs pan.
+- **`SankeyChart`:** Renders as **`<g>`** inside the canvas (no nested root `<svg>`); link paths with minimum stroke width and semantic stroke color; **pointer `stopPropagation`** on node drag to avoid conflating node drag with canvas pan.
+- **Still broken or unverified in the live Electron app (2026-04 session end):** **Pan and zoom** do not behave correctly for users; **Sankey links** are **not reliably visible**; **no automated check** yet that on-screen node labels/amounts match underlying `SankeySectionModel` / corpus rows — see **[sankey-app.md](sankey-app.md)** for investigation checklist and verification ideas.
 
 ### Documentation & workspace layout (2026-04)
 

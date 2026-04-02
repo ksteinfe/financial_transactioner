@@ -6,11 +6,13 @@ import type {
   CorpusSummaryMonthBucket,
   CorpusSummaryRollup,
   CorpusSummaryYearBucket,
-  CorpusSummaryYearMajorCategory,
-  CorpusTransaction
+  CorpusSummaryYearMajorCategory
 } from '@txn/types'
+import { parseCategory } from './category.js'
 import { CORPUS_SUMMARY_FILENAME, CORPUS_SUMMARY_SCHEMA_VERSION } from './constants.js'
 import { DEFAULT_MAJOR_CATEGORY_KEYS } from './majors.js'
+import { monthKeyFromDate } from './month.js'
+import { parseTransactionRow } from './transaction.js'
 
 const YEAR_FILE = /^(\d{4})\.json$/
 
@@ -48,63 +50,8 @@ function finalizeRollup(r: MutableRollup): CorpusSummaryRollup {
   }
 }
 
-function parseCategory(category: string): { major: string; minor: string } {
-  const i = category.indexOf(':')
-  if (i <= 0) return { major: 'unknown', minor: 'undefined' }
-  const major = category.slice(0, i).trim()
-  const minor = category.slice(i + 1).trim()
-  if (major.length === 0) return { major: 'unknown', minor: minor.length > 0 ? minor : 'undefined' }
-  return { major, minor: minor.length > 0 ? minor : 'undefined' }
-}
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-function asTransaction(raw: unknown): CorpusTransaction | null {
-  if (!isRecord(raw)) return null
-  const key = raw.key
-  const date = raw.date
-  const amount = raw.amount
-  const account = raw.account
-  const description = raw.description
-  const category = raw.category
-  const date_created = raw.date_created
-  const date_updated = raw.date_updated
-  if (
-    typeof key !== 'string' ||
-    typeof date !== 'string' ||
-    typeof amount !== 'number' ||
-    Number.isNaN(amount) ||
-    typeof account !== 'string' ||
-    typeof description !== 'string' ||
-    typeof category !== 'string' ||
-    typeof date_created !== 'string' ||
-    typeof date_updated !== 'string'
-  ) {
-    return null
-  }
-  const notes = raw.notes
-  const tx: CorpusTransaction = {
-    key,
-    date,
-    amount,
-    account,
-    description,
-    category,
-    date_created,
-    date_updated
-  }
-  if (typeof notes === 'string' && notes.length > 0) {
-    tx.notes = notes
-  }
-  return tx
-}
-
-function monthKeyFromDate(isoDate: string): string | null {
-  const m = /^(\d{4})-(\d{2})-\d{2}$/.exec(isoDate.trim())
-  if (!m) return null
-  return `${m[1]}-${m[2]}`
 }
 
 function sortKeys<T>(obj: Record<string, T>): Record<string, T> {
@@ -178,7 +125,7 @@ export async function computeCorpusSummary(rootPath: string): Promise<CorpusSumm
     }
 
     for (const row of parsed.transactions) {
-      const tx = asTransaction(row)
+      const tx = parseTransactionRow(row)
       if (!tx) continue
 
       const amount = tx.amount

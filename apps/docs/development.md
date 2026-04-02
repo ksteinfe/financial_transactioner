@@ -1,5 +1,42 @@
 # Development
 
+## TL;DR — Two apps, same workspace
+
+The **`apps/`** workspace contains **multiple runnable products** under [`applications/`](../applications/). Each app is a separate **pnpm package** (`@txn/hello`, `@txn/sankey`, …) with its own **`version`**, **scripts**, and **Electron/electron-builder** output. You can **develop, build, test, and package each app independently** without touching the other product’s `package.json` or release tags.
+
+**Run in development (from `apps/` directory, after `pnpm install`):**
+
+| App | Command |
+|-----|---------|
+| **Steinfeld Finance - Hello** | `pnpm dev` **or** `pnpm --filter @txn/hello dev` |
+| **Steinfeld Finance - Sankey** | `pnpm dev:sankey` **or** `pnpm --filter @txn/sankey dev` |
+
+**Build production artifacts:**
+
+| App | Command |
+|-----|---------|
+| Hello | `pnpm build` **or** `pnpm --filter @txn/hello build` |
+| Sankey | `pnpm build:sankey` **or** `pnpm --filter @txn/sankey build` |
+
+**Build local installers (no upload):**
+
+| App | Command |
+|-----|---------|
+| Hello | `pnpm --filter @txn/hello package` |
+| Sankey | `pnpm package:sankey` **or** `pnpm --filter @txn/sankey package` |
+
+**Automated tests (Vitest):**
+
+| App | Command |
+|-----|---------|
+| Sankey | `pnpm --filter @txn/sankey test` |
+
+Hello does not define a workspace `test` script yet; add tests there when needed.
+
+**Publish to GitHub Releases (tag push → CI):** see **[releases.md](releases.md)** — separate **tag prefix** and **workflow** per app.
+
+---
+
 ## Prerequisites
 
 - **Node.js** 20 LTS or newer (18+ may work; 20+ recommended).
@@ -15,6 +52,8 @@ pnpm install
 
 ## Run (development)
 
+**Hello:**
+
 ```bash
 pnpm dev
 ```
@@ -25,11 +64,23 @@ Equivalent:
 pnpm --filter @txn/hello dev
 ```
 
-This starts the Electron app with Vite HMR for the renderer.
+This starts **Steinfeld Finance - Hello** with Electron + Vite HMR for the renderer.
+
+**Sankey:**
+
+```bash
+pnpm dev:sankey
+```
+
+or:
+
+```bash
+pnpm --filter @txn/sankey dev
+```
 
 ## Build
 
-Compile main, preload, and renderer:
+**Hello** — compile main, preload, and renderer:
 
 ```bash
 pnpm build
@@ -43,15 +94,43 @@ pnpm --filter @txn/hello build
 
 Output is under `applications/hello/out/` (electron-vite default).
 
+**Sankey:**
+
+```bash
+pnpm build:sankey
+```
+
+or:
+
+```bash
+pnpm --filter @txn/sankey build
+```
+
+Output under `applications/sankey/out/`.
+
 ## Package (installer / distributable)
 
-Requires build artifacts first:
+Requires build artifacts first.
+
+**Hello:**
 
 ```bash
 pnpm --filter @txn/hello package
 ```
 
-Uses `electron-builder` from the hello app package. See [updates.md](updates.md) for update metadata and environment variables.
+**Sankey:**
+
+```bash
+pnpm package:sankey
+```
+
+or:
+
+```bash
+pnpm --filter @txn/sankey package
+```
+
+Uses `electron-builder` from each app package. See [updates.md](updates.md) for update metadata and environment variables.
 
 ### App icons (Material Symbols)
 
@@ -77,6 +156,8 @@ Each packaged Electron app should ship an icon that **matches the app’s name o
 | Package | Role |
 |---------|------|
 | `@txn/hello` | Electron shell (Steinfeld Finance - Hello) |
+| `@txn/sankey` | Electron app (Steinfeld Finance - Sankey flow visualization) |
+| `@txn/ui-core` | Shared React primitives (canvas, month range selector) |
 | `@txn/types` | Shared types |
 | `@txn/app-contracts` | Manifests and capabilities |
 | `@txn/corpus-core` | Corpus scan, summary index, validation |

@@ -1,0 +1,131 @@
+:root {
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: #f1f2f4;
+  color: #1e293b;
+  --sankey-fg: #1e293b;
+  --sankey-muted: #64748b;
+  --sankey-link-stroke: #64748b;
+  --sankey-node-stroke: rgba(15, 23, 42, 0.18);
+  --sankey-total: #94a3b8;
+  --sankey-deficit: #ff0000;
+  --sankey-surplus: #00dd44;
+  --sankey-neutral: #64748b;
+  --txn-ym-muted: #64748b;
+  --txn-ym-border: #cbd5e1;
+  --txn-ym-bg: #ffffff;
+  --txn-ym-fg: #1e293b;
+  --txn-ym-range-bg: #e0e7ff;
+  --txn-ym-accent: #4f46e5;
+  --txn-canvas-bg: #eceef1;
+  --txn-canvas-border: #d1d5db;
+  --txn-canvas-btn-bg: #ffffff;
+  --txn-canvas-btn-hover: #f3f4f6;
+  --txn-canvas-fg: #1e293b;
+}
+
+body {
+  margin: 0;
+}
+
+.sankey-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+}
+
+.sankey-header {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fafbfc;
+}
+
+.sankey-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sankey-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sankey-header button {
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.sankey-header button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sankey-folder {
+  font-size: 12px;
+  color: #475569;
+  max-width: 48vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.muted {
+  color: #64748b;
+}
+
+.sankey-controls {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fafbfc;
+}
+
+.sankey-error {
+  color: #b91c1c;
+  font-size: 13px;
+  margin: 0.35rem 0 0;
+}
+
+.sankey-tooltip {
+  font-size: 12px;
+  color: #334155;
+  margin: 0.35rem 0 0;
+  white-space: pre-wrap;
+}
+
+.sankey-canvas-wrap {
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem 1rem 1rem;
+}
+
+.sankey-footer {
+  flex-shrink: 0;
+  padding: 0.35rem 1rem;
+  font-size: 11px;
+  border-top: 1px solid #e2e8f0;
+  background: #fafbfc;
+}
+
+.sankey-empty {
+  padding: 2rem;
+  color: #64748b;
+}
+
+.sankey-svg,
+.sankey-root {
+  overflow: visible;
+}

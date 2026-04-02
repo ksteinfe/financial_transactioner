@@ -1,15 +1,11 @@
-export { CORPUS_SUMMARY_FILENAME, CORPUS_SUMMARY_SCHEMA_VERSION } from './constants.js'
+/**
+ * Browser-safe exports (no `node:fs`). Use `@txn/corpus-core/pure` from Electron renderers.
+ * Full package `@txn/corpus-core` remains for main process and tools.
+ */
 export { parseCategory } from './category.js'
-export { DEFAULT_MAJOR_CATEGORY_KEYS } from './majors.js'
-export {
-  computeCorpusSummary,
-  rebuildCorpusSummaryFile,
-  writeCorpusSummaryFile
-} from './summary.js'
-export { scanCorpusDirectory } from './scan.js'
+export { monthKeyFromDate, calendarMonthFromDate, calendarYearFromDate } from './month.js'
 export { parseTransactionRow } from './transaction.js'
 export { parseCorpusYearFile } from './yearFile.js'
-export { monthKeyFromDate, calendarMonthFromDate, calendarYearFromDate } from './month.js'
 export {
   REIMBURSEMENT_CATEGORIES,
   TRANSFER_CATEGORIES,

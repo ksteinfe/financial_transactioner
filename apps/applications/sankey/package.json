@@ -1,0 +1,74 @@
+{
+  "name": "@txn/sankey",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Steinfeld Finance",
+  "description": "Steinfeld Finance - Sankey (Electron)",
+  "main": "./out/main/index.js",
+  "type": "module",
+  "scripts": {
+    "build:deps": "pnpm --filter @txn/types build && pnpm --filter @txn/app-contracts build && pnpm --filter @txn/corpus-core build && pnpm --filter @txn/category-colors build && pnpm --filter @txn/ui-core build",
+    "dev": "pnpm run build:deps && electron-vite dev",
+    "build": "pnpm run build:deps && electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "pnpm run build && electron-builder --publish never",
+    "release": "pnpm run build && electron-builder --publish always",
+    "test": "pnpm run build:deps && vitest run"
+  },
+  "dependencies": {
+    "@txn/app-contracts": "workspace:*",
+    "@txn/category-colors": "workspace:*",
+    "@txn/corpus-core": "workspace:*",
+    "@txn/types": "workspace:*",
+    "@txn/ui-core": "workspace:*",
+    "d3": "^7.9.0",
+    "d3-sankey": "^0.12.3",
+    "d3-selection": "^3.0.0",
+    "electron-updater": "^6.3.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.0.1",
+    "@types/d3": "^7.4.3",
+    "@types/d3-sankey": "^0.12.4",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  },
+  "build": {
+    "appId": "com.steinfeld.finance.sankey",
+    "productName": "Steinfeld Finance - Sankey",
+    "artifactName": "steinfeld-finance-sankey-${version}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "icon": "build/sankey.png",
+    "files": [
+      "out/**/*"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "ksteinfe",
+      "repo": "financial_transactioner",
+      "releaseType": "release"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "win": {
+      "executableName": "steinfeld-finance-sankey",
+      "icon": "build/sankey.png",
+      "sign": null,
+      "verifyUpdateCodeSignature": false
+    }
+  }
+}

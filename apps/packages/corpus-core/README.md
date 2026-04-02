@@ -11,3 +11,4 @@ Exports:
 - `scanCorpusDirectory(rootPath)` — discover `YYYY.json` files, count `transactions.length`, report diagnostics.
 - `computeCorpusSummary` / `writeCorpusSummaryFile` / `rebuildCorpusSummaryFile` — build or refresh the derived **`corpus-summary.json`** index (see `docs/corpus-format.md` section 9).
 - `CORPUS_SUMMARY_FILENAME`, `CORPUS_SUMMARY_SCHEMA_VERSION`, `DEFAULT_MAJOR_CATEGORY_KEYS`.
+- **`@txn/corpus-core/pure`** — browser-safe entry (no `node:fs`): `parseCorpusYearFile`, `parseCategory`, `filterTransactionsByYearMonthRange`, `aggregateByCategory`, `sectionForCategory`, Sankey partition helpers, etc. Use from Electron **renderers**; keep full `@txn/corpus-core` in main/process tooling.

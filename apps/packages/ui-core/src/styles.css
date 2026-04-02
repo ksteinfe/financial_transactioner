@@ -1,0 +1,127 @@
+/* AppCanvas */
+.txn-app-canvas-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.txn-app-canvas-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.25rem 0;
+}
+
+.txn-app-canvas-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--txn-canvas-bg, #eceef1);
+  border-radius: 6px;
+  border: 1px solid var(--txn-canvas-border, #d1d5db);
+}
+
+.txn-app-canvas-viewport svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.txn-app-canvas-viewport svg:active {
+  cursor: grabbing;
+}
+
+.txn-app-canvas-controls {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.txn-app-canvas-controls button {
+  font-size: 12px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--txn-canvas-border, #d1d5db);
+  background: var(--txn-canvas-btn-bg, #ffffff);
+  color: var(--txn-canvas-fg, #1e293b);
+  cursor: pointer;
+}
+
+.txn-app-canvas-controls button:hover {
+  background: var(--txn-canvas-btn-hover, #f3f4f6);
+}
+
+/* YearMonthRangeSelector */
+.txn-ym-range {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.txn-ym-range-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.txn-ym-range-label {
+  font-size: 12px;
+  color: var(--txn-ym-muted, #888);
+  min-width: 2.5rem;
+}
+
+.txn-ym-range-select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--txn-ym-border, #444);
+  background: var(--txn-ym-bg, #222);
+  color: var(--txn-ym-fg, #eee);
+  font-size: 13px;
+}
+
+.txn-ym-months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.txn-ym-month {
+  min-width: 2.75rem;
+  padding: 0.35rem 0.4rem;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid var(--txn-ym-border, #444);
+  background: var(--txn-ym-bg, #222);
+  color: var(--txn-ym-fg, #ddd);
+  cursor: pointer;
+  user-select: none;
+}
+
+.txn-ym-month:hover:not(:disabled) {
+  border-color: var(--txn-ym-accent, #6b9fff);
+}
+
+.txn-ym-month--faded {
+  opacity: 0.45;
+}
+
+.txn-ym-month--in-range {
+  background: var(--txn-ym-range-bg, #2a3a55);
+  border-color: var(--txn-ym-accent, #6b9fff);
+}
+
+.txn-ym-month--edge {
+  font-weight: 600;
+}
+
+.txn-ym-month:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

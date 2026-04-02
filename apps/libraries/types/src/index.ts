@@ -209,3 +209,16 @@ export type CorpusRescanResult =
   | { status: 'no_folder' }
 
 
+
+/** Result of loading a single `YYYY.json` from the stored corpus folder (main process). */
+
+export type CorpusYearFileLoadResult =
+
+  | { status: 'no_folder' }
+
+  | { status: 'missing_file'; year: number }
+
+  | { status: 'error'; message: string; path?: string }
+
+  | { status: 'ok'; file: CorpusYearFile; diagnostics: CorpusScanDiagnostic[] }
+

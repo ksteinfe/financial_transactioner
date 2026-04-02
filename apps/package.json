@@ -4,7 +4,10 @@
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "pnpm --filter @txn/hello dev",
+    "dev:sankey": "pnpm --filter @txn/sankey dev",
     "build": "pnpm --filter @txn/hello build",
-    "package": "pnpm --filter @txn/hello package"
+    "build:sankey": "pnpm --filter @txn/sankey build",
+    "package": "pnpm --filter @txn/hello package",
+    "package:sankey": "pnpm --filter @txn/sankey package"
   }
 }

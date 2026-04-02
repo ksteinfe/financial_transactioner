@@ -50,4 +50,4 @@ This distinction must be explicit in **code**, **manifests**, **preload exposure
 
 ## Practical deployment: one shell, many views
 
-The first deliverable is **one Electron app** with **multiple internal views/routes**. Code is structured so some views could later be split into separate installers; one binary, one update channel, shared platform code.
+The first deliverable was **one Electron app** with **multiple internal views/routes**. Additional products (for example **Steinfeld Finance - Sankey**) ship as **separate Electron apps** in `applications/` with their own versioning, installers, and GitHub Releases tag prefixes, while reusing the same `libraries/` and `packages/` layers.

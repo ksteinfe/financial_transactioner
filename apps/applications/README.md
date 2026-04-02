@@ -1,5 +1,18 @@
 # Applications (`applications/`)
 
+## TL;DR
+
+Each **subfolder** is one **deployable product** (`@txn/<folder>`): its own **version**, **Electron build**, and **release tag prefix**. Develop and test with `pnpm --filter @txn/<folder> dev` from `apps/` (see [development.md](../docs/development.md)). Publish with a **product-specific git tag** and CI (see [releases.md](../docs/releases.md)). **Hello** and **Sankey** do not share release tags or installers.
+
+**Commands (from `apps/`):**
+
+| Product | Dev | Test | Package (local installer) |
+|---------|-----|------|---------------------------|
+| Hello | `pnpm dev` or `pnpm --filter @txn/hello dev` | *(no workspace test script yet)* | `pnpm --filter @txn/hello package` |
+| Sankey | `pnpm dev:sankey` or `pnpm --filter @txn/sankey dev` | `pnpm --filter @txn/sankey test` | `pnpm --filter @txn/sankey package` |
+
+---
+
 Each **subfolder** is one **deployable product**: something with its own `package.json`, scripts, and (usually) a distinct npm name.
 
 ## Current and example layout
@@ -7,11 +20,11 @@ Each **subfolder** is one **deployable product**: something with its own `packag
 ```
 applications/
   hello/           # @txn/hello — Steinfeld Finance - Hello (Electron)
-  sankey/          # (future) @txn/sankey — e.g. flow / Sankey visualization app
+  sankey/          # @txn/sankey — Steinfeld Finance - Sankey (Electron)
   second/          # (future) @txn/second — placeholder name for another product
 ```
 
-Folders **`sankey`** and **`second`** are **not** in the repo yet; they illustrate how new apps are organized.
+Folder **`second`** is not in the repo yet; it illustrates how another product could be added.
 
 ## Naming conventions
 
