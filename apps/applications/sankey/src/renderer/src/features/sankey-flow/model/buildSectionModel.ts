@@ -92,7 +92,7 @@ function sortOutflowMinors(
   return out
 }
 
-function collectInflowOutflow(
+export function collectInflowOutflow(
   sectionId: SankeySectionId,
   transactions: CorpusTransaction[]
 ): { inflowCats: CategoryAggregate[]; outflowCats: CategoryAggregate[] } | null {

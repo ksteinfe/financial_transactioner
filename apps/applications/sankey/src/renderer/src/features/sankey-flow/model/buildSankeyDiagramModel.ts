@@ -1,25 +1,9 @@
-import {
-  filterTransactionsByYearMonthRange,
-  sectionForCategory,
-  type SankeySectionId
-} from '@txn/corpus-core/pure'
+import { filterTransactionsByYearMonthRange } from '@txn/corpus-core/pure'
 import type { CorpusTransaction } from '@txn/types'
 import { buildSectionModel } from './buildSectionModel.js'
 import { verifySectionIntegrity } from './graphIntegrity.js'
+import { partitionBySection } from './partitionBySection.js'
 import { SANKEY_SECTION_DISPLAY_ORDER, type SankeyDiagramModel } from './sankeyTypes.js'
-
-function partitionBySection(transactions: CorpusTransaction[]): Record<SankeySectionId, CorpusTransaction[]> {
-  const buckets: Record<SankeySectionId, CorpusTransaction[]> = {
-    main: [],
-    reimbursement: [],
-    transfer: []
-  }
-  for (const tx of transactions) {
-    const s = sectionForCategory(tx.category)
-    buckets[s].push(tx)
-  }
-  return buckets
-}
 
 export function buildSankeyDiagramModel(
   yearTransactions: CorpusTransaction[],

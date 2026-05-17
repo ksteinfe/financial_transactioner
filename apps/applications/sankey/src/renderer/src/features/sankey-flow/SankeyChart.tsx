@@ -5,11 +5,17 @@ import {
   useMemo,
   useRef,
   useState,
+  type MouseEvent as ReactMouseEvent,
   type PointerEvent,
   type ReactElement
 } from 'react'
 import { formatCurrencyShort } from './model/formatCurrencyShort.js'
-import { SANKEY_SECTION_DISPLAY_ORDER, type SankeySectionId, type SankeySectionModel } from './model/sankeyTypes.js'
+import {
+  SANKEY_SECTION_DISPLAY_ORDER,
+  type SankeyNodeModel,
+  type SankeySectionId,
+  type SankeySectionModel
+} from './model/sankeyTypes.js'
 import { getSankeyNodeFill } from './sankeyColors.js'
 import {
   layoutSankeySection,
@@ -58,6 +64,8 @@ type SectionLayoutState = {
   layout: SectionLayout | null
 }
 
+const DRAG_THRESHOLD_PX = 4
+
 interface SankeyChartProps {
   sections: SankeySectionModel[]
   width: number
@@ -66,6 +74,11 @@ interface SankeyChartProps {
   layoutResetKey?: number
   onHover: (payload: SankeyHoverInfo | null) => void
   onContentHeightChange?: (height: number) => void
+  onNodeActivate?: (node: SankeyNodeModel) => void
+}
+
+function isNodeActionable(kind: SankeyNodeModel['kind']): boolean {
+  return kind !== 'surplus' && kind !== 'deficit'
 }
 
 function sectionDisplayTitle(section: SankeySectionModel): string {
@@ -83,7 +96,8 @@ export function SankeyChart({
   dollarsPerPixel,
   layoutResetKey = 0,
   onHover,
-  onContentHeightChange
+  onContentHeightChange,
+  onNodeActivate
 }: SankeyChartProps): ReactElement {
   const activeSections = useMemo(() => {
     const rank = new Map(SANKEY_SECTION_DISPLAY_ORDER.map((id, i) => [id, i]))
@@ -159,6 +173,10 @@ export function SankeyChart({
     layoutOffsetY: number
     grabOffsetX: number
     grabOffsetY: number
+    startClientX: number
+    startClientY: number
+    active: boolean
+    pointerId: number
   } | null>(null)
 
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null)
@@ -175,7 +193,6 @@ export function SankeyChart({
   const onPointerDown = useCallback(
     (e: PointerEvent, sectionId: string, nodeId: string) => {
       e.stopPropagation()
-      e.preventDefault()
       const root = rootRef.current
       const svg = root?.ownerSVGElement
       const row = layouts.find((l) => l.section.id === sectionId)
@@ -189,10 +206,12 @@ export function SankeyChart({
         nodeId,
         layoutOffsetY,
         grabOffsetX: pt.x - node.x0,
-        grabOffsetY: pt.y - node.y0
+        grabOffsetY: pt.y - node.y0,
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        active: false,
+        pointerId: e.pointerId
       }
-      setDraggingNodeId(nodeId)
-      root.setPointerCapture(e.pointerId)
     },
     [layouts, sectionLayoutOffsetY]
   )
@@ -203,6 +222,16 @@ export function SankeyChart({
       const root = rootRef.current
       const svg = root?.ownerSVGElement
       if (!drag || !root || !svg) return
+
+      if (!drag.active) {
+        const dx = e.clientX - drag.startClientX
+        const dy = e.clientY - drag.startClientY
+        if (Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) return
+        drag.active = true
+        setDraggingNodeId(drag.nodeId)
+        root.setPointerCapture(drag.pointerId)
+      }
+
       e.stopPropagation()
       e.preventDefault()
       const pt = clientToLayoutPoint(svg, root, drag.layoutOffsetY, e.clientX, e.clientY)
@@ -220,16 +249,29 @@ export function SankeyChart({
   )
 
   const endDrag = useCallback((e: PointerEvent) => {
-    if (!dragRef.current) return
+    const drag = dragRef.current
+    if (!drag) return
     e.stopPropagation()
-    try {
-      rootRef.current?.releasePointerCapture(e.pointerId)
-    } catch {
-      /* ok */
+    if (drag.active) {
+      try {
+        rootRef.current?.releasePointerCapture(drag.pointerId)
+      } catch {
+        /* ok */
+      }
+      setDraggingNodeId(null)
     }
     dragRef.current = null
-    setDraggingNodeId(null)
   }, [])
+
+  const onNodeDoubleClick = useCallback(
+    (e: ReactMouseEvent, node: SankeyNodeModel) => {
+      e.stopPropagation()
+      e.preventDefault()
+      if (!isNodeActionable(node.kind)) return
+      onNodeActivate?.(node)
+    },
+    [onNodeActivate]
+  )
 
   if (activeSections.length === 0) {
     return (
@@ -351,12 +393,19 @@ export function SankeyChart({
                         const labelLeft = d.raw.column === 1 || d.raw.column === 2
                         const shown = d.raw.displayLabel ?? d.raw.label
                         const labelText = shown.length > 22 ? `${shown.slice(0, 20)}…` : shown
+                        const actionable = isNodeActionable(d.raw.kind)
                         return (
                           <g
                             key={d.id}
                             transform={`translate(${d.x0 ?? 0},${d.y0 ?? 0})`}
                             onPointerDown={(e) => onPointerDown(e, row.section.id, d.id)}
-                            className={draggingNodeId === d.id ? 'sankey-node-dragging' : undefined}
+                            onDoubleClick={actionable ? (e) => onNodeDoubleClick(e, d.raw) : undefined}
+                            className={[
+                              actionable ? 'sankey-node-actionable' : undefined,
+                              draggingNodeId === d.id ? 'sankey-node-dragging' : undefined
+                            ]
+                              .filter(Boolean)
+                              .join(' ') || undefined}
                             style={{ touchAction: 'none' }}
                           >
                             <rect

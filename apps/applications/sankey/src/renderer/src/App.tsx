@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useMemo, useState, type ReactElement } from 'react'
 import type { CorpusScanSummary, CorpusTransaction } from '@txn/types'
-import { monthAvailabilityForYear } from '@txn/corpus-core/pure'
+import { filterTransactionsByYearMonthRange, monthAvailabilityForYear } from '@txn/corpus-core/pure'
 import { AppCanvas, type CanvasTransform, YearMonthRangeSelector } from '@txn/ui-core'
 import { SankeyChart, type SankeyHoverInfo } from './features/sankey-flow/SankeyChart.js'
 import { SankeyScaleToolbar } from './features/sankey-flow/SankeyScaleToolbar.js'
 import { buildSankeyDiagramModel } from './features/sankey-flow/model/buildSankeyDiagramModel.js'
+import { partitionBySection } from './features/sankey-flow/model/partitionBySection.js'
+import { resolveNodeTransactions } from './features/sankey-flow/model/resolveNodeTransactions.js'
+import type { SankeyNodeModel } from './features/sankey-flow/model/sankeyTypes.js'
 import { pickAutoDollarsPerPixel } from './features/sankey-flow/sankeyScale.js'
+import { TransactionTableDialog } from './features/transaction-table/TransactionTableDialog.js'
+
+type TransactionPanelState = {
+  title: string
+  transactions: CorpusTransaction[]
+} | null
 
 export function App(): ReactElement {
   const [folder, setFolder] = useState<string | null>(null)
@@ -18,6 +27,7 @@ export function App(): ReactElement {
   const [layoutResetKey, setLayoutResetKey] = useState(0)
   const [hoverInfo, setHoverInfo] = useState<SankeyHoverInfo | null>(null)
   const [dollarsPerPixel, setDollarsPerPixel] = useState<number>(100)
+  const [transactionPanel, setTransactionPanel] = useState<TransactionPanelState>(null)
 
   const rescan = useCallback(async (): Promise<void> => {
     setPending(true)
@@ -93,6 +103,21 @@ export function App(): ReactElement {
     return monthAvailabilityForYear(yearData.transactions, yearData.year)
   }, [yearData])
 
+  const filteredTransactions = useMemo(() => {
+    if (!yearData) return []
+    return filterTransactionsByYearMonthRange(
+      yearData.transactions,
+      range.year,
+      range.startMonth,
+      range.endMonth
+    )
+  }, [yearData, range.year, range.startMonth, range.endMonth])
+
+  const transactionsBySection = useMemo(
+    () => partitionBySection(filteredTransactions),
+    [filteredTransactions]
+  )
+
   const diagram = useMemo(() => {
     if (!yearData) return null
     return buildSankeyDiagramModel(
@@ -102,6 +127,21 @@ export function App(): ReactElement {
       range.endMonth
     )
   }, [yearData, range.year, range.startMonth, range.endMonth])
+
+  const onNodeActivate = useCallback(
+    (node: SankeyNodeModel) => {
+      const sectionTxs = transactionsBySection[node.sectionId]
+      const rows = resolveNodeTransactions(node, sectionTxs, node.sectionId)
+      if (rows === null) return
+      const sectionLabel = diagram?.sections.find((s) => s.id === node.sectionId)?.label ?? node.sectionId
+      const nodeLabel = node.displayLabel ?? node.label
+      setTransactionPanel({
+        title: `${sectionLabel} — ${nodeLabel}`,
+        transactions: rows
+      })
+    },
+    [transactionsBySection, diagram?.sections]
+  )
 
   const onChooseFolder = useCallback(async () => {
     const p = await window.platform.chooseCorpusFolder()
@@ -217,6 +257,7 @@ export function App(): ReactElement {
               layoutResetKey={layoutResetKey}
               onContentHeightChange={setChartH}
               onHover={setHoverInfo}
+              onNodeActivate={onNodeActivate}
             />
           ) : (
             <rect width={chartW} height={chartH} fill="transparent" />
@@ -227,6 +268,14 @@ export function App(): ReactElement {
       <footer className="sankey-footer muted">
         Zoom: {canvasTransform.k.toFixed(2)}× — use canvas toolbar for Fit / Reset view.
       </footer>
+
+      {transactionPanel ? (
+        <TransactionTableDialog
+          title={transactionPanel.title}
+          transactions={transactionPanel.transactions}
+          onClose={() => setTransactionPanel(null)}
+        />
+      ) : null}
     </div>
   )
 }
