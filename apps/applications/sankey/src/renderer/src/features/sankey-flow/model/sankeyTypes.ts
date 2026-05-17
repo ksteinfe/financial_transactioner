@@ -42,12 +42,17 @@ export interface SankeyNodeModel {
   sectionId: SankeySectionId
   column: 1 | 2 | 3 | 4 | 5
   kind: SankeyNodeKind
+  /** Full name (category path or semantic label); used in tooltips and link hover. */
   label: string
+  /** Shorter on-chart label when different from {@link label}. */
+  displayLabel?: string
   majorCategory?: string
   category?: string
   rawSignedValue?: number
   magnitude: number
   sortValue: number
+  /** Vertical stack order within a column (set for ordered outflow minors). */
+  stackOrder?: number
   colorRole: string
   formattedValue: string
 }

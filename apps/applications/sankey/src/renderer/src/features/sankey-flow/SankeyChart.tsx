@@ -349,8 +349,8 @@ export function SankeyChart({
                         const fs = nodeLabelFontSizePx(h, lay.dollarsPerPixel)
                         const labelGap = 6
                         const labelLeft = d.raw.column === 1 || d.raw.column === 2
-                        const labelText =
-                          d.raw.label.length > 22 ? `${d.raw.label.slice(0, 20)}…` : d.raw.label
+                        const shown = d.raw.displayLabel ?? d.raw.label
+                        const labelText = shown.length > 22 ? `${shown.slice(0, 20)}…` : shown
                         return (
                           <g
                             key={d.id}

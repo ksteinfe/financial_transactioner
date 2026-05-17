@@ -5,6 +5,7 @@ import {
   type CategoryAggregate
 } from '@txn/corpus-core/pure'
 import type { CorpusTransaction } from '@txn/types'
+import { displayLabelForCategoryNode } from './categoryDisplay.js'
 import { formatCurrencyShort } from './formatCurrencyShort.js'
 import type { SankeyLinkModel, SankeyNodeModel, SankeySectionId, SankeySectionModel } from './sankeyTypes.js'
 
@@ -44,27 +45,49 @@ function sortNodesColumn4(a: SankeyNodeModel, b: SankeyNodeModel): number {
   return sortNodesColumn1(a, b)
 }
 
-function sortOutflowMinors(nodes: SankeyNodeModel[]): SankeyNodeModel[] {
+/**
+ * Outflow minors: group by major (optionally in column-4 order), then largest $ first within each major.
+ */
+function sortOutflowMinors(
+  nodes: SankeyNodeModel[],
+  majorCol4Order?: readonly SankeyNodeModel[]
+): SankeyNodeModel[] {
   const byMajor = new Map<string, SankeyNodeModel[]>()
   for (const n of nodes) {
     const m = n.majorCategory ?? ''
     if (!byMajor.has(m)) byMajor.set(m, [])
     byMajor.get(m)!.push(n)
   }
-  const majorOrder = [...byMajor.keys()].sort((a, b) => {
-    const ta = byMajor.get(a)!.reduce((s, x) => s + x.magnitude, 0)
-    const tb = byMajor.get(b)!.reduce((s, x) => s + x.magnitude, 0)
-    return tb - ta
-  })
+
+  let majorOrder: string[]
+  if (majorCol4Order && majorCol4Order.length > 0) {
+    majorOrder = majorCol4Order.map((m) => m.majorCategory ?? m.label)
+    for (const k of byMajor.keys()) {
+      if (!majorOrder.includes(k)) majorOrder.push(k)
+    }
+  } else {
+    majorOrder = [...byMajor.keys()].sort((a, b) => {
+      const ta = byMajor.get(a)!.reduce((s, x) => s + x.magnitude, 0)
+      const tb = byMajor.get(b)!.reduce((s, x) => s + x.magnitude, 0)
+      return tb - ta
+    })
+  }
+
   const out: SankeyNodeModel[] = []
+  let stackOrder = 0
   for (const maj of majorOrder) {
-    const list = byMajor.get(maj)!
+    const list = byMajor.get(maj)
+    if (!list) continue
     list.sort((a, b) => {
       const d = b.sortValue - a.sortValue
       if (d !== 0) return d
       return a.label.localeCompare(b.label)
     })
-    out.push(...list)
+    for (const n of list) {
+      n.stackOrder = stackOrder
+      stackOrder += 1
+      out.push(n)
+    }
   }
   return out
 }
@@ -146,12 +169,14 @@ export function buildSectionModel(
   const col1: SankeyNodeModel[] = []
   for (const a of inflowCats) {
     const mag = a.total
+    const inflowDisplay = displayLabelForCategoryNode(sectionId, 'inflow-minor', 1, a.category)
     col1.push({
       id: nid(`inflow|${a.category}`),
       sectionId,
       column: 1,
       kind: 'inflow-minor',
       label: a.category,
+      displayLabel: inflowDisplay === a.category ? undefined : inflowDisplay,
       category: a.category,
       majorCategory: a.major,
       rawSignedValue: a.total,
@@ -176,7 +201,7 @@ export function buildSectionModel(
       sectionId,
       column: 2,
       kind: 'total-inflow',
-      label: 'Total inflow',
+      label: 'total inflow',
       magnitude: totalInflow,
       sortValue: totalInflow,
       colorRole: colorRoleForNode(sectionId, 'total-inflow'),
@@ -191,7 +216,7 @@ export function buildSectionModel(
       sectionId,
       column: 2,
       kind: 'deficit',
-      label: 'Deficit',
+      label: 'deficit',
       magnitude: deficit,
       sortValue: deficit,
       colorRole: colorRoleForNode(sectionId, 'deficit'),
@@ -206,7 +231,7 @@ export function buildSectionModel(
       sectionId,
       column: 3,
       kind: 'total-outflow',
-      label: 'Total outflow',
+      label: 'total outflow',
       magnitude: totalOutflow,
       sortValue: totalOutflow,
       colorRole: colorRoleForNode(sectionId, 'total-outflow'),
@@ -221,7 +246,7 @@ export function buildSectionModel(
       sectionId,
       column: 3,
       kind: 'surplus',
-      label: 'Surplus',
+      label: 'surplus',
       magnitude: surplus,
       sortValue: surplus,
       colorRole: colorRoleForNode(sectionId, 'surplus'),
@@ -252,12 +277,14 @@ export function buildSectionModel(
   for (const a of outflowCats) {
     const { major } = parseCategory(a.category)
     const mag = Math.abs(a.total)
+    const outDisplay = displayLabelForCategoryNode(sectionId, 'outflow-minor', minorCol, a.category)
     outflowMinors.push({
       id: nid(`minor|${a.category}`),
       sectionId,
       column: minorCol,
       kind: 'outflow-minor',
       label: a.category,
+      displayLabel: outDisplay === a.category ? undefined : outDisplay,
       category: a.category,
       majorCategory: major,
       rawSignedValue: a.total,
@@ -267,7 +294,7 @@ export function buildSectionModel(
       formattedValue: formatCurrencyShort(mag)
     })
   }
-  const outflowSorted = sortOutflowMinors(outflowMinors)
+  const outflowSorted = sortOutflowMinors(outflowMinors, noMajors ? undefined : col4)
 
   const ordered: SankeyNodeModel[] = [...col1, ...middle, ...col4, ...outflowSorted]
 

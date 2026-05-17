@@ -83,6 +83,11 @@ function sankeyNodeSort(
   if (col !== 0) return col
   const d = stackRank(a.raw.kind) - stackRank(b.raw.kind)
   if (d !== 0) return d
+  const aStack = a.raw.stackOrder
+  const bStack = b.raw.stackOrder
+  if (aStack != null && bStack != null) {
+    return aStack - bStack
+  }
   const dv = b.raw.sortValue - a.raw.sortValue
   if (dv !== 0) return dv
   return a.raw.label.localeCompare(b.raw.label)
