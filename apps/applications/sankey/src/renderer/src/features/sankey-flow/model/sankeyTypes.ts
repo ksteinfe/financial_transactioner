@@ -1,5 +1,12 @@
 export type SankeySectionId = 'main' | 'reimbursement' | 'transfer'
 
+/** Vertical stack order on the canvas (top → bottom). */
+export const SANKEY_SECTION_DISPLAY_ORDER: readonly SankeySectionId[] = [
+  'main',
+  'transfer',
+  'reimbursement'
+]
+
 export type SankeyNodeKind =
   | 'inflow-minor'
   | 'total-inflow'

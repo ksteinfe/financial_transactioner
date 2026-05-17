@@ -2,8 +2,10 @@ import { useCallback, useEffect, useMemo, useState, type ReactElement } from 're
 import type { CorpusScanSummary, CorpusTransaction } from '@txn/types'
 import { monthAvailabilityForYear } from '@txn/corpus-core/pure'
 import { AppCanvas, type CanvasTransform, YearMonthRangeSelector } from '@txn/ui-core'
-import { SankeyChart } from './features/sankey-flow/SankeyChart.js'
+import { SankeyChart, type SankeyHoverInfo } from './features/sankey-flow/SankeyChart.js'
+import { SankeyScaleToolbar } from './features/sankey-flow/SankeyScaleToolbar.js'
 import { buildSankeyDiagramModel } from './features/sankey-flow/model/buildSankeyDiagramModel.js'
+import { pickAutoDollarsPerPixel } from './features/sankey-flow/sankeyScale.js'
 
 export function App(): ReactElement {
   const [folder, setFolder] = useState<string | null>(null)
@@ -13,8 +15,9 @@ export function App(): ReactElement {
   const [pending, setPending] = useState(false)
   const [range, setRange] = useState({ year: new Date().getFullYear(), startMonth: 1, endMonth: 12 })
   const [canvasTransform, setCanvasTransform] = useState<CanvasTransform>({ x: 0, y: 0, k: 1 })
-  const [nodeOverrides, setNodeOverrides] = useState<Record<string, { dx: number; dy: number }>>({})
-  const [tooltip, setTooltip] = useState<string | null>(null)
+  const [layoutResetKey, setLayoutResetKey] = useState(0)
+  const [hoverInfo, setHoverInfo] = useState<SankeyHoverInfo | null>(null)
+  const [dollarsPerPixel, setDollarsPerPixel] = useState<number>(100)
 
   const rescan = useCallback(async (): Promise<void> => {
     setPending(true)
@@ -110,19 +113,29 @@ export function App(): ReactElement {
     }
   }, [])
 
-  const onNodeDrag = useCallback((nodeId: string, dx: number, dy: number) => {
-    setNodeOverrides((prev) => {
-      const cur = prev[nodeId] ?? { dx: 0, dy: 0 }
-      return { ...prev, [nodeId]: { dx: cur.dx + dx, dy: cur.dy + dy } }
-    })
-  }, [])
-
-  const resetNodePositions = useCallback(() => setNodeOverrides({}), [])
+  const resetNodePositions = useCallback(() => setLayoutResetKey((k) => k + 1), [])
 
   const integrityWarning = diagram?.integrityErrors.length ? diagram.integrityErrors.join(' | ') : null
 
   const chartW = 960
-  const chartH = 720
+  const [chartH, setChartH] = useState(720)
+
+  const monthKey =
+    range.months !== undefined ? range.months.join(',') : `${range.startMonth}-${range.endMonth}`
+
+  const diagramScaleKey = diagram
+    ? `${range.year}|${monthKey}|${diagram.sections.map((s) => `${s.id}:${s.nodes.length}`).join(';')}`
+    : ''
+
+  useEffect(() => {
+    if (!diagram) return
+    setDollarsPerPixel(pickAutoDollarsPerPixel(diagram.sections, chartW))
+  }, [diagramScaleKey, chartW, diagram])
+
+  const contentBounds = useMemo(() => ({ width: chartW, height: chartH }), [chartW, chartH])
+  const contentFitKey = diagram
+    ? `${range.year}-${monthKey}-${layoutResetKey}-${dollarsPerPixel}-${chartH}`
+    : 'empty'
 
   return (
     <div className="sankey-app">
@@ -149,7 +162,6 @@ export function App(): ReactElement {
         />
         {loadError ? <p className="sankey-error">{loadError}</p> : null}
         {integrityWarning ? <p className="sankey-error">Integrity: {integrityWarning}</p> : null}
-        {tooltip ? <p className="sankey-tooltip">{tooltip}</p> : null}
       </div>
 
       <div className="sankey-canvas-wrap">
@@ -158,21 +170,53 @@ export function App(): ReactElement {
           maxZoom={6}
           initialFit
           onTransformChange={setCanvasTransform}
-          contentBounds={{ width: chartW, height: chartH }}
+          contentBounds={contentBounds}
+          contentFitKey={contentFitKey}
           toolbarExtra={
             <button type="button" onClick={resetNodePositions}>
               Reset node positions
             </button>
+          }
+          toolbarCenter={
+            diagram ? (
+              <SankeyScaleToolbar dollarsPerPixel={dollarsPerPixel} onChange={setDollarsPerPixel} />
+            ) : null
+          }
+          toolbarInfo={
+            <div className="sankey-toolbar-info">
+              {hoverInfo ? (
+                <>
+                  <span className="sankey-toolbar-info-section">{hoverInfo.section}</span>
+                  <span className="sankey-toolbar-info-detail">
+                    {hoverInfo.kind === 'link' ? (
+                      <>
+                        <span>{hoverInfo.source}</span>
+                        <span className="sankey-toolbar-info-arrow" aria-hidden>
+                          {' '}
+                          →{' '}
+                        </span>
+                        <span>{hoverInfo.target}</span>
+                      </>
+                    ) : (
+                      <span>{hoverInfo.label}</span>
+                    )}
+                    <span className="sankey-toolbar-info-amount">{hoverInfo.amount}</span>
+                  </span>
+                </>
+              ) : (
+                <span className="sankey-toolbar-info-placeholder">Hover a node or link</span>
+              )}
+            </div>
           }
         >
           {diagram ? (
             <SankeyChart
               sections={diagram.sections}
               width={chartW}
-              height={chartH}
-              nodeOverrides={nodeOverrides}
-              onNodeDrag={onNodeDrag}
-              onHover={(h) => setTooltip(h ? h.text : null)}
+              dollarsPerPixel={dollarsPerPixel}
+              layoutResetKey={layoutResetKey}
+              onContentHeightChange={setChartH}
+              onHover={setHoverInfo}
             />
           ) : (
             <rect width={chartW} height={chartH} fill="transparent" />

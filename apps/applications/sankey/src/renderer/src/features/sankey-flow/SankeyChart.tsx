@@ -1,170 +1,240 @@
-import { sankey, sankeyLinkHorizontal } from 'd3-sankey'
-import { useCallback, useMemo, useState, useId, type PointerEvent, type ReactElement } from 'react'
-import type { SankeySectionModel } from './model/sankeyTypes.js'
+import { sankeyLinkHorizontal } from 'd3-sankey'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent,
+  type ReactElement
+} from 'react'
+import { formatCurrencyShort } from './model/formatCurrencyShort.js'
+import { SANKEY_SECTION_DISPLAY_ORDER, type SankeySectionId, type SankeySectionModel } from './model/sankeyTypes.js'
 import { getSankeyNodeFill } from './sankeyColors.js'
+import {
+  layoutSankeySection,
+  moveSankeyNodeTo,
+  type SectionLayout,
+  type SnLink,
+  type SnNode
+} from './layoutSankeySection.js'
+import { clientToLayoutPoint } from './sankeyPointer.js'
+import {
+  buildInitialExpandedById,
+  formatCollapsibleSectionTitle,
+  isCollapsibleSection,
+  isSectionBalanced
+} from './sectionTitle.js'
+import {
+  linkVisualHeightPx,
+  nodeLabelFontSizePx,
+  SANKEY_EMPTY_CHART_H,
+  SANKEY_SECTION_GAP,
+  SANKEY_SECTION_TITLE_H
+} from './sankeyScale.js'
 
-const SECTION_TITLE_H = 28
-const SECTION_GAP = 24
-const STACK_GAP = 8
+export type { SnNode, SnLink }
+export { layoutSankeySection as layoutSection }
+
+export type SankeyHoverInfo =
+  | {
+      kind: 'link'
+      section: string
+      source: string
+      target: string
+      amount: string
+    }
+  | {
+      kind: 'node'
+      section: string
+      label: string
+      amount: string
+    }
+
+type SectionLayoutState = {
+  section: SankeySectionModel
+  offsetY: number
+  expanded: boolean
+  layout: SectionLayout | null
+}
 
 interface SankeyChartProps {
   sections: SankeySectionModel[]
   width: number
-  height: number
-  nodeOverrides: Record<string, { dx: number; dy: number }>
-  onNodeDrag: (nodeId: string, dx: number, dy: number) => void
-  onHover: (payload: { kind: 'node' | 'link'; section: string; text: string } | null) => void
+  dollarsPerPixel: number
+  /** Increment to reset node positions to the automatic layout */
+  layoutResetKey?: number
+  onHover: (payload: SankeyHoverInfo | null) => void
+  onContentHeightChange?: (height: number) => void
 }
 
-type SnNode = {
-  id: string
-  raw: SankeySectionModel['nodes'][0]
-  x0?: number
-  x1?: number
-  y0?: number
-  y1?: number
+function sectionDisplayTitle(section: SankeySectionModel): string {
+  return isCollapsibleSection(section.id) ? formatCollapsibleSectionTitle(section) : section.label
 }
 
-type SnLink = {
-  source: SnNode
-  target: SnNode
-  value: number
-  id: string
-  width?: number
-}
-
-function adjustStackedBalances(nodes: SnNode[]): void {
-  const find = (kind: SnNode['raw']['kind']) => nodes.find((n) => n.raw.kind === kind)
-  const ti = find('total-inflow')
-  const def = find('deficit')
-  const to = find('total-outflow')
-  const sur = find('surplus')
-  if (ti && def) {
-    const h = Math.max(2, (def.y1 ?? 0) - (def.y0 ?? 0))
-    const x0 = ti.x0 ?? 0
-    const x1 = ti.x1 ?? 0
-    const y0 = (ti.y1 ?? 0) + STACK_GAP
-    def.x0 = x0
-    def.x1 = x1
-    def.y0 = y0
-    def.y1 = y0 + h
-  }
-  if (to && sur) {
-    const h = Math.max(2, (sur.y1 ?? 0) - (sur.y0 ?? 0))
-    const x0 = to.x0 ?? 0
-    const x1 = to.x1 ?? 0
-    const y0 = (to.y1 ?? 0) + STACK_GAP
-    sur.x0 = x0
-    sur.x1 = x1
-    sur.y0 = y0
-    sur.y1 = y0 + h
-  }
-}
-
-function layoutSection(section: SankeySectionModel, innerW: number, innerH: number): { nodes: SnNode[]; links: SnLink[] } {
-  if (!section.hasActivity || section.nodes.length === 0) {
-    return { nodes: [], links: [] }
-  }
-  const idToIndex = new Map<string, number>()
-  section.nodes.forEach((n, i) => idToIndex.set(n.id, i))
-  const nodes = section.nodes.map((n) => ({ id: n.id, raw: n })) as SnNode[]
-  const linkData = section.links
-    .map((l) => {
-      const s = idToIndex.get(l.source)
-      const t = idToIndex.get(l.target)
-      if (s === undefined || t === undefined) return null
-      return { source: s, target: t, value: l.value, id: l.id }
-    })
-    .filter((x): x is NonNullable<typeof x> => x !== null)
-
-  const sn = sankey<SnNode, { source: number; target: number; value: number; id: string }>()
-    .nodeWidth(14)
-    .nodePadding(8)
-    .extent([
-      [4, 4],
-      [innerW - 4, innerH - 4]
-    ])
-
-  const graph = sn({
-    nodes: [...nodes],
-    links: linkData.map((l) => ({ ...l }))
-  })
-
-  const outNodes = graph.nodes as SnNode[]
-  adjustStackedBalances(outNodes)
-
-  const outLinks: SnLink[] = graph.links.map((l) => {
-    const s = l.source as unknown as SnNode
-    const t = l.target as unknown as SnNode
-    return {
-      source: s,
-      target: t,
-      value: l.value,
-      id: (l as unknown as { id?: string }).id ?? '',
-      width: (l as unknown as { width?: number }).width
-    }
-  })
-
-  return { nodes: outNodes, links: outLinks }
+/** Small stroke chevron: right when collapsed, down when expanded. */
+function sectionChevronPath(expanded: boolean): string {
+  return expanded ? 'M4 6 L8 11 L12 6' : 'M5 5 L9 10 L5 15'
 }
 
 export function SankeyChart({
   sections,
   width,
-  height,
-  nodeOverrides,
-  onNodeDrag,
-  onHover
+  dollarsPerPixel,
+  layoutResetKey = 0,
+  onHover,
+  onContentHeightChange
 }: SankeyChartProps): ReactElement {
-  const filterId = useId().replace(/:/g, '')
-  const activeSections = sections.filter((s) => s.hasActivity)
-  const nSec = Math.max(1, activeSections.length)
-  const blockH = (height - SECTION_GAP * (nSec - 1)) / nSec
-  const innerH = Math.max(100, blockH - SECTION_TITLE_H - 8)
+  const activeSections = useMemo(() => {
+    const rank = new Map(SANKEY_SECTION_DISPLAY_ORDER.map((id, i) => [id, i]))
+    return sections
+      .filter((s) => s.hasActivity)
+      .sort((a, b) => (rank.get(a.id) ?? 99) - (rank.get(b.id) ?? 99))
+  }, [sections])
 
-  const layouts = useMemo(() => {
-    return activeSections.map((section) => ({
-      section,
-      ...layoutSection(section, width, innerH)
-    }))
-  }, [activeSections, width, innerH])
+  const balanceKey = useMemo(
+    () => activeSections.map((s) => `${s.id}:${s.surplus}:${s.deficit}`).join('|'),
+    [activeSections]
+  )
+
+  const layoutSeed = useMemo(() => {
+    return (
+      `${layoutResetKey}|${dollarsPerPixel}|${balanceKey}|${width}|` +
+      activeSections.map((s) => `${s.nodes.length}:${s.links.length}`).join(',')
+    )
+  }, [activeSections, width, layoutResetKey, dollarsPerPixel, balanceKey])
+
+  const [expandedById, setExpandedById] = useState<Partial<Record<SankeySectionId, boolean>>>(() =>
+    buildInitialExpandedById(activeSections)
+  )
+
+  useEffect(() => {
+    setExpandedById(buildInitialExpandedById(activeSections))
+  }, [balanceKey, activeSections])
+
+  const isSectionExpanded = useCallback(
+    (section: SankeySectionModel): boolean => {
+      if (!isCollapsibleSection(section.id)) return true
+      if (expandedById[section.id] !== undefined) return expandedById[section.id]!
+      return !isSectionBalanced(section)
+    },
+    [expandedById]
+  )
+
+  const toggleSection = useCallback((sectionId: SankeySectionId) => {
+    setExpandedById((prev) => {
+      const section = activeSections.find((s) => s.id === sectionId)
+      if (!section) return prev
+      const current = prev[sectionId] ?? !isSectionBalanced(section)
+      return { ...prev, [sectionId]: !current }
+    })
+  }, [activeSections])
+
+  const [layouts, setLayouts] = useState<SectionLayoutState[]>([])
+  const [totalHeight, setTotalHeight] = useState(SANKEY_EMPTY_CHART_H)
+
+  useEffect(() => {
+    let offsetY = 0
+    const next: SectionLayoutState[] = []
+    for (const section of activeSections) {
+      const expanded = isSectionExpanded(section)
+      const layout = expanded ? layoutSankeySection(section, width, dollarsPerPixel) : null
+      if (expanded && !layout) continue
+      next.push({ section, offsetY, expanded, layout })
+      const contentHeight = layout?.contentHeight ?? 0
+      offsetY += SANKEY_SECTION_TITLE_H + contentHeight + SANKEY_SECTION_GAP
+    }
+    const h = next.length > 0 ? offsetY - SANKEY_SECTION_GAP : SANKEY_EMPTY_CHART_H
+    setLayouts(next)
+    setTotalHeight(h)
+    onContentHeightChange?.(h)
+  }, [layoutSeed, activeSections, width, dollarsPerPixel, onContentHeightChange, expandedById, isSectionExpanded])
 
   const linkPath = useMemo(() => sankeyLinkHorizontal(), [])
 
-  const [dragging, setDragging] = useState<{ id: string; startX: number; startY: number } | null>(null)
+  const rootRef = useRef<SVGGElement>(null)
+  const dragRef = useRef<{
+    sectionId: string
+    nodeId: string
+    layoutOffsetY: number
+    grabOffsetX: number
+    grabOffsetY: number
+  } | null>(null)
 
-  const onPointerDown = useCallback((e: PointerEvent, nodeId: string) => {
-    e.stopPropagation()
-    e.currentTarget.setPointerCapture(e.pointerId)
-    setDragging({ id: nodeId, startX: e.clientX, startY: e.clientY })
-  }, [])
+  const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null)
+
+  const sectionLayoutOffsetY = useCallback(
+    (sectionId: string) => {
+      const row = layouts.find((l) => l.section.id === sectionId)
+      if (!row) return SANKEY_SECTION_TITLE_H
+      return row.offsetY + SANKEY_SECTION_TITLE_H
+    },
+    [layouts]
+  )
+
+  const onPointerDown = useCallback(
+    (e: PointerEvent, sectionId: string, nodeId: string) => {
+      e.stopPropagation()
+      e.preventDefault()
+      const root = rootRef.current
+      const svg = root?.ownerSVGElement
+      const row = layouts.find((l) => l.section.id === sectionId)
+      const node = row?.layout?.nodes.find((n) => n.id === nodeId)
+      if (!root || !svg || !row?.layout || !node || node.x0 == null || node.y0 == null) return
+
+      const layoutOffsetY = sectionLayoutOffsetY(sectionId)
+      const pt = clientToLayoutPoint(svg, root, layoutOffsetY, e.clientX, e.clientY)
+      dragRef.current = {
+        sectionId,
+        nodeId,
+        layoutOffsetY,
+        grabOffsetX: pt.x - node.x0,
+        grabOffsetY: pt.y - node.y0
+      }
+      setDraggingNodeId(nodeId)
+      root.setPointerCapture(e.pointerId)
+    },
+    [layouts, sectionLayoutOffsetY]
+  )
 
   const onPointerMove = useCallback(
     (e: PointerEvent) => {
-      if (!dragging) return
+      const drag = dragRef.current
+      const root = rootRef.current
+      const svg = root?.ownerSVGElement
+      if (!drag || !root || !svg) return
       e.stopPropagation()
-      const dx = e.clientX - dragging.startX
-      const dy = e.clientY - dragging.startY
-      onNodeDrag(dragging.id, dx, dy)
-      setDragging({ ...dragging, startX: e.clientX, startY: e.clientY })
+      e.preventDefault()
+      const pt = clientToLayoutPoint(svg, root, drag.layoutOffsetY, e.clientX, e.clientY)
+      const x0 = pt.x - drag.grabOffsetX
+      const y0 = pt.y - drag.grabOffsetY
+      setLayouts((prev) =>
+        prev.map((row) => {
+          if (row.section.id !== drag.sectionId || !row.layout) return row
+          moveSankeyNodeTo(row.layout, drag.nodeId, x0, y0)
+          return { ...row, layout: { ...row.layout } }
+        })
+      )
     },
-    [dragging, onNodeDrag]
+    []
   )
 
-  const onPointerUp = useCallback((e: PointerEvent) => {
+  const endDrag = useCallback((e: PointerEvent) => {
+    if (!dragRef.current) return
     e.stopPropagation()
     try {
-      e.currentTarget.releasePointerCapture(e.pointerId)
+      rootRef.current?.releasePointerCapture(e.pointerId)
     } catch {
       /* ok */
     }
-    setDragging(null)
+    dragRef.current = null
+    setDraggingNodeId(null)
   }, [])
 
   if (activeSections.length === 0) {
     return (
       <g className="sankey-root" aria-hidden>
-        <text x={width / 2 - 120} y={height / 2} fill="var(--sankey-muted, #64748b)" fontSize={13}>
+        <text x={width / 2 - 120} y={SANKEY_EMPTY_CHART_H / 2} fill="var(--sankey-muted, #64748b)" fontSize={13}>
           No diagram data for the selected range.
         </text>
       </g>
@@ -172,95 +242,155 @@ export function SankeyChart({
   }
 
   return (
-    <g className="sankey-root" aria-label="Sankey diagram">
-      <defs>
-        <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodOpacity="0.2" />
-        </filter>
-      </defs>
-      <rect width={width} height={height} fill="transparent" pointerEvents="none" />
-      {layouts.map((lay, idx) => {
-        const ty = idx * (blockH + SECTION_GAP)
-        const gkey = lay.section.id
+    <g
+      ref={rootRef}
+      className="sankey-root"
+      aria-label="Sankey diagram"
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+    >
+      <rect width={width} height={totalHeight} fill="transparent" pointerEvents="none" />
+      {layouts.map((row) => {
+        const ty = row.offsetY
+        const gkey = row.section.id
+        const collapsible = isCollapsibleSection(row.section.id)
+        const title = sectionDisplayTitle(row.section)
+        const lay = row.layout
+
         return (
           <g key={gkey} transform={`translate(0,${ty})`}>
-            <text x={4} y={16} fill="var(--sankey-fg, #1e293b)" fontSize={14} fontWeight={600}>
-              {lay.section.label}
-            </text>
-            <g transform={`translate(0,${SECTION_TITLE_H})`}>
-              {lay.nodes.length === 0 ? (
-                <text x={width / 2 - 70} y={innerH / 2} fill="var(--sankey-muted, #64748b)" fontSize={13}>
-                  No activity in range
+            {collapsible ? (
+              <g className="sankey-section-header">
+                <rect
+                  x={0}
+                  y={0}
+                  width={width}
+                  height={SANKEY_SECTION_TITLE_H}
+                  fill="transparent"
+                  className="sankey-section-header-hit sankey-interactive"
+                  role="button"
+                  aria-expanded={row.expanded}
+                  aria-label={`${title}, ${row.expanded ? 'expanded' : 'collapsed'}`}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleSection(row.section.id)
+                  }}
+                />
+                <path
+                  d={sectionChevronPath(row.expanded)}
+                  fill="none"
+                  stroke="var(--sankey-muted, #64748b)"
+                  strokeWidth={1.75}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  pointerEvents="none"
+                />
+                <text
+                  x={20}
+                  y={16}
+                  fill="var(--sankey-fg, #1e293b)"
+                  fontSize={14}
+                  fontWeight={600}
+                  pointerEvents="none"
+                >
+                  {title}
                 </text>
-              ) : (
-                <>
-                  <g className="sankey-links">
-                    {lay.links.map((l, li) => {
-                      const d = linkPath(l as unknown as Parameters<typeof linkPath>[0])
-                      if (!d) return null
-                      const sw = Math.max(2.5, l.width ?? 2.5)
-                      return (
-                        <path
-                          key={`${l.source.id}-${l.target.id}-${li}`}
-                          d={d}
-                          fill="none"
-                          stroke="var(--sankey-link-stroke, #64748b)"
-                          strokeOpacity={0.92}
-                          strokeWidth={sw}
-                          strokeLinecap="round"
-                          pointerEvents="stroke"
-                          onMouseEnter={() =>
-                            onHover({
-                              kind: 'link',
-                              section: lay.section.label,
-                              text: `${l.source.raw.label} → ${l.target.raw.label}`
-                            })
-                          }
-                          onMouseLeave={() => onHover(null)}
-                        />
-                      )
-                    })}
-                  </g>
-                  <g className="sankey-nodes">
-                    {lay.nodes.map((d) => {
-                      const o = nodeOverrides[d.id] ?? { dx: 0, dy: 0 }
-                      const h = Math.max(2, (d.y1 ?? 0) - (d.y0 ?? 0))
-                      const w = Math.max(2, (d.x1 ?? 0) - (d.x0 ?? 0))
-                      const fs = Math.min(14, Math.max(9, Math.sqrt(h) * 1.8))
-                      return (
-                        <g
-                          key={d.id}
-                          transform={`translate(${(d.x0 ?? 0) + o.dx},${(d.y0 ?? 0) + o.dy})`}
-                          onPointerDown={(e) => onPointerDown(e, d.id)}
-                          onPointerMove={onPointerMove}
-                          onPointerUp={onPointerUp}
-                          style={{ cursor: 'grab', touchAction: 'none' }}
-                        >
-                          <rect
-                            width={w}
-                            height={h}
-                            rx={3}
-                            fill={getSankeyNodeFill(d.raw)}
-                            stroke="var(--sankey-node-stroke, rgba(15,23,42,0.18))"
-                            strokeWidth={1}
-                            filter={`url(#${filterId})`}
-                          />
-                          <text
-                            x={w + 6}
-                            y={h / 2 + 4}
-                            fill="var(--sankey-fg, #1e293b)"
-                            fontSize={fs}
-                            pointerEvents="none"
+              </g>
+            ) : (
+              <text x={4} y={16} fill="var(--sankey-fg, #1e293b)" fontSize={14} fontWeight={600}>
+                {title}
+              </text>
+            )}
+            {row.expanded && lay ? (
+              <g transform={`translate(0,${SANKEY_SECTION_TITLE_H})`}>
+                {lay.nodes.length === 0 ? (
+                  <text x={width / 2 - 70} y={lay.contentHeight / 2} fill="var(--sankey-muted, #64748b)" fontSize={13}>
+                    No activity in range
+                  </text>
+                ) : (
+                  <>
+                    <g className="sankey-links sankey-interactive">
+                      {[...lay.links]
+                        .sort((a, b) => b.value - a.value)
+                        .map((l, li) => {
+                          const d = linkPath(l)
+                          if (!d || d.includes('NaN')) return null
+                          const sw = linkVisualHeightPx(l.value, lay.dollarsPerPixel)
+                          return (
+                            <path
+                              key={`${l.source.id}-${l.target.id}-${li}`}
+                              d={d}
+                              fill="none"
+                              stroke="var(--sankey-link-stroke, #e0e0e0)"
+                              strokeOpacity={0.58}
+                              strokeWidth={sw}
+                              strokeLinecap="butt"
+                              pointerEvents="stroke"
+                              onMouseEnter={() =>
+                                onHover({
+                                  kind: 'link',
+                                  section: title,
+                                  source: l.source.raw.label,
+                                  target: l.target.raw.label,
+                                  amount: formatCurrencyShort(l.value)
+                                })
+                              }
+                              onMouseLeave={() => onHover(null)}
+                            />
+                          )
+                        })}
+                    </g>
+                    <g className="sankey-nodes sankey-interactive">
+                      {lay.nodes.map((d) => {
+                        const h = Math.max(2, (d.y1 ?? 0) - (d.y0 ?? 0))
+                        const w = Math.max(2, (d.x1 ?? 0) - (d.x0 ?? 0))
+                        const fs = nodeLabelFontSizePx(h, lay.dollarsPerPixel)
+                        const labelGap = 6
+                        const labelLeft = d.raw.column === 1 || d.raw.column === 2
+                        const labelText =
+                          d.raw.label.length > 22 ? `${d.raw.label.slice(0, 20)}…` : d.raw.label
+                        return (
+                          <g
+                            key={d.id}
+                            transform={`translate(${d.x0 ?? 0},${d.y0 ?? 0})`}
+                            onPointerDown={(e) => onPointerDown(e, row.section.id, d.id)}
+                            className={draggingNodeId === d.id ? 'sankey-node-dragging' : undefined}
+                            style={{ touchAction: 'none' }}
                           >
-                            {d.raw.label.length > 22 ? `${d.raw.label.slice(0, 20)}…` : d.raw.label}
-                          </text>
-                        </g>
-                      )
-                    })}
-                  </g>
-                </>
-              )}
-            </g>
+                            <rect
+                              width={w}
+                              height={h}
+                              fill={getSankeyNodeFill(d.raw)}
+                              onMouseEnter={() =>
+                                onHover({
+                                  kind: 'node',
+                                  section: title,
+                                  label: d.raw.label,
+                                  amount: d.raw.formattedValue
+                                })
+                              }
+                              onMouseLeave={() => onHover(null)}
+                            />
+                            <text
+                              x={labelLeft ? -labelGap : w + labelGap}
+                              y={h / 2 + 4}
+                              textAnchor={labelLeft ? 'end' : 'start'}
+                              fill="var(--sankey-fg, #1e293b)"
+                              fontSize={fs}
+                              pointerEvents="none"
+                            >
+                              {labelText}
+                            </text>
+                          </g>
+                        )
+                      })}
+                    </g>
+                  </>
+                )}
+              </g>
+            ) : null}
           </g>
         )
       })}

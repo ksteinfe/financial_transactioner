@@ -18,7 +18,7 @@ export const DEFAULT_MAJOR_CATEGORY_KEYS: readonly string[] = [
   'professional',
   'project',
   'rare',
-  'reimbursment',
+  'reimbursement',
   'savings',
   'shopping',
   'tax',

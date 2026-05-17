@@ -57,9 +57,9 @@ project:vacation_hotel
 project:vacation_misc
 project:big_medical
 rare:parking_ticket
-reimbursment:berkeley
-reimbursment:som
-reimbursment:other
+reimbursement:berkeley
+reimbursement:som
+reimbursement:other
 savings:college_savings
 savings:deep_savings
 shopping:amazon

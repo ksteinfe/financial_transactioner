@@ -7,14 +7,21 @@ export { monthKeyFromDate, calendarMonthFromDate, calendarYearFromDate } from '.
 export { parseTransactionRow } from './transaction.js'
 export { parseCorpusYearFile } from './yearFile.js'
 export {
-  REIMBURSEMENT_CATEGORIES,
-  TRANSFER_CATEGORIES,
+  isReimbursementCategory,
+  isTransferCategory,
   sectionForCategory
 } from './query/partition.js'
 export type { SankeySectionId } from './query/partition.js'
 export {
   filterTransactionsByYearMonthRange,
   monthAvailabilityForYear,
-  type MonthAvailability
+  resolveSelectedMonths,
+  type MonthAvailability,
+  type YearMonthSelection
 } from './query/dateRange.js'
-export { aggregateByCategory, type CategoryAggregate } from './query/aggregate.js'
+export {
+  aggregateByCategory,
+  aggregateByCategorySplitSign,
+  type CategoryAggregate,
+  type CategorySignSplit
+} from './query/aggregate.js'

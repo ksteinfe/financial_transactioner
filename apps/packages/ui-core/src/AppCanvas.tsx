@@ -21,8 +21,14 @@ export interface AppCanvasProps {
   controls?: ReactNode
   /** Extra buttons shown after default controls (ignored when `controls` is set) */
   toolbarExtra?: ReactNode
+  /** Centered toolbar content (e.g. diagram scale readout) */
+  toolbarCenter?: ReactNode
+  /** Right-aligned readout (e.g. hover details); keeps toolbar height stable when content changes */
+  toolbarInfo?: ReactNode
   /** Optional explicit bounds (SVG user units) for fit-to-view when content bbox is not yet measurable */
   contentBounds?: { width: number; height: number }
+  /** When this value changes, `initialFit` runs again (e.g. new diagram data). Omit to fit once on mount. */
+  contentFitKey?: string | number
 }
 
 function transformToCanvas(t: { x: number; y: number; k: number }): CanvasTransform {
@@ -40,18 +46,24 @@ export function AppCanvas({
   onTransformChange,
   controls,
   toolbarExtra,
-  contentBounds
+  toolbarCenter,
+  toolbarInfo,
+  contentBounds,
+  contentFitKey
 }: AppCanvasProps): React.ReactElement {
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const viewportRef = useRef<HTMLDivElement | null>(null)
   const contentRef = useRef<SVGGElement | null>(null)
   const zoomBehaviorRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null)
+  const onTransformChangeRef = useRef(onTransformChange)
+  onTransformChangeRef.current = onTransformChange
 
-  const notify = useCallback(
-    (t: { x: number; y: number; k: number }) => {
-      onTransformChange?.(transformToCanvas(t))
-    },
-    [onTransformChange]
-  )
+  const contentW = contentBounds?.width ?? 0
+  const contentH = contentBounds?.height ?? 0
+
+  const notify = useCallback((t: { x: number; y: number; k: number }) => {
+    onTransformChangeRef.current?.(transformToCanvas(t))
+  }, [])
 
   useEffect(() => {
     const svg = svgRef.current
@@ -66,7 +78,17 @@ export function AppCanvas({
         if (!enablePan && (et === 'mousedown' || et === 'mousemove')) return false
         // Primary button only for pan; let zoom handle wheel
         if (et === 'mousedown' && event instanceof MouseEvent && event.button !== 0) return false
+        if (et === 'mousedown' || et === 'pointerdown' || et === 'touchstart') {
+          const target = event.target
+          if (target instanceof Element && target.closest('.sankey-interactive')) return false
+        }
         return true
+      })
+      .on('start', () => {
+        viewportRef.current?.classList.add('txn-app-canvas-panning')
+      })
+      .on('end', () => {
+        viewportRef.current?.classList.remove('txn-app-canvas-panning')
       })
       .on('zoom', (event) => {
         const t = event.transform
@@ -90,11 +112,15 @@ export function AppCanvas({
     const z = zoomBehaviorRef.current
     if (!svg || !content || !z) return
 
+    let x = 0
+    let y = 0
     let w = contentBounds?.width ?? 0
     let h = contentBounds?.height ?? 0
     try {
       const bbox = content.getBBox()
       if (bbox.width > 0 && bbox.height > 0) {
+        x = bbox.x
+        y = bbox.y
         w = bbox.width
         h = bbox.height
       }
@@ -109,14 +135,14 @@ export function AppCanvas({
     if (vw <= 0 || vh <= 0) return
 
     const pad = 24
-    const k = Math.min((vw - pad) / w, (vh - pad) / h, maxZoom)
+    const k = Math.min((vw - 2 * pad) / w, (vh - 2 * pad) / h, maxZoom)
     const clampedK = Math.max(k, minZoom)
-    const tx = (vw - w * clampedK) / 2
-    const ty = (vh - h * clampedK) / 2
+    const tx = (vw - w * clampedK) / 2 - x * clampedK
+    const ty = (vh - h * clampedK) / 2 - y * clampedK
 
     const t = zoomIdentity.translate(tx, ty).scale(clampedK)
     select(svg).call(z.transform, t)
-  }, [contentBounds, maxZoom, minZoom])
+  }, [contentW, contentH, maxZoom, minZoom])
 
   const resetView = useCallback(() => {
     const svg = svgRef.current
@@ -129,7 +155,8 @@ export function AppCanvas({
     if (!initialFit) return
     const id = requestAnimationFrame(() => fitToView())
     return () => cancelAnimationFrame(id)
-  }, [initialFit, fitToView, children])
+    // Only refit when content identity changes — not on every React child re-render (hover, zoom, drag).
+  }, [initialFit, fitToView, contentFitKey])
 
   const defaultControls = useMemo(
     () => (
@@ -148,8 +175,25 @@ export function AppCanvas({
 
   return (
     <div className={['txn-app-canvas-wrap', className].filter(Boolean).join(' ')}>
-      <div className="txn-app-canvas-toolbar">{controls ?? defaultControls}</div>
-      <div className="txn-app-canvas-viewport">
+      <div
+        className={[
+          'txn-app-canvas-toolbar',
+          toolbarCenter != null ? 'txn-app-canvas-toolbar--with-center' : ''
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        <div className="txn-app-canvas-toolbar-start">{controls ?? defaultControls}</div>
+        {toolbarCenter != null ? (
+          <div className="txn-app-canvas-toolbar-center">{toolbarCenter}</div>
+        ) : null}
+        {toolbarInfo != null ? (
+          <div className="txn-app-canvas-toolbar-info" aria-live="polite">
+            {toolbarInfo}
+          </div>
+        ) : null}
+      </div>
+      <div className="txn-app-canvas-viewport" ref={viewportRef}>
         <svg
           ref={svgRef}
           width="100%"

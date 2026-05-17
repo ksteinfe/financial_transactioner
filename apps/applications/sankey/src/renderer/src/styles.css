@@ -4,8 +4,7 @@
   color: #1e293b;
   --sankey-fg: #1e293b;
   --sankey-muted: #64748b;
-  --sankey-link-stroke: #64748b;
-  --sankey-node-stroke: rgba(15, 23, 42, 0.18);
+  --sankey-link-stroke: #c9c9c9;
   --sankey-total: #94a3b8;
   --sankey-deficit: #ff0000;
   --sankey-surplus: #00dd44;
@@ -16,8 +15,8 @@
   --txn-ym-fg: #1e293b;
   --txn-ym-range-bg: #e0e7ff;
   --txn-ym-accent: #4f46e5;
-  --txn-canvas-bg: #eceef1;
-  --txn-canvas-border: #d1d5db;
+  --txn-canvas-bg: #ececec;
+  --txn-canvas-border: #aeb4bc;
   --txn-canvas-btn-bg: #ffffff;
   --txn-canvas-btn-hover: #f3f4f6;
   --txn-canvas-fg: #1e293b;
@@ -99,11 +98,105 @@ body {
   margin: 0.35rem 0 0;
 }
 
-.sankey-tooltip {
+.sankey-scale-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 12px;
-  color: #334155;
-  margin: 0.35rem 0 0;
-  white-space: pre-wrap;
+  color: var(--sankey-fg, #1e293b);
+}
+
+.sankey-scale-step {
+  width: 1.65rem;
+  height: 1.65rem;
+  padding: 0;
+  border-radius: 4px;
+  border: 1px solid var(--txn-canvas-border, #d1d5db);
+  background: var(--txn-canvas-btn-bg, #fff);
+  color: var(--sankey-fg, #1e293b);
+  cursor: pointer;
+  line-height: 1;
+  font-size: 14px;
+}
+
+.sankey-scale-step:hover:not(:disabled) {
+  background: var(--txn-canvas-btn-hover, #f3f4f6);
+}
+
+.sankey-scale-step:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.sankey-scale-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  line-height: 1.25;
+}
+
+.sankey-scale-label {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.sankey-scale-min {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.sankey-toolbar-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+  max-width: 100%;
+}
+
+.sankey-toolbar-info-section {
+  font-weight: 600;
+  color: var(--sankey-muted, #64748b);
+  white-space: nowrap;
+}
+
+.sankey-toolbar-info-detail {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  min-width: 0;
+}
+
+.sankey-toolbar-info-arrow {
+  color: var(--sankey-muted, #64748b);
+}
+
+.sankey-toolbar-info-amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sankey-toolbar-info-placeholder {
+  color: var(--sankey-muted, #64748b);
+  font-style: italic;
+}
+
+.sankey-links path:hover {
+  stroke-opacity: 0.82;
+}
+
+/* Arrow over nodes/links; canvas viewport supplies grab/grabbing for pan */
+.sankey-interactive {
+  cursor: default;
+}
+
+.sankey-node-dragging {
+  cursor: grabbing !important;
 }
 
 .sankey-canvas-wrap {
@@ -128,4 +221,20 @@ body {
 .sankey-svg,
 .sankey-root {
   overflow: visible;
+}
+
+.sankey-section-header-hit {
+  cursor: pointer;
+}
+
+.txn-app-canvas-viewport .sankey-section-header-hit {
+  cursor: pointer;
+}
+
+.sankey-section-header:hover path {
+  stroke: var(--sankey-fg, #1e293b);
+}
+
+.sankey-section-header:hover text {
+  fill: var(--sankey-fg, #1e293b);
 }

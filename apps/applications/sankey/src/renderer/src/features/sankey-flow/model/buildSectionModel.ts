@@ -1,4 +1,9 @@
-import { aggregateByCategory, parseCategory, type CategoryAggregate } from '@txn/corpus-core/pure'
+import {
+  aggregateByCategory,
+  aggregateByCategorySplitSign,
+  parseCategory,
+  type CategoryAggregate
+} from '@txn/corpus-core/pure'
 import type { CorpusTransaction } from '@txn/types'
 import { formatCurrencyShort } from './formatCurrencyShort.js'
 import type { SankeyLinkModel, SankeyNodeModel, SankeySectionId, SankeySectionModel } from './sankeyTypes.js'
@@ -7,6 +12,15 @@ const SECTION_LABELS: Record<SankeySectionId, string> = {
   main: 'Main',
   reimbursement: 'Reimbursement',
   transfer: 'Transfer'
+}
+
+/** Main uses five columns; reimbursement and transfer use four (no outflow majors). */
+function skipMajors(sectionId: SankeySectionId): boolean {
+  return sectionId !== 'main'
+}
+
+function outflowMinorColumn(sectionId: SankeySectionId): 4 | 5 {
+  return skipMajors(sectionId) ? 4 : 5
 }
 
 function colorRoleForNode(sectionId: SankeySectionId, kind: SankeyNodeModel['kind']): string {
@@ -30,7 +44,7 @@ function sortNodesColumn4(a: SankeyNodeModel, b: SankeyNodeModel): number {
   return sortNodesColumn1(a, b)
 }
 
-function sortNodesColumn5(nodes: SankeyNodeModel[]): SankeyNodeModel[] {
+function sortOutflowMinors(nodes: SankeyNodeModel[]): SankeyNodeModel[] {
   const byMajor = new Map<string, SankeyNodeModel[]>()
   for (const n of nodes) {
     const m = n.majorCategory ?? ''
@@ -55,6 +69,38 @@ function sortNodesColumn5(nodes: SankeyNodeModel[]): SankeyNodeModel[] {
   return out
 }
 
+function collectInflowOutflow(
+  sectionId: SankeySectionId,
+  transactions: CorpusTransaction[]
+): { inflowCats: CategoryAggregate[]; outflowCats: CategoryAggregate[] } | null {
+  if (sectionId === 'main') {
+    const aggregates = aggregateByCategory(transactions).filter((a) => a.total !== 0)
+    if (aggregates.length === 0) return null
+    const inflowCats: CategoryAggregate[] = []
+    const outflowCats: CategoryAggregate[] = []
+    for (const a of aggregates) {
+      if (a.total > 0) inflowCats.push(a)
+      else if (a.total < 0) outflowCats.push(a)
+    }
+    return { inflowCats, outflowCats }
+  }
+
+  const splits = aggregateByCategorySplitSign(transactions)
+  if (splits.length === 0) return null
+  const inflowCats: CategoryAggregate[] = []
+  const outflowCats: CategoryAggregate[] = []
+  for (const s of splits) {
+    if (s.inflow > 0) {
+      inflowCats.push({ category: s.category, major: s.major, total: s.inflow })
+    }
+    if (s.outflow > 0) {
+      outflowCats.push({ category: s.category, major: s.major, total: -s.outflow })
+    }
+  }
+  if (inflowCats.length === 0 && outflowCats.length === 0) return null
+  return { inflowCats, outflowCats }
+}
+
 /**
  * Build strict-flow Sankey section from transactions already scoped to this section and date range.
  */
@@ -63,9 +109,9 @@ export function buildSectionModel(
   transactions: CorpusTransaction[]
 ): SankeySectionModel {
   const label = SECTION_LABELS[sectionId]
-  const aggregates = aggregateByCategory(transactions).filter((a) => a.total !== 0)
+  const flow = collectInflowOutflow(sectionId, transactions)
 
-  if (aggregates.length === 0) {
+  if (!flow) {
     return {
       id: sectionId,
       label,
@@ -79,12 +125,9 @@ export function buildSectionModel(
     }
   }
 
-  const inflowCats: CategoryAggregate[] = []
-  const outflowCats: CategoryAggregate[] = []
-  for (const a of aggregates) {
-    if (a.total > 0) inflowCats.push(a)
-    else if (a.total < 0) outflowCats.push(a)
-  }
+  const { inflowCats, outflowCats } = flow
+  const noMajors = skipMajors(sectionId)
+  const minorCol = outflowMinorColumn(sectionId)
 
   const totalInflow = inflowCats.reduce((s, a) => s + a.total, 0)
   const totalOutflow = outflowCats.reduce((s, a) => s + Math.abs(a.total), 0)
@@ -98,9 +141,6 @@ export function buildSectionModel(
   }
 
   const links: SankeyLinkModel[] = []
-  /** Transfer section: column 1 → total inflow → total outflow → minors only (no major category column). */
-  const skipMajors = sectionId === 'transfer'
-
   const nid = (suffix: string) => `${sectionId}|${suffix}`
 
   const col1: SankeyNodeModel[] = []
@@ -124,22 +164,30 @@ export function buildSectionModel(
   col1.sort(sortNodesColumn1)
 
   const middle: SankeyNodeModel[] = []
+  const hasInflow = totalInflow > 0
+  const hasOutflow = totalOutflow > 0
+  let totalInflowId: string | null = null
+  let totalOutflowId: string | null = null
 
-  middle.push({
-    id: nid('total-inflow'),
-    sectionId,
-    column: 2,
-    kind: 'total-inflow',
-    label: 'Total inflow',
-    magnitude: Math.max(totalInflow, totalOutflow),
-    sortValue: Math.max(totalInflow, totalOutflow),
-    colorRole: colorRoleForNode(sectionId, 'total-inflow'),
-    formattedValue: formatCurrencyShort(totalInflow)
-  })
-
-  if (deficit > 0) {
+  if (hasInflow) {
+    totalInflowId = nid('total-inflow')
     middle.push({
-      id: nid('deficit'),
+      id: totalInflowId,
+      sectionId,
+      column: 2,
+      kind: 'total-inflow',
+      label: 'Total inflow',
+      magnitude: totalInflow,
+      sortValue: totalInflow,
+      colorRole: colorRoleForNode(sectionId, 'total-inflow'),
+      formattedValue: formatCurrencyShort(totalInflow)
+    })
+  }
+
+  const deficitId = deficit > 0 ? nid('deficit') : null
+  if (deficitId) {
+    middle.push({
+      id: deficitId,
       sectionId,
       column: 2,
       kind: 'deficit',
@@ -151,21 +199,25 @@ export function buildSectionModel(
     })
   }
 
-  middle.push({
-    id: nid('total-outflow'),
-    sectionId,
-    column: 3,
-    kind: 'total-outflow',
-    label: 'Total outflow',
-    magnitude: Math.max(totalInflow, totalOutflow),
-    sortValue: Math.max(totalInflow, totalOutflow),
-    colorRole: colorRoleForNode(sectionId, 'total-outflow'),
-    formattedValue: formatCurrencyShort(totalOutflow)
-  })
-
-  if (surplus > 0) {
+  if (hasOutflow) {
+    totalOutflowId = nid('total-outflow')
     middle.push({
-      id: nid('surplus'),
+      id: totalOutflowId,
+      sectionId,
+      column: 3,
+      kind: 'total-outflow',
+      label: 'Total outflow',
+      magnitude: totalOutflow,
+      sortValue: totalOutflow,
+      colorRole: colorRoleForNode(sectionId, 'total-outflow'),
+      formattedValue: formatCurrencyShort(totalOutflow)
+    })
+  }
+
+  const surplusId = surplus > 0 ? nid('surplus') : null
+  if (surplusId) {
+    middle.push({
+      id: surplusId,
       sectionId,
       column: 3,
       kind: 'surplus',
@@ -178,7 +230,7 @@ export function buildSectionModel(
   }
 
   const col4: SankeyNodeModel[] = []
-  if (!skipMajors) {
+  if (!noMajors) {
     for (const [major, tot] of majorTotals) {
       col4.push({
         id: nid(`major|${major}`),
@@ -196,14 +248,14 @@ export function buildSectionModel(
     col4.sort(sortNodesColumn4)
   }
 
-  const col5: SankeyNodeModel[] = []
+  const outflowMinors: SankeyNodeModel[] = []
   for (const a of outflowCats) {
     const { major } = parseCategory(a.category)
     const mag = Math.abs(a.total)
-    col5.push({
+    outflowMinors.push({
       id: nid(`minor|${a.category}`),
       sectionId,
-      column: 5,
+      column: minorCol,
       kind: 'outflow-minor',
       label: a.category,
       category: a.category,
@@ -215,11 +267,9 @@ export function buildSectionModel(
       formattedValue: formatCurrencyShort(mag)
     })
   }
-  const col5sorted = sortNodesColumn5(col5)
+  const outflowSorted = sortOutflowMinors(outflowMinors)
 
-  const ordered: SankeyNodeModel[] = [...col1, ...middle, ...col4, ...col5sorted]
-
-  const bridge = Math.max(totalInflow, totalOutflow)
+  const ordered: SankeyNodeModel[] = [...col1, ...middle, ...col4, ...outflowSorted]
 
   const link = (source: string, target: string, value: number, id: string, colorRole?: string) => {
     if (value <= 0) return
@@ -233,33 +283,40 @@ export function buildSectionModel(
     })
   }
 
-  const totalInflowId = nid('total-inflow')
-  const totalOutflowId = nid('total-outflow')
-
   for (const n of col1) {
-    link(n.id, totalInflowId, n.magnitude, `in|${n.id}`)
-  }
-  if (deficit > 0) {
-    link(nid('deficit'), totalInflowId, deficit, 'deficit')
-  }
-  link(totalInflowId, totalOutflowId, bridge, 'bridge')
-
-  if (surplus > 0) {
-    link(totalOutflowId, nid('surplus'), surplus, 'surplus')
+    if (totalInflowId) link(n.id, totalInflowId, n.magnitude, `in|${n.id}`)
   }
 
-  if (!skipMajors) {
+  if (deficitId && totalOutflowId) {
+    link(deficitId, totalOutflowId, deficit, 'deficit')
+  }
+
+  if (totalInflowId && totalOutflowId) {
+    if (surplusId) {
+      link(totalInflowId, totalOutflowId, totalOutflow, 'bridge')
+      link(totalInflowId, surplusId, surplus, 'surplus')
+    } else if (deficitId) {
+      link(totalInflowId, totalOutflowId, totalInflow, 'bridge')
+    } else {
+      link(totalInflowId, totalOutflowId, totalInflow, 'bridge')
+    }
+  } else if (totalInflowId && surplusId) {
+    link(totalInflowId, surplusId, surplus, 'surplus')
+  }
+
+  if (!noMajors && totalOutflowId) {
     for (const m of col4) {
       link(totalOutflowId, m.id, m.magnitude, `to-major|${m.id}`)
     }
   }
 
-  for (const n of col5sorted) {
-    if (skipMajors) {
+  const majorIds = new Set(col4.map((m) => m.id))
+  for (const n of outflowSorted) {
+    if (noMajors && totalOutflowId) {
       link(totalOutflowId, n.id, n.magnitude, `to-minor|${n.id}`)
-    } else {
+    } else if (!noMajors) {
       const majId = nid(`major|${n.majorCategory ?? ''}`)
-      link(majId, n.id, n.magnitude, `maj-min|${n.id}`)
+      if (majorIds.has(majId)) link(majId, n.id, n.magnitude, `maj-min|${n.id}`)
     }
   }
 

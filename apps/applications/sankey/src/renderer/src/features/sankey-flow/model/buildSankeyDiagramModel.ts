@@ -6,7 +6,7 @@ import {
 import type { CorpusTransaction } from '@txn/types'
 import { buildSectionModel } from './buildSectionModel.js'
 import { verifySectionIntegrity } from './graphIntegrity.js'
-import type { SankeyDiagramModel } from './sankeyTypes.js'
+import { SANKEY_SECTION_DISPLAY_ORDER, type SankeyDiagramModel } from './sankeyTypes.js'
 
 function partitionBySection(transactions: CorpusTransaction[]): Record<SankeySectionId, CorpusTransaction[]> {
   const buckets: Record<SankeySectionId, CorpusTransaction[]> = {
@@ -30,9 +30,7 @@ export function buildSankeyDiagramModel(
   const filtered = filterTransactionsByYearMonthRange(yearTransactions, selectedYear, startMonth, endMonth)
   const buckets = partitionBySection(filtered)
 
-  const sections = (
-    ['main', 'reimbursement', 'transfer'] as const
-  ).map((id) => buildSectionModel(id, buckets[id]))
+  const sections = SANKEY_SECTION_DISPLAY_ORDER.map((id) => buildSectionModel(id, buckets[id]))
 
   const integrityErrors: string[] = []
   for (const s of sections) {
