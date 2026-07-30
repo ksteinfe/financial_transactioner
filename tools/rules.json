@@ -1,0 +1,480 @@
+{
+  "transfer:2232_bills": [
+    {
+      "id": "rule_1785165784",
+      "regex": "Online scheduled transfer to CHK 2232 Confirmation#.*",
+      "category": "transfer:2232_bills",
+      "created_at": "2026-07-27T15:23:04.995365+00:00",
+      "created_by": "llm",
+      "notes": "all xfers TO 2232_bills",
+      "apply_to_accounts": null
+    }
+  ],
+  "transfer:1816_deep": [
+    {
+      "id": "rule_1785431222",
+      "regex": "Online scheduled transfer from SAV 1816.*",
+      "category": "transfer:1816_deep",
+      "created_at": "2026-07-30T17:07:02.457864+00:00",
+      "created_by": "llm",
+      "notes": "all xfers FROM 1816_deep",
+      "apply_to_accounts": null
+    }
+  ],
+  "transfer:6934_checking": [
+    {
+      "id": "rule_1785432696",
+      "regex": "^Online scheduled transfer from CHK 6934.*",
+      "category": "transfer:6934_checking",
+      "created_at": "2026-07-30T17:31:36.881972+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "transfer:credit_card_payment": [
+    {
+      "id": "rule_1785448086",
+      "regex": "^CAPITAL ONE DES:CRCARDPMT.*",
+      "category": "transfer:credit_card_payment",
+      "created_at": "2026-07-30T21:48:06.000884+00:00",
+      "created_by": "llm",
+      "notes": "cap one credit card payments",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785448914",
+      "regex": "^TARGET CARD SRVC DES:PAYMENT ID:H \\S+ INDN:[A-Z]+,.* CO ID:\\S+",
+      "category": "transfer:credit_card_payment",
+      "created_at": "2026-07-30T22:01:54.776045+00:00",
+      "created_by": "llm",
+      "notes": "target card payments",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785449474",
+      "regex": "^CHASE CREDIT CRD DES:AUTOPAY ID:\\S+ INDN:.* CO ID:.* PPD",
+      "category": "transfer:credit_card_payment",
+      "created_at": "2026-07-30T22:11:14.335402+00:00",
+      "created_by": "llm",
+      "notes": "chase amazon visa card payment",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450577",
+      "regex": "^CAPITAL ONE AUTOPAY.*",
+      "category": "transfer:credit_card_payment",
+      "created_at": "2026-07-30T22:29:37.032020+00:00",
+      "created_by": "llm",
+      "notes": "cap one credit card automatic payments",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451039",
+      "regex": "^AUTOMATIC PAYMENT - THANK",
+      "category": "transfer:credit_card_payment",
+      "created_at": "2026-07-30T22:37:19.312123+00:00",
+      "created_by": "llm",
+      "notes": "case credit card automatic payments",
+      "apply_to_accounts": [
+        "chase",
+        "chase_test"
+      ]
+    }
+  ],
+  "income:misc": [
+    {
+      "id": "rule_1785165854",
+      "regex": "Interest Earned.*",
+      "category": "income:misc",
+      "created_at": "2026-07-27T15:24:14.578944+00:00",
+      "created_by": "llm",
+      "notes": "earned interest",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450468",
+      "regex": "^CASH AUTO REDEMPTION",
+      "category": "income:misc",
+      "created_at": "2026-07-30T22:27:48.927869+00:00",
+      "created_by": "llm",
+      "notes": "SJ coupon thing?",
+      "apply_to_accounts": null
+    }
+  ],
+  "income:berkeley": [
+    {
+      "id": "rule_1785448771",
+      "regex": "^UNIVERSITY OF CA DES:\\S+ ID:\\d+ INDN:[A-Z]+,[A-Z]+ CO ID:.*",
+      "category": "income:berkeley",
+      "created_at": "2026-07-30T21:59:31.472277+00:00",
+      "created_by": "llm",
+      "notes": "berkeley monthly paycheck",
+      "apply_to_accounts": null
+    }
+  ],
+  "unknown:undefined": [
+    {
+      "id": "rule_1785440000",
+      "regex": "^Check \\d+",
+      "category": "unknown:undefined",
+      "created_at": "2026-07-30T00:00:00+00:00",
+      "created_by": "manual",
+      "notes": "defer categorization for check number descriptions",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785448815",
+      "regex": "^VENMO \\*.*",
+      "category": "unknown:undefined",
+      "created_at": "2026-07-30T22:00:15.832166+00:00",
+      "created_by": "llm",
+      "notes": "all venmo transactions",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:internet": [
+    {
+      "id": "rule_1785431739",
+      "regex": "^SONIC NET LLC.*",
+      "category": "home:internet",
+      "created_at": "2026-07-30T17:15:39.633553+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:utilities_wm": [
+    {
+      "id": "rule_1785432214",
+      "regex": "^WASTE MANAGEMENT DES:PAYMENT ID:.*INDN:.*PPD PMT INFO:.*",
+      "category": "home:utilities_wm",
+      "created_at": "2026-07-30T17:23:34.312469+00:00",
+      "created_by": "llm",
+      "notes": "trash service",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:utilities_pge": [
+    {
+      "id": "rule_1785432286",
+      "regex": "^PGANDE DES:WEB ONLINE ID:.*",
+      "category": "home:utilities_pge",
+      "created_at": "2026-07-30T17:24:46.920941+00:00",
+      "created_by": "llm",
+      "notes": "pg&e",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:utilities_mud": [
+    {
+      "id": "rule_1785432741",
+      "regex": "^EAST BAY MUD.*",
+      "category": "home:utilities_mud",
+      "created_at": "2026-07-30T17:32:21.217128+00:00",
+      "created_by": "llm",
+      "notes": "water bill",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:home_alarm": [
+    {
+      "id": "rule_1785432767",
+      "regex": "^ADT SECURITY.*",
+      "category": "home:home_alarm",
+      "created_at": "2026-07-30T17:32:47.258130+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:mortgage": [
+    {
+      "id": "rule_1785432802",
+      "regex": "^JPMORGAN CHASE DES:CHASE.*",
+      "category": "home:mortgage",
+      "created_at": "2026-07-30T17:33:22.305458+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "transportation:auto_payment": [
+    {
+      "id": "rule_1785432160",
+      "regex": "^JPMorgan Chase DES:Ext Trnsfr.*",
+      "category": "transportation:auto_payment",
+      "created_at": "2026-07-30T17:22:40.961215+00:00",
+      "created_by": "llm",
+      "notes": "car payments",
+      "apply_to_accounts": null
+    }
+  ],
+  "transportation:gas": [
+    {
+      "id": "rule_1785447986",
+      "regex": "^GO! GAS & FOOD.*",
+      "category": "transportation:gas",
+      "created_at": "2026-07-30T21:46:26.784664+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "savings:college_savings": [
+    {
+      "id": "rule_1785432308",
+      "regex": "^ScholarShare ACH DES:CONTRIB ID:.*",
+      "category": "savings:college_savings",
+      "created_at": "2026-07-30T17:25:08.458505+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "food:groceries": [
+    {
+      "id": "rule_1785448110",
+      "regex": "^COSTCO.*",
+      "category": "food:groceries",
+      "created_at": "2026-07-30T21:48:30.640772+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450604",
+      "regex": "^Whole Foods \\w+.*",
+      "category": "food:groceries",
+      "created_at": "2026-07-30T22:30:04.504265+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451325",
+      "regex": "^TST\\*BOICHIK\\s+.*",
+      "category": "food:groceries",
+      "created_at": "2026-07-30T22:42:05.272862+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451337",
+      "regex": "^STAR GROCERY",
+      "category": "food:groceries",
+      "created_at": "2026-07-30T22:42:17.072355+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451343",
+      "regex": "^SQ \\*STAR MEATS",
+      "category": "food:groceries",
+      "created_at": "2026-07-30T22:42:23.840102+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:misc": [
+    {
+      "id": "rule_1785450235",
+      "regex": "^BERKELEY HORTICULTURAL.*",
+      "category": "home:misc",
+      "created_at": "2026-07-30T22:23:55.976630+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "professional:business_services": [
+    {
+      "id": "rule_1785450300",
+      "regex": "^Amazon web services",
+      "category": "professional:business_services",
+      "created_at": "2026-07-30T22:25:00.408483+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "food:restaurants": [
+    {
+      "id": "rule_1785450312",
+      "regex": "^TST\\* THE MONK'S KETTLE",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:25:12.735691+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450478",
+      "regex": "^TST\\* JAYNA GYRO",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:27:58.384063+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450521",
+      "regex": "^TST\\*PIZZERIA VIOLETTA",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:28:41.800350+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450636",
+      "regex": "^TST\\* HEADLANDS BREWING -.*",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:30:36.759131+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450644",
+      "regex": "^SQ \\*MUMU HOT POT",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:30:44.814993+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450679",
+      "regex": "^HANSHIN POCHA - OAKLAND",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:31:19.784393+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450750",
+      "regex": "^WWW\\.SWEETGREEN\\.COM\\s+.*",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:32:30.040557+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451280",
+      "regex": "^TST\\*PIPPAL",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:41:20.368659+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451390",
+      "regex": "^SQ \\*GHOST TOWN BREWING",
+      "category": "food:restaurants",
+      "created_at": "2026-07-30T22:43:10.000241+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "home:home_improvement": [
+    {
+      "id": "rule_1785450324",
+      "regex": "^COLE HARDWARE",
+      "category": "home:home_improvement",
+      "created_at": "2026-07-30T22:25:24.112632+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "transportation:parking": [
+    {
+      "id": "rule_1785450382",
+      "regex": "^OAKLAND PARKING MTR .*",
+      "category": "transportation:parking",
+      "created_at": "2026-07-30T22:26:22.713004+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450626",
+      "regex": "^BERKELEY-PRKG\\s+IPS\\s+METER.*",
+      "category": "transportation:parking",
+      "created_at": "2026-07-30T22:30:26.431386+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785450723",
+      "regex": "^UCB PARKING.*",
+      "category": "transportation:parking",
+      "created_at": "2026-07-30T22:32:03.303864+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "health:dentist": [
+    {
+      "id": "rule_1785450441",
+      "regex": "^SQ \\*ENDO CARE GROUP\\s+.*",
+      "category": "health:dentist",
+      "created_at": "2026-07-30T22:27:21.248262+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "health:doctor": [
+    {
+      "id": "rule_1785450509",
+      "regex": "^AUDIOLOGY SERVICES \\d+.*",
+      "category": "health:doctor",
+      "created_at": "2026-07-30T22:28:29.736439+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "shopping:amazon": [
+    {
+      "id": "rule_1785450661",
+      "regex": "^AMAZON MKTPL\\*.*",
+      "category": "shopping:amazon",
+      "created_at": "2026-07-30T22:31:01.720743+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1785451379",
+      "regex": "^Amazon\\.com\\*.*",
+      "category": "shopping:amazon",
+      "created_at": "2026-07-30T22:42:59.704368+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "food:food_services": [
+    {
+      "id": "rule_1785450710",
+      "regex": "^DD \\*DOORDASH.*",
+      "category": "food:food_services",
+      "created_at": "2026-07-30T22:31:50.671878+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ]
+}
