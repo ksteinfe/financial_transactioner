@@ -1,0 +1,10 @@
+Description,,Summary Amt.
+Beginning balance as of 10/09/2099,,"30,214.32"
+Total credits,,"0.88"
+Total debits,,"-550.00"
+Ending balance as of 11/04/2099,,"29,665.20"
+
+Date,Description,Amount,Running Bal.
+10/09/2099,Beginning balance as of 10/09/2099,,"30,214.32"
+10/14/2099,"Online scheduled transfer to CHK 2232 Confirmation# XXXXX17718","-550.00","29,664.32"
+11/04/2099,"Interest Earned","0.88","29,665.20"

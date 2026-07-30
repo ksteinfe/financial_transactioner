@@ -2,5 +2,10 @@ data.hdf5
 data.json
 results/
 *.pyc
-*.csv
 .env
+# Tools local state and IGNORED outputs
+tools/audit/
+tools/state/
+# Ignore ingested artifacts created for sample tests
+tools/sample_data/*_ingested.jsonl
+tools/llm_debug.log

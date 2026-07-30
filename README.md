@@ -56,8 +56,6 @@ All tools and apps should read data-directory locations from the root `.env`.
 1. Copy `.env.example` to `.env`.
 2. Set absolute paths for your local machine:
    - `TRANSACTION_CORPUS_DIR`
-   - `TRANSACTION_DOWNLOADS_UNPROCESSED_DIR`
-   - `TRANSACTION_DOWNLOADS_PROCESSED_DIR`
 
 This provides a single, stable configuration contract across `tools/` and
 `apps/`.

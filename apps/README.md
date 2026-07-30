@@ -67,7 +67,6 @@ The **transaction corpus** is a local folder of yearly JSON files on disk; it is
 Repository-wide paths are configured at the **repository root** via `.env` (copy from `.env.example`):
 
 - `TRANSACTION_CORPUS_DIR` — corpus directory
-- `TRANSACTION_DOWNLOADS_UNPROCESSED_DIR` / `TRANSACTION_DOWNLOADS_PROCESSED_DIR` — ingestion pipeline (used by `tools/`)
 
 Apps resolve corpus access through the **main process** and **preload** IPC (not raw filesystem access from the renderer).
 

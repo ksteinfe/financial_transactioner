@@ -1,0 +1,9 @@
+Description,,Summary Amt.
+Beginning balance as of 10/24/2099,,"11,881.82"
+Total credits,,"0.35"
+Total debits,,"0.00"
+Ending balance as of 11/19/2099,,"11,882.17"
+
+Date,Description,Amount,Running Bal.
+10/24/2099,Beginning balance as of 10/24/2099,,"11,881.82"
+11/19/2099,"Interest Earned","0.35","11,882.17"

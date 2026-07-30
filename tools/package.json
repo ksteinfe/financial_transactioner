@@ -1,0 +1,9 @@
+{
+  "name": "financial-transactioner-tools",
+  "private": true,
+  "scripts": {
+    "ingest": "python tools/ingest.py",
+    "integrate": "python tools/integrate_with_corpus.py",
+    "rules": "python tools/rules.py"
+  }
+}

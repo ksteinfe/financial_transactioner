@@ -82,5 +82,3 @@ A sample file is provided at `.env.example`.
 Expected variables:
 
 - `TRANSACTION_CORPUS_DIR`: local JSON corpus directory
-- `TRANSACTION_DOWNLOADS_UNPROCESSED_DIR`: directory for unprocessed downloaded transaction CSV files
-- `TRANSACTION_DOWNLOADS_PROCESSED_DIR`: directory for CSV files after they are processed
