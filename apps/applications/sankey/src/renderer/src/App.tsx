@@ -5,6 +5,10 @@ import { AppCanvas, type CanvasTransform, YearMonthRangeSelector } from '@txn/ui
 import { SankeyChart, type SankeyHoverInfo } from './features/sankey-flow/SankeyChart.js'
 import { SankeyScaleToolbar } from './features/sankey-flow/SankeyScaleToolbar.js'
 import { buildSankeyDiagramModel } from './features/sankey-flow/model/buildSankeyDiagramModel.js'
+import {
+  DEEP_SAVINGS_ACCOUNTS,
+  excludeAccounts
+} from './features/sankey-flow/model/deepSavingsFilter.js'
 import { partitionBySection } from './features/sankey-flow/model/partitionBySection.js'
 import { resolveNodeTransactions } from './features/sankey-flow/model/resolveNodeTransactions.js'
 import type { SankeyNodeModel } from './features/sankey-flow/model/sankeyTypes.js'
@@ -25,6 +29,7 @@ export function App(): ReactElement {
   const [range, setRange] = useState({ year: new Date().getFullYear(), startMonth: 1, endMonth: 12 })
   const [canvasTransform, setCanvasTransform] = useState<CanvasTransform>({ x: 0, y: 0, k: 1 })
   const [layoutResetKey, setLayoutResetKey] = useState(0)
+  const [showDeepSavings, setShowDeepSavings] = useState(false)
   const [hoverInfo, setHoverInfo] = useState<SankeyHoverInfo | null>(null)
   const [dollarsPerPixel, setDollarsPerPixel] = useState<number>(100)
   const [transactionPanel, setTransactionPanel] = useState<TransactionPanelState>(null)
@@ -103,15 +108,21 @@ export function App(): ReactElement {
     return monthAvailabilityForYear(yearData.transactions, yearData.year)
   }, [yearData])
 
-  const filteredTransactions = useMemo(() => {
+  /** Corpus rows for visualization; deep-savings accounts excluded unless toggle is on. */
+  const visualizationTransactions = useMemo(() => {
     if (!yearData) return []
+    if (showDeepSavings) return yearData.transactions
+    return excludeAccounts(yearData.transactions, DEEP_SAVINGS_ACCOUNTS)
+  }, [yearData, showDeepSavings])
+
+  const filteredTransactions = useMemo(() => {
     return filterTransactionsByYearMonthRange(
-      yearData.transactions,
+      visualizationTransactions,
       range.year,
       range.startMonth,
       range.endMonth
     )
-  }, [yearData, range.year, range.startMonth, range.endMonth])
+  }, [visualizationTransactions, range.year, range.startMonth, range.endMonth])
 
   const transactionsBySection = useMemo(
     () => partitionBySection(filteredTransactions),
@@ -121,12 +132,12 @@ export function App(): ReactElement {
   const diagram = useMemo(() => {
     if (!yearData) return null
     return buildSankeyDiagramModel(
-      yearData.transactions,
+      visualizationTransactions,
       range.year,
       range.startMonth,
       range.endMonth
     )
-  }, [yearData, range.year, range.startMonth, range.endMonth])
+  }, [yearData, visualizationTransactions, range.year, range.startMonth, range.endMonth])
 
   const onNodeActivate = useCallback(
     (node: SankeyNodeModel) => {
@@ -213,9 +224,19 @@ export function App(): ReactElement {
           contentBounds={contentBounds}
           contentFitKey={contentFitKey}
           toolbarExtra={
-            <button type="button" onClick={resetNodePositions}>
-              Reset node positions
-            </button>
+            <>
+              <button type="button" onClick={resetNodePositions}>
+                Reset node positions
+              </button>
+              <label className="sankey-deep-savings-toggle">
+                <input
+                  type="checkbox"
+                  checked={showDeepSavings}
+                  onChange={(e) => setShowDeepSavings(e.target.checked)}
+                />
+                Show deep savings transactions
+              </label>
+            </>
           }
           toolbarCenter={
             diagram ? (

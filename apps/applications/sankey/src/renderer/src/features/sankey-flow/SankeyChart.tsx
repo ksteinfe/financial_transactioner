@@ -81,6 +81,17 @@ function isNodeActionable(kind: SankeyNodeModel['kind']): boolean {
   return kind !== 'surplus' && kind !== 'deficit'
 }
 
+/** Total / balance nodes on the main section show $ under the name. */
+function showsAmountUnderLabel(sectionId: SankeySectionId, kind: SankeyNodeModel['kind']): boolean {
+  if (sectionId !== 'main') return false
+  return (
+    kind === 'total-inflow' ||
+    kind === 'total-outflow' ||
+    kind === 'surplus' ||
+    kind === 'deficit'
+  )
+}
+
 function sectionDisplayTitle(section: SankeySectionModel): string {
   return isCollapsibleSection(section.id) ? formatCollapsibleSectionTitle(section) : section.label
 }
@@ -394,6 +405,8 @@ export function SankeyChart({
                         const shown = d.raw.displayLabel ?? d.raw.label
                         const labelText = shown.length > 22 ? `${shown.slice(0, 20)}…` : shown
                         const actionable = isNodeActionable(d.raw.kind)
+                        const amountUnder = showsAmountUnderLabel(row.section.id, d.raw.kind)
+                        const lx = labelLeft ? -labelGap : w + labelGap
                         return (
                           <g
                             key={d.id}
@@ -423,14 +436,25 @@ export function SankeyChart({
                               onMouseLeave={() => onHover(null)}
                             />
                             <text
-                              x={labelLeft ? -labelGap : w + labelGap}
-                              y={h / 2 + 4}
+                              x={lx}
+                              y={amountUnder ? h / 2 - fs * 0.55 : h / 2 + 4}
                               textAnchor={labelLeft ? 'end' : 'start'}
                               fill="var(--sankey-fg, #1e293b)"
                               fontSize={fs}
                               pointerEvents="none"
                             >
-                              {labelText}
+                              {amountUnder ? (
+                                <>
+                                  <tspan x={lx} dy="0">
+                                    {labelText}
+                                  </tspan>
+                                  <tspan x={lx} dy="1.2em">
+                                    {d.raw.formattedValue}
+                                  </tspan>
+                                </>
+                              ) : (
+                                labelText
+                              )}
                             </text>
                           </g>
                         )

@@ -132,6 +132,93 @@ def normalize_account_from_file_name(file_name: str) -> str:
     return re.sub(r'[^a-z0-9_]', '_', base)
 
 
+def get_allowed_accounts_path() -> Path:
+    return Path(resolve_repo_root()) / 'reference' / 'allowed-accounts.json'
+
+
+def load_allowed_accounts() -> list[str]:
+    path = get_allowed_accounts_path()
+    with path.open(encoding='utf-8') as handle:
+        data = json.load(handle)
+    if not isinstance(data, list):
+        raise SystemExit(f'Expected a list in {path}')
+    return [str(item).strip() for item in data if str(item).strip()]
+
+
+def match_allowed_accounts_in_file_name(file_name: str, allowed_accounts: list[str] | None = None) -> list[str]:
+    """Return allowlist accounts that exactly match the filename stem or its leading token(s).
+
+    A match means the normalized stem equals the account, or starts with ``account + '_'``.
+    When several allowlist entries match, only the longest ones that are not prefixes of a
+    longer match are kept (e.g. ``boa_check_6934`` wins over ``boa_check``).
+    """
+    allowed = allowed_accounts if allowed_accounts is not None else load_allowed_accounts()
+    stem = normalize_account_from_file_name(file_name)
+    matches = [
+        account
+        for account in allowed
+        if stem == account or stem.startswith(f'{account}_')
+    ]
+    if not matches:
+        return []
+    longest = max(len(account) for account in matches)
+    return sorted(account for account in matches if len(account) == longest)
+
+
+def prompt_account_from_allowlist(file_name: str, allowed_accounts: list[str], candidates: list[str] | None = None) -> str:
+    """Ask the user which allowlist account to use for a source file."""
+    display_name = Path(file_name).name
+    print(f"Could not uniquely resolve account for '{display_name}' from allowlist.")
+    if candidates:
+        print(f'Ambiguous filename matches: {", ".join(candidates)}')
+    print('Allowed accounts:')
+    for index, account in enumerate(allowed_accounts, start=1):
+        print(f'  {index}. {account}')
+    while True:
+        try:
+            answer = input("Enter number, account name, or 'q' to quit: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit('Aborted account selection.')
+        if not answer:
+            continue
+        if answer.lower() in {'q', 'quit'}:
+            raise SystemExit('Aborted account selection.')
+        if answer.isdigit():
+            index = int(answer)
+            if 1 <= index <= len(allowed_accounts):
+                return allowed_accounts[index - 1]
+            print(f'Choose a number between 1 and {len(allowed_accounts)}.')
+            continue
+        if answer in allowed_accounts:
+            return answer
+        print(f"'{answer}' is not in allowed-accounts.json. Pick a listed account.")
+
+
+def resolve_account_for_source_file(
+    file_name: str,
+    allowed_accounts: list[str] | None = None,
+    *,
+    interactive: bool = True,
+) -> str:
+    """Resolve the single account for a source CSV from its filename + allowlist.
+
+    Each source file is assumed to contain transactions for exactly one account.
+    """
+    allowed = allowed_accounts if allowed_accounts is not None else load_allowed_accounts()
+    if not allowed:
+        raise SystemExit(f'No accounts found in {get_allowed_accounts_path()}')
+    matches = match_allowed_accounts_in_file_name(file_name, allowed)
+    if len(matches) == 1:
+        return matches[0]
+    if not interactive:
+        detail = ', '.join(matches) if matches else 'none'
+        raise SystemExit(
+            f"Could not uniquely resolve account for '{Path(file_name).name}' "
+            f'(matches: {detail}). Re-run interactively or rename the file.'
+        )
+    return prompt_account_from_allowlist(file_name, allowed, candidates=matches or None)
+
+
 def get_string_field(row: dict, names):
     for name in names:
         if name in row and isinstance(row[name], str):

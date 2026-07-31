@@ -107,6 +107,17 @@ This CLI integrates ingested transaction records into the target corpus.
 - If the user skips category selection, the transaction is assigned `unknown:undefined` and can still be integrated.
 - Rule creation during integration persists new rules only when allowed by dry-run semantics.
 
+### Pause / resume progress file
+
+- After each categorization decision, the tool writes
+  `<ingested_stem>.progress.json` beside the ingested JSONL
+  (example: `import_123_ingested.jsonl` → `import_123_ingested.progress.json`).
+- The file maps transaction `key` → `{ category, rule_id, rule_note, decided_at }`.
+- On later runs with the same `--input`, saved keys are auto-applied (no re-prompt / no LLM).
+- Stop mid-run with `q` at categorization prompts, or Ctrl+C / EOF; corpus is not written and the progress file is kept.
+- After a successful non-dry-run corpus write, the progress file is deleted.
+- Dry-run and declined corpus confirm keep the progress file so work is not lost.
+
 ### Dry-run semantics
 
 - `--dry-run`
@@ -114,11 +125,13 @@ This CLI integrates ingested transaction records into the target corpus.
 - `--dry-run --persist-rules`
   - partial dry run: rule persistence allowed, corpus writes skipped
 - confirmation is requested before batch writing the integrated transaction payload into year files.
+- progress-file updates still happen under dry-run.
 
 ### Batch integration
 
-Transactions are not written one-by-one.
-They are collected into pending year files, then written in a batch after user confirmation.
+Transactions are not written one-by-one to the corpus.
+At the end of a completed pass, pending year payloads are rebuilt from the progress file
+(for all ingested keys that are categorized and not already in the corpus), then written after confirmation.
 This reduces partial-write risk and gives the user a single commit decision for the entire batch.
 
 ## `tools/llm.py`

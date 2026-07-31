@@ -39,6 +39,7 @@ Step-by-step usage:
    - this reads the ingested records, simulates writers, and skips both rule persistence and corpus writes.
    - interactive prompts and auto-LLM suggestions run by default during this preview.
    - use `--dry-run --persist-rules` to simulate corpus writes while persisting any newly created rules.
+   - categorizations are still written to a sibling progress file (see pause/resume below).
 
 4. integrate into the corpus for real
 
@@ -47,7 +48,15 @@ Step-by-step usage:
    - records are appended into year-based JSON files under `TRANSACTION_CORPUS_DIR`.
    - interactive prompts and auto-LLM suggestions run by default for this workflow.
 
-5. manage rules
+5. pause and resume a large integration
+
+   - each decided categorization is saved immediately to `<ingested_stem>.progress.json` next to the ingested JSONL
+     (example: `import_123_ingested.jsonl` → `import_123_ingested.progress.json`).
+   - stop mid-run with `q` at a categorization prompt, or Ctrl+C; progress is kept.
+   - resume by re-running the same integrate command with the same `--input`; saved categorizations are auto-applied.
+   - the progress file is deleted only after a successful (non-dry-run) corpus write.
+
+6. manage rules
 
    - list rules: `python tools/rules.py list`
    - add a rule: `python tools/rules.py add --regex '<pattern>' --category '<major:minor>'`
