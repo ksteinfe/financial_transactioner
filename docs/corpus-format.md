@@ -17,8 +17,8 @@ Normative terms use RFC-style language:
   committed.
 - Corpus files are partitioned by year:
   - `YYYY.json` (example: `2024.json`)
-- Optional derived index at the corpus root:
-  - `corpus-summary.json` (section 11)
+- Derived aggregate index at the corpus root (MUST be kept current after writes):
+  - `corpus-summary.json` (section 9)
 - Each yearly file MUST contain:
   - `metadata` object
   - `transactions` array
@@ -134,8 +134,12 @@ Multiple tools/apps MAY read/write the same corpus. Therefore all writers MUST:
 6. Update `metadata.last_sync_date` on each successful ingest write.
 7. Append/update `metadata.sources` entries for CSVs processed.
 8. After any successful write that inserts, updates, or deletes transactions in
-   yearly files, either rebuild `corpus-summary.json` (section 11) in the same
-   operation or schedule an immediate rebuild so the summary does not stay stale.
+   yearly files, MUST rebuild `corpus-summary.json` (section 9) in the same
+   operation so the summary does not stay stale.
+   - **Python tools:** call `rebuild_corpus_summary()` from `tools/corpus_summary.py`
+     (CLI: `python tools/rebuild_corpus_summary.py`).
+   - **Apps / TypeScript:** call `rebuildCorpusSummaryFile` from `@txn/corpus-core`
+     (IPC such as `platform:rebuildCorpusSummary` in Hello).
    Read-only tools MAY expose an explicit “refresh summary” action that performs
    the same rebuild without changing yearly data.
 
@@ -233,10 +237,12 @@ Required behavior:
 
 ## 9) Corpus summary index (`corpus-summary.json`)
 
-The corpus root MAY contain a single derived JSON file:
+The corpus root MUST be kept in sync with a single derived JSON file after any
+transaction write (the file itself MAY be missing only until the first rebuild):
 
-- **File name**: `corpus-summary.json` (constant `CORPUS_SUMMARY_FILENAME` in
-  `@txn/corpus-core`).
+- **File name**: `corpus-summary.json`
+  - Python: `CORPUS_SUMMARY_FILENAME` in `tools/corpus_summary.py`
+  - TypeScript: `CORPUS_SUMMARY_FILENAME` in `@txn/corpus-core`
 
 Purpose:
 
@@ -250,19 +256,27 @@ Nature:
   will be recreated on the next rebuild.
 - **Do not edit manually** — the `_note` field in the file states this for humans
   and diff tools.
+- Year-file scanners MUST match only `YYYY.json` (four-digit year). Do not treat
+  `corpus-summary.json` as a year file; it is a sibling index, not omitted data.
 
 When to rebuild:
 
 - After every write that changes transaction data (insert/update/delete in any
   year file), OR
-- On demand (user gesture, CLI, or IPC such as `platform:rebuildCorpusSummary`
-  in the Steinfeld Finance - Hello app).
+- On demand (CLI, user gesture, or app IPC).
 
 How to rebuild:
 
-- Implementation reference: `computeCorpusSummary` and `rebuildCorpusSummaryFile`
-  in `@txn/corpus-core`, which read all `YYYY.json` files, aggregate amounts, and
-  write through a temporary file plus atomic rename.
+| Surface | Entry point |
+| --- | --- |
+| Python library | `tools/corpus_summary.py` → `rebuild_corpus_summary(corpus_dir)` |
+| Python CLI | `python tools/rebuild_corpus_summary.py` (uses `TRANSACTION_CORPUS_DIR` or `--corpus-dir`) |
+| TypeScript / apps | `@txn/corpus-core` → `rebuildCorpusSummaryFile(rootPath)` |
+| Hello app IPC | `platform:rebuildCorpusSummary` |
+
+Both Python and TypeScript implementations read all `YYYY.json` files, aggregate
+amounts, and write through a temporary file plus atomic rename. Keep them
+behaviorally aligned when changing aggregation rules.
 
 Aggregation rules (normative):
 

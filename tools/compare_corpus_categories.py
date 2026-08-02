@@ -8,6 +8,8 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+from corpus_summary import iter_year_json_files
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_PATH = REPO_ROOT / "reference" / "allowed-categories.json"
 DEFAULT_CORPUS = Path(r"I:\My Drive\Homestead\Finance\Budget and Tracking\Corpus")
@@ -23,9 +25,7 @@ def load_allowed(path: Path) -> set[str]:
 
 def collect_corpus_categories(corpus_dir: Path) -> Counter[str]:
     counts: Counter[str] = Counter()
-    year_files = sorted(
-        p for p in corpus_dir.glob("*.json") if p.name != "corpus-summary.json"
-    )
+    year_files = iter_year_json_files(corpus_dir)
     if not year_files:
         raise SystemExit(f"No year JSON files found in {corpus_dir}")
 

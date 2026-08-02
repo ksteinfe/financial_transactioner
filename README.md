@@ -63,9 +63,12 @@ This provides a single, stable configuration contract across `tools/` and
 ## Corpus data loading (apps)
 
 Yearly transaction files live as `YYYY.json` under the corpus directory. The
-derived index **`corpus-summary.json`** (see [`docs/corpus-format.md`](docs/corpus-format.md))
+derived index **`corpus-summary.json`** (see [`docs/corpus-format.md`](docs/corpus-format.md) §9)
 holds pre-aggregated rollups by year, month, and category. **Apps and tools
 should read `corpus-summary.json` when possible** (dashboards, charts, high-level
 totals) and fall back to scanning `YYYY.json` only when row-level detail is
-required. The summary is rebuilt after writes or on demand (`@txn/corpus-core`,
-Steinfeld Finance - Hello **Rebuild summary**).
+required. After any write that changes transactions, the summary MUST be rebuilt:
+
+- **Python tools:** `tools/corpus_summary.rebuild_corpus_summary` /
+  `python tools/rebuild_corpus_summary.py`
+- **Apps:** `@txn/corpus-core` (`rebuildCorpusSummaryFile`) / Hello **Rebuild summary**

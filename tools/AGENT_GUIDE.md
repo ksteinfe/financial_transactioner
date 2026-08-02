@@ -11,7 +11,9 @@ Key scripts:
 
 - `tools/ingest.py`: ingest exporter output into normalized JSONL transaction records
 - `tools/rules.py`: manage categorization rules
-- `tools/integrate_with_corpus.py`: integrate ingested records into the corpus
+- `tools/integrate_with_corpus.py`: integrate ingested records into the corpus (rebuilds summary after writes)
+- `tools/corpus_summary.py`: shared library to compute/write `corpus-summary.json`
+- `tools/rebuild_corpus_summary.py`: CLI that only rebuilds the summary from current year files
 - `tools/llm.py`: query an LLM for category and regex suggestions
 - `tools/utils.py`: shared helpers for file I/O, rule loading, and parsing
 
@@ -69,6 +71,13 @@ The nesting key is the rule's full `category` value (`major:minor`).
 
 Transaction integration writes to year-based files under the corpus root configured by `TRANSACTION_CORPUS_DIR` in the repository `.env`.
 Each year file is JSON and contains a `transactions` array plus metadata such as `last_sync_date`, `sources`, and `last_push_date`.
+
+The corpus root also holds derived **`corpus-summary.json`** (rollups by year, month, and category).
+Full contract: `docs/corpus-format.md` §9.
+
+- Mutating tools MUST call `rebuild_corpus_summary(corpus_dir)` from `tools/corpus_summary.py` after successful writes.
+- Standalone rebuild: `python tools/rebuild_corpus_summary.py`
+- Year-file iteration uses `YYYY.json` only (`iter_year_json_files`); the summary is a sibling index, not a year file.
 
 ## Rule loading and usage
 

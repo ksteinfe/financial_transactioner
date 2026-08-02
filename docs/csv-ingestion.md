@@ -207,8 +207,9 @@ Then map normalized object to corpus transaction fields:
 - insert/update lifecycle fields (`key`, `date_created`, `date_updated`) per
   `docs/corpus-format.md`
 - optional `notes` only when the user or pipeline supplies one; otherwise omit
-- after successful ingest writes, rebuild `corpus-summary.json` per
-  `docs/corpus-format.md` section 9
+- after successful ingest/integration writes, rebuild `corpus-summary.json` via
+  `tools/corpus_summary.rebuild_corpus_summary` (or
+  `python tools/rebuild_corpus_summary.py`) per `docs/corpus-format.md` section 9
 
 ## 7) Category resolution and validation
 

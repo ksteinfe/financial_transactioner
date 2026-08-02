@@ -70,7 +70,7 @@ Repository-wide paths are configured at the **repository root** via `.env` (copy
 
 Apps resolve corpus access through the **main process** and **preload** IPC (not raw filesystem access from the renderer).
 
-**Data loading preference:** when implementing features that need aggregates (totals by year/month/category), **prefer the derived `corpus-summary.json`** in the corpus root over re-reading every `YYYY.json` file. It reduces I/O and parsing cost; use yearly files when you need individual transactions or fields not present in the summary. Contract and rebuild rules: [`../../docs/corpus-format.md`](../../docs/corpus-format.md) (summary section). Shared logic lives in `@txn/corpus-core`; the hello app displays summary rollups and can rebuild the file from the UI.
+**Data loading preference:** when implementing features that need aggregates (totals by year/month/category), **prefer the derived `corpus-summary.json`** in the corpus root over re-reading every `YYYY.json` file. It reduces I/O and parsing cost; use yearly files when you need individual transactions or fields not present in the summary. Contract and rebuild rules: [`../../docs/corpus-format.md`](../../docs/corpus-format.md) §9. Shared TypeScript logic lives in `@txn/corpus-core`; Python tools rebuild via `tools/corpus_summary.py` / `tools/rebuild_corpus_summary.py`. The hello app displays summary rollups and can rebuild the file from the UI.
 
 ## Legacy reference
 

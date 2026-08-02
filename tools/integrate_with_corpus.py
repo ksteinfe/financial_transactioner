@@ -5,6 +5,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+from corpus_summary import CORPUS_SUMMARY_FILENAME, iter_year_json_files, rebuild_corpus_summary
 from utils import (
     append_rule,
     flatten_rules,
@@ -187,20 +188,10 @@ def choose_rule(rules: list, record: dict):
     return sorted_matches
 
 
-def corpus_year_json_files(corpus_root: Path) -> list[Path]:
-    if not corpus_root.is_dir():
-        return []
-    return sorted(
-        entry
-        for entry in corpus_root.iterdir()
-        if entry.is_file() and entry.suffix == '.json' and entry.name != 'corpus-summary.json'
-    )
-
-
 def load_existing_corpus_keys(corpus_root: Path) -> set[str]:
     """Load every transaction key already present in the corpus (once)."""
     keys: set[str] = set()
-    files = corpus_year_json_files(corpus_root)
+    files = iter_year_json_files(corpus_root)
     if not files:
         print(f'No corpus year files found under {corpus_root}')
         return keys
@@ -235,7 +226,7 @@ def file_contains_transaction_key(
     candidates = []
     if year:
         candidates.append(corpus_root / f'{year}.json')
-    for entry in corpus_year_json_files(corpus_root):
+    for entry in iter_year_json_files(corpus_root):
         if entry not in candidates:
             candidates.append(entry)
     for candidate in candidates:
@@ -653,6 +644,8 @@ def main():
                     write_json_file(year_file_path, year_file)
                     print(f"Wrote {year_file_path} ({len(year_file.get('transactions', []))} records)")
                 print(f"Integrated {pending_integration_count} records into corpus.")
+                summary_path = rebuild_corpus_summary(corpus_dir)
+                print(f"Rebuilt {CORPUS_SUMMARY_FILENAME} -> {summary_path}")
                 delete_progress_file(progress_path)
                 print(f"Removed progress file {progress_path.name}")
             else:
