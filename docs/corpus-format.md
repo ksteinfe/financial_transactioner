@@ -43,6 +43,7 @@ Each `YYYY.json` file MUST follow this shape:
       "description": "string",
       "category": "major:minor",
       "notes": "optional free-text note",
+      "date_original": "YYYY-MM-DD",
       "date_created": "ISO-8601 timestamp",
       "date_updated": "ISO-8601 timestamp"
     }
@@ -69,7 +70,9 @@ All metadata timestamps MUST be UTC ISO 8601, e.g. `2026-01-15T18:25:02Z`.
 Required fields for each transaction:
 
 - `key` (string): stable unique identifier (UUID format recommended).
-- `date` (string): transaction date in `YYYY-MM-DD`.
+- `date` (string): effective transaction date in `YYYY-MM-DD`. Used for year-file
+  placement, summary month buckets, and reporting. May differ from the bank
+  export date when the user has corrected it (see `date_original`).
 - `amount` (number): signed amount; debits are negative, credits are positive.
 - `account` (string): normalized account identifier.
 - `description` (string): normalized payee/memo text.
@@ -82,6 +85,15 @@ Optional fields:
 - `notes` (string): user- or tool-supplied context (e.g. trip label, reimbursement
   explanation). Writers MAY omit the key when there is no note. Empty strings
   SHOULD be treated as “no note” and omitted on save.
+- `date_original` (string): the source/bank date in `YYYY-MM-DD` when `date` has
+  been manually changed to a different value. Writers MUST set `date_original` to
+  the pre-edit date the first time `date` is changed from the source value, and
+  MUST preserve `date_original` on later edits (do not overwrite with intermediate
+  values). Writers MUST omit `date_original` when `date` still matches the source
+  date (including on initial insert from an export).
+
+Writers MUST NOT persist any other transaction fields (including legacy keys such
+as `source_key`). Readers MUST ignore unknown keys if present in older files.
 
 ## 3) Required full sample JSON (fake values)
 
@@ -116,6 +128,18 @@ Optional fields:
       "notes": "Q4 bonus",
       "date_created": "2026-01-15T18:22:11Z",
       "date_updated": "2026-01-15T18:23:10Z"
+    },
+    {
+      "key": "bbbbbbbb-cccc-dddd-eeee-ffffffffffff",
+      "date": "2026-01-08",
+      "date_original": "2026-01-12",
+      "amount": -42.0,
+      "account": "boa_checking_1234",
+      "description": "Airline ticket hold",
+      "category": "vacation:misc",
+      "notes": "Posted later; attributed to trip day",
+      "date_created": "2026-01-15T18:22:11Z",
+      "date_updated": "2026-01-16T12:00:00Z"
     }
   ]
 }
@@ -126,8 +150,10 @@ Optional fields:
 Multiple tools/apps MAY read/write the same corpus. Therefore all writers MUST:
 
 1. Follow this schema exactly.
-2. MUST NOT introduce ad-hoc transaction fields beyond the optional `notes` field
-   documented in section 2.2.
+2. MUST NOT introduce ad-hoc transaction fields beyond the optional fields
+   documented in section 2.2 (`notes`, `date_original`). When rewriting existing
+   rows, MUST drop undocumented keys (e.g. legacy `source_key`) rather than
+   preserving them.
 3. Preserve existing `key` values.
 4. Preserve existing `date_created` on updates.
 5. Update `date_updated` on every material transaction update.

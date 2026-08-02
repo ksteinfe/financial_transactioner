@@ -8,6 +8,7 @@ This log records **maintainer-facing** changes to the **`apps/`** workspace (Ele
 
 - **Version:** see `applications/hello/package.json` `version` (e.g. **0.1.4** at last documentation pass). **Sankey:** `applications/sankey/package.json` (**@txn/sankey**), releases via tags `steinfeld-finance-sankey-v*`.
 - **Upcoming:** repository may be switched **public** for anonymous GitHub Releases / auto-updates (private repos require `GH_TOKEN` for the updater feed).
+- **Corpus contract:** optional transaction field **`date_original`** (`YYYY-MM-DD`) documented in [`docs/corpus-format.md`](../../docs/corpus-format.md) §2.2 — records the source/bank date when `date` is manually changed. Docs only; tools/apps not updated yet.
 
 ### Steinfeld Finance - Sankey (2026-04)
 

@@ -1,0 +1,6 @@
+date,amount,account,description,category,bank_category,rule_used,notes,transaction_key
+9/16/2024,-80,boa_bills_2232,Check 389: Han,kids:activities,,628684a8-fd4c-4d32-879d-3e8f660b8ac0,,fa9438f2-8f7e-4dc5-bbad-5acfe56b1179
+9/19/2024,-200,boa_bills_2232,Check 390: Fernando,home:home_services,,628684a8-fd4c-4d32-879d-3e8f660b8ac0,,33ee96c8-d771-49af-a8dd-d231209b4b56
+10/22/2024,-80,boa_bills_2232,Check 391: Han,kids:activities,,628684a8-fd4c-4d32-879d-3e8f660b8ac0,,ff3452fa-5458-4e00-ad38-133c96b38150
+12/23/2024,-400,boa_bills_2232,Check 392: Fernando,home:home_services,,628684a8-fd4c-4d32-879d-3e8f660b8ac0,,69e361cf-b7c5-4e0e-ad6c-24ad089fec97
+1/6/2025,-100,boa_bills_2232,Check 393: Fernando,home:home_services,,628684a8-fd4c-4d32-879d-3e8f660b8ac0,,fd952198-1461-4d5d-bb36-029f178722cd

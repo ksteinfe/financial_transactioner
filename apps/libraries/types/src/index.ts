@@ -41,7 +41,6 @@ export interface CorpusTransaction {
   /** Optional human context (e.g. trip name, reconciliation note). Omitted when empty. */
 
   notes?: string
-
 }
 
 

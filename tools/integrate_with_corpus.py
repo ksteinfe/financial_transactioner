@@ -251,7 +251,6 @@ def build_corpus_transaction(record: dict, category: str, rule_note: str | None 
         'category': category,
         'date_created': now,
         'date_updated': now,
-        'source_key': record['key'],
     }
     notes = []
     if record.get('bank_category'):
