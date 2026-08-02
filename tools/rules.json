@@ -81,15 +81,6 @@
       "apply_to_accounts": null
     },
     {
-      "id": "rule_1785448914",
-      "regex": "^TARGET CARD SRVC DES:PAYMENT ID:H \\S+ INDN:[A-Z]+,.* CO ID:\\S+",
-      "category": "transfer:credit_card_payment",
-      "created_at": "2026-07-30T22:01:54.776045+00:00",
-      "created_by": "llm",
-      "notes": "target card payments",
-      "apply_to_accounts": null
-    },
-    {
       "id": "rule_1785449474",
       "regex": "^CHASE CREDIT CRD DES:AUTOPAY ID:\\S+ INDN:.* CO ID:.* PPD",
       "category": "transfer:credit_card_payment",
@@ -187,7 +178,7 @@
       "category": "unknown:uncatagorized",
       "created_at": "2026-07-30T22:00:15.832166+00:00",
       "created_by": "llm",
-      "notes": "all venmo transactions",
+      "notes": "defer categorization for venmo transactions",
       "apply_to_accounts": null
     },
     {
@@ -196,7 +187,7 @@
       "category": "unknown:uncatagorized",
       "created_at": "2026-07-31T18:23:34.442517+00:00",
       "created_by": "llm",
-      "notes": "all paypal transactions",
+      "notes": "defer categorization for paypal transactions",
       "apply_to_accounts": null
     }
   ],
@@ -2435,7 +2426,16 @@
       "apply_to_accounts": null
     }
   ],
-  "shopping:misc": [
+  "shopping:misc": [    
+    {
+      "id": "rule_1785448914",
+      "regex": "^TARGET CARD SRVC DES:PAYMENT ID:H \\S+ INDN:[A-Z]+,.* CO ID:\\S+",
+      "category": "shopping:misc",
+      "created_at": "2026-07-30T22:01:54.776045+00:00",
+      "created_by": "llm",
+      "notes": "target card payments, assume general shopping",
+      "apply_to_accounts": null
+    },
     {
       "id": "rule_1785524692",
       "regex": "^DAISO.*",
