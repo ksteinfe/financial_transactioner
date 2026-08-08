@@ -136,29 +136,64 @@ def get_allowed_accounts_path() -> Path:
     return Path(resolve_repo_root()) / 'reference' / 'allowed-accounts.json'
 
 
-def load_allowed_accounts() -> list[str]:
+def normalize_allowed_account_definitions(allowed_accounts: list[str] | list[dict] | None) -> list[dict]:
+    if allowed_accounts is None:
+        return load_allowed_account_definitions()
+
+    definitions = []
+    for item in allowed_accounts:
+        if isinstance(item, str):
+            account = str(item).strip()
+            if account:
+                definitions.append({'account': account, 'matches': []})
+        elif isinstance(item, dict):
+            account = str(item.get('account') or item.get('name') or '').strip()
+            if not account:
+                continue
+            raw_matches = item.get('matches', [])
+            if isinstance(raw_matches, list):
+                matches = [str(match).strip() for match in raw_matches if str(match).strip()]
+            else:
+                matches = []
+            definitions.append({'account': account, 'matches': matches})
+    return definitions
+
+
+def load_allowed_account_definitions() -> list[dict]:
     path = get_allowed_accounts_path()
     with path.open(encoding='utf-8') as handle:
         data = json.load(handle)
     if not isinstance(data, list):
         raise SystemExit(f'Expected a list in {path}')
-    return [str(item).strip() for item in data if str(item).strip()]
+    return normalize_allowed_account_definitions(data)
 
 
-def match_allowed_accounts_in_file_name(file_name: str, allowed_accounts: list[str] | None = None) -> list[str]:
-    """Return allowlist accounts that exactly match the filename stem or its leading token(s).
+def load_allowed_accounts() -> list[str]:
+    return [entry['account'] for entry in load_allowed_account_definitions()]
 
-    A match means the normalized stem equals the account, or starts with ``account + '_'``.
+
+def _matches_account_name(stem: str, candidate: str) -> bool:
+    normalized_candidate = normalize_account_from_file_name(candidate)
+    if not normalized_candidate:
+        return False
+    return stem == normalized_candidate or stem.startswith(f'{normalized_candidate}_') or normalized_candidate in stem
+
+
+def match_allowed_accounts_in_file_name(file_name: str, allowed_accounts: list[str] | list[dict] | None = None) -> list[str]:
+    """Return allowlist accounts that match the filename stem or configured fragments.
+
+    A match can come from the normalized account name itself or any configured fragment.
     When several allowlist entries match, only the longest ones that are not prefixes of a
     longer match are kept (e.g. ``boa_check_6934`` wins over ``boa_check``).
     """
-    allowed = allowed_accounts if allowed_accounts is not None else load_allowed_accounts()
+    definitions = normalize_allowed_account_definitions(allowed_accounts)
     stem = normalize_account_from_file_name(file_name)
-    matches = [
-        account
-        for account in allowed
-        if stem == account or stem.startswith(f'{account}_')
-    ]
+    matches = []
+    for entry in definitions:
+        account = entry['account']
+        match_candidates = [account] + entry.get('matches', [])
+        if any(_matches_account_name(stem, candidate) for candidate in match_candidates):
+            matches.append(account)
     if not matches:
         return []
     longest = max(len(account) for account in matches)

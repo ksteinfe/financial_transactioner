@@ -1,11 +1,11 @@
 [
-  "alaska_old_visa",
-  "boa_bills_2232",
-  "boa_check_6934",
-  "boa_check_bad_2955",
-  "boa_old_visa",
-  "boa_savings_1816",
-  "boa_savings_3570",
-  "capital_one",
-  "chase"
+  { "account": "alaska_old_visa", "matches": [] },
+  { "account": "boa_bills_2232", "matches": ["2232"] },
+  { "account": "boa_check_6934", "matches": ["6934"] },
+  { "account": "boa_check_bad_2955", "matches": ["2955"] },
+  { "account": "boa_old_visa", "matches": [] },
+  { "account": "boa_savings_1816", "matches": ["1816"] },
+  { "account": "boa_savings_3570", "matches": ["3570"] },
+  { "account": "capital_one", "matches": ["capone"] },
+  { "account": "chase", "matches": ["chase"] }
 ]

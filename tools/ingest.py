@@ -5,6 +5,7 @@ from pathlib import Path
 
 from utils import (
     get_string_field,
+    load_allowed_account_definitions,
     load_allowed_accounts,
     normalize_iso_date,
     parse_csv_rows,
@@ -61,6 +62,7 @@ def main():
         raise SystemExit(f'No supported transaction files found in {input_path}')
 
     allowed_accounts = load_allowed_accounts()
+    allowed_account_definitions = load_allowed_account_definitions()
     forced_account = None
     if args.account:
         if args.account not in allowed_accounts:
@@ -81,7 +83,7 @@ def main():
         if forced_account:
             account = forced_account
         else:
-            account = resolve_account_for_source_file(str(file_path), allowed_accounts)
+            account = resolve_account_for_source_file(str(file_path), allowed_account_definitions)
         file_accounts[file_path] = account
         print(f'{file_path.name} -> {account}')
 
