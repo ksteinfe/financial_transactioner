@@ -349,6 +349,15 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215864",
+      "regex": "^SHELL OIL.*",
+      "category": "transportation:gas",
+      "created_at": "2026-08-08T19:04:24.619830+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "savings:college_savings": [
@@ -656,6 +665,24 @@
       "regex": "^CAL MART",
       "category": "food:groceries",
       "created_at": "2026-07-31T20:45:01.383250+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215599",
+      "regex": "^PUBLIX.*",
+      "category": "food:groceries",
+      "created_at": "2026-08-08T18:59:59.220246+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215877",
+      "regex": "^SQ \\*TARTS DE FEYBESSE.*",
+      "category": "food:groceries",
+      "created_at": "2026-08-08T19:04:37.771426+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -1637,6 +1664,114 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215377",
+      "regex": "^HUDSON BAY CAFE.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T18:56:17.500061+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215489",
+      "regex": "^FISHERMANS COVE.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T18:58:09.348168+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215521",
+      "regex": "^MUGUNGHWA OAKLAND",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T18:58:41.020166+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215533",
+      "regex": "^TST\\*RESTAURANT JOSEPHINE",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T18:58:53.588321+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215554",
+      "regex": "^TST\\*VIA DEL CORSO.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T18:59:14.059982+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215569",
+      "regex": ".*CHICK-FIL-A.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T18:59:29.387786+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215626",
+      "regex": "^OUTBACK.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T19:00:26.077040+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215692",
+      "regex": "^Waffle House.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T19:01:32.948305+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215829",
+      "regex": "^TST\\*ZAYTOON",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T19:03:49.276170+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215888",
+      "regex": "^SHAKE SHACK\\s+.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T19:04:48.243900+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215921",
+      "regex": "^POKE TO THE MAX\\s+.*",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T19:05:21.139903+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215961",
+      "regex": "^UEP\\*DUMPLING HOURS",
+      "category": "food:restaurants",
+      "created_at": "2026-08-08T19:06:01.531878+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "home:home_improvement": [
@@ -1654,6 +1789,15 @@
       "regex": "^GRAND LAKE ACE\\s+.*",
       "category": "home:home_improvement",
       "created_at": "2026-07-31T19:00:36.249239+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215612",
+      "regex": "^LOWES.*",
+      "category": "home:home_improvement",
+      "created_at": "2026-08-08T19:00:12.803659+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -1942,6 +2086,15 @@
       "created_at": "2026-07-31T18:05:14.680958+00:00",
       "created_by": "llm",
       "notes": "BPC Black Pine Circle tuition",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215122",
+      "regex": "^Black Pine Circl.*",
+      "category": "education:tuition",
+      "created_at": "2026-08-08T18:52:02.636103+00:00",
+      "created_by": "llm",
+      "notes": "Black Pine Circle tuition",
       "apply_to_accounts": null
     }
   ],
@@ -2364,6 +2517,15 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215357",
+      "regex": "^BERKELEY-PARKNGFINE.*",
+      "category": "tax:parking_ticket",
+      "created_at": "2026-08-08T18:55:57.020113+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "personal_care:hair": [
@@ -2426,7 +2588,7 @@
       "apply_to_accounts": null
     }
   ],
-  "shopping:misc": [    
+  "shopping:misc": [
     {
       "id": "rule_1785448914",
       "regex": "^TARGET CARD SRVC DES:PAYMENT ID:H \\S+ INDN:[A-Z]+,.* CO ID:\\S+",
@@ -2618,6 +2780,24 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215734",
+      "regex": "^QDI\\*QUEST DIAGNOSTICS.*",
+      "category": "health:doctor",
+      "created_at": "2026-08-08T19:02:14.139598+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1786215838",
+      "regex": "^GOLDEN GATE OBSTETRICS",
+      "category": "health:doctor",
+      "created_at": "2026-08-08T19:03:58.508435+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "food:miru_lunch": [
@@ -2710,6 +2890,17 @@
       "regex": "^GOOGLE \\*Fitbit",
       "category": "health:subscription_services",
       "created_at": "2026-07-31T20:49:48.215755+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "transportation:auto_service_repair": [
+    {
+      "id": "rule_1786215796",
+      "regex": "^SQ \\*AUTO ROW SMOG & RE",
+      "category": "transportation:auto_service_repair",
+      "created_at": "2026-08-08T19:03:16.356234+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
