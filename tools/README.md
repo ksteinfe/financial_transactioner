@@ -60,11 +60,13 @@ python tools/<script>.py ...
 # Bank export → JSONL
 python tools/ingest.py --input <download-subfolder> [--force] [--account <account>]
 
-# Legacy categorized CSV → JSONL
-python tools/translate_legacy_csv.py --input <file.csv> [--output <out.jsonl>] [--force]
-
 # JSONL → corpus (interactive / rules / LLM)
 python tools/integrate_with_corpus.py --input <folder|file> [--dry-run] [--persist-rules]
+
+
+
+# Legacy categorized CSV → JSONL
+python tools/translate_legacy_csv.py --input <file.csv> [--output <out.jsonl>] [--force]
 
 # Backfill date_original from ingest JSONL tree
 python tools/reconcile_year_dates.py --year YYYY --ingest-root <downloads-root> [--dry-run] [--corpus-dir <path>]
