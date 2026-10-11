@@ -358,6 +358,24 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788965973",
+      "regex": "^EXXON.*",
+      "category": "transportation:gas",
+      "created_at": "2026-09-09T14:59:33.878414+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966007",
+      "regex": "^BERKELEY GAS &amp; SMOG",
+      "category": "transportation:gas",
+      "created_at": "2026-09-09T15:00:07.222211+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "savings:college_savings": [
@@ -686,6 +704,33 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966264",
+      "regex": "^SQ \\*KASHIWASE FARMS",
+      "category": "food:groceries",
+      "created_at": "2026-09-09T15:04:24.464661+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966279",
+      "regex": "^SQ \\*BLUE HOUSE FARM",
+      "category": "food:groceries",
+      "created_at": "2026-09-09T15:04:39.596764+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966289",
+      "regex": "^WOORI FOOD MARKET.*",
+      "category": "food:groceries",
+      "created_at": "2026-09-09T15:04:49.930191+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "home:misc": [
@@ -732,6 +777,15 @@
       "regex": "^1PASSWORD\\s+.*",
       "category": "professional:subscription_services",
       "created_at": "2026-07-31T20:34:06.924863+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966089",
+      "regex": "^GOOGLE \\*Google One\\s+.*",
+      "category": "professional:subscription_services",
+      "created_at": "2026-09-09T15:01:29.901727+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -1772,6 +1826,105 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966000",
+      "regex": "^LA NOTE",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:00:00.373594+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966016",
+      "regex": "^TST\\*ROSE PIZZERIA.*",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:00:16.893907+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966117",
+      "regex": "^LIU MANDARIN KITCHEN.*",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:01:57.086200+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966234",
+      "regex": "^TST\\*KUNUGI NOODLE",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:03:54.792534+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966255",
+      "regex": "^SQ \\*LUCIA'S BERKELEY M",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:04:15.234422+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966296",
+      "regex": "^TST\\*BAGELTOPIA",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:04:56.544759+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966342",
+      "regex": "^SQ \\*BAD WALTER'S BOOTL.*",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:05:42.500305+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966353",
+      "regex": "^SQ \\*BOBA BINGE UPTOWN",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:05:53.865887+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966371",
+      "regex": "^YUYU ZAZANG",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:06:11.276923+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966388",
+      "regex": "^K BANCHAN",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:06:28.728862+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966395",
+      "regex": "^THREE FORKS BAKERY AND.*",
+      "category": "food:restaurants",
+      "created_at": "2026-09-09T15:06:35.167260+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "home:home_improvement": [
@@ -1964,6 +2117,15 @@
       "regex": "^SQ \\*ENDO CARE GROUP\\s+.*",
       "category": "health:dentist",
       "created_at": "2026-07-30T22:27:21.248262+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788965982",
+      "regex": "^NOOSHAN MIRHADI DDS",
+      "category": "health:dentist",
+      "created_at": "2026-09-09T14:59:42.893767+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -2309,6 +2471,15 @@
       "regex": "^Bonobos.*",
       "category": "shopping:clothing",
       "created_at": "2026-07-31T19:40:55.845333+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966323",
+      "regex": "^BRFACTORY\\.COM",
+      "category": "shopping:clothing",
+      "created_at": "2026-09-09T15:05:23.545343+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -2700,6 +2871,15 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966022",
+      "regex": "^GRAND LAKE THEATER",
+      "category": "entertainment:misc",
+      "created_at": "2026-09-09T15:00:22.862339+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "health:gym": [
@@ -2840,6 +3020,15 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966102",
+      "regex": "^BEST BUY.*",
+      "category": "shopping:electronics_and_software",
+      "created_at": "2026-09-09T15:01:42.150414+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "professional:business_services": [
@@ -2893,6 +3082,15 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1788966333",
+      "regex": "^GOOGLE \\*Google Health .*",
+      "category": "health:subscription_services",
+      "created_at": "2026-09-09T15:05:33.870682+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "transportation:auto_service_repair": [
@@ -2901,6 +3099,28 @@
       "regex": "^SQ \\*AUTO ROW SMOG & RE",
       "category": "transportation:auto_service_repair",
       "created_at": "2026-08-08T19:03:16.356234+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "shopping:subscription_services": [
+    {
+      "id": "rule_1788966041",
+      "regex": "^Kindle Unltd\\*.*",
+      "category": "shopping:subscription_services",
+      "created_at": "2026-09-09T15:00:41.006433+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    }
+  ],
+  "entertainment:camping_and_supplies": [
+    {
+      "id": "rule_1788966218",
+      "regex": "^NIC\\*RESERVECALIFORNIA\\s+.*",
+      "category": "entertainment:camping_and_supplies",
+      "created_at": "2026-09-09T15:03:38.995804+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
