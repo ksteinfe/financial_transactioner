@@ -39,6 +39,15 @@
       "created_by": "llm",
       "notes": "all xfers TO 1816_deep",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741583",
+      "regex": "^Online Banking transfer from SAV 1816.*",
+      "category": "transfer:1816_deep",
+      "created_at": "2026-10-11T17:59:43.466338+00:00",
+      "created_by": "llm",
+      "notes": "all xfers FROM 1816_deep",
+      "apply_to_accounts": null
     }
   ],
   "transfer:6934_checking": [
@@ -373,6 +382,15 @@
       "regex": "^BERKELEY GAS &amp; SMOG",
       "category": "transportation:gas",
       "created_at": "2026-09-09T15:00:07.222211+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741642",
+      "regex": "^ARCO.*",
+      "category": "transportation:gas",
+      "created_at": "2026-10-11T18:00:42.273844+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -728,6 +746,33 @@
       "regex": "^WOORI FOOD MARKET.*",
       "category": "food:groceries",
       "created_at": "2026-09-09T15:04:49.930191+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741757",
+      "regex": "^GRAND PERKINS MARKET.*",
+      "category": "food:groceries",
+      "created_at": "2026-10-11T18:02:37.609671+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791742038",
+      "regex": "^SLC PUBLIC MKT .*",
+      "category": "food:groceries",
+      "created_at": "2026-10-11T18:07:18.666082+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791742044",
+      "regex": "^SQ \\*MI TIERRA FOODS.*",
+      "category": "food:groceries",
+      "created_at": "2026-10-11T18:07:24.994127+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -1925,6 +1970,60 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741654",
+      "regex": "^TST\\* IKE'S LOVE AND SA.*",
+      "category": "food:restaurants",
+      "created_at": "2026-10-11T18:00:54.370324+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741685",
+      "regex": "^PANDA EXPRESS.*",
+      "category": "food:restaurants",
+      "created_at": "2026-10-11T18:01:25.218348+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741887",
+      "regex": "^TST\\*GOTTS\\s+ROADSIDE.*",
+      "category": "food:restaurants",
+      "created_at": "2026-10-11T18:04:47.954441+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741965",
+      "regex": "^TST\\*H&amp;H BAGELS.*",
+      "category": "food:restaurants",
+      "created_at": "2026-10-11T18:06:05.562418+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791742004",
+      "regex": "^PEETS .*",
+      "category": "food:restaurants",
+      "created_at": "2026-10-11T18:06:44.313972+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791742136",
+      "regex": "^SMOKEHOUSE",
+      "category": "food:restaurants",
+      "created_at": "2026-10-11T18:08:56.090220+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "home:home_improvement": [
@@ -2235,6 +2334,15 @@
       "regex": "^CAMP AUGUSTA.*",
       "category": "kids:camps_and_enrichment",
       "created_at": "2026-07-31T18:02:30.474537+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791742093",
+      "regex": "^ADAMAH",
+      "category": "kids:camps_and_enrichment",
+      "created_at": "2026-10-11T18:08:13.394281+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -2585,6 +2693,15 @@
       "regex": "^BEVERAGES &amp; MORE #04",
       "category": "food:alcohol",
       "created_at": "2026-07-31T20:41:05.144299+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741903",
+      "regex": "^PAUL MARCUS WINES",
+      "category": "food:alcohol",
+      "created_at": "2026-10-11T18:05:03.002180+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
@@ -2989,6 +3106,15 @@
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791741798",
+      "regex": "^EPICUREAN AT BENTLEY-M\\s+.*",
+      "category": "food:miru_lunch",
+      "created_at": "2026-10-11T18:03:18.122688+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
     }
   ],
   "transportation:misc": [
@@ -3110,6 +3236,15 @@
       "regex": "^Kindle Unltd\\*.*",
       "category": "shopping:subscription_services",
       "created_at": "2026-09-09T15:00:41.006433+00:00",
+      "created_by": "llm",
+      "notes": "",
+      "apply_to_accounts": null
+    },
+    {
+      "id": "rule_1791742109",
+      "regex": "^Kindle\\s+Svcs.*",
+      "category": "shopping:subscription_services",
+      "created_at": "2026-10-11T18:08:29.074649+00:00",
       "created_by": "llm",
       "notes": "",
       "apply_to_accounts": null
